@@ -1,10 +1,4 @@
 import { defineConfig } from "eslint/config"
-import base from "../../eslint.config"
+import medusa from "@medusajs/eslint-plugin"
 
-export default defineConfig([
-  {
-    extends: [base],
-    // backend-specific overrides go here
-    rules: {},
-  },
-])
+export default defineConfig([...medusa.configs.recommended])
