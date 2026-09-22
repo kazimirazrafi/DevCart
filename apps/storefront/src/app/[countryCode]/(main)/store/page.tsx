@@ -1,7 +1,7 @@
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 
-import { parseOptionValueIds } from "@lib/util/product-option-filters"
-import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
+import { getRegion } from "@lib/data/regions"
 import StoreTemplate from "@modules/store/templates"
 
 export const metadata: Metadata = {
@@ -9,31 +9,15 @@ export const metadata: Metadata = {
   description: "Explore all of our products.",
 }
 
-type StorePageSearchParams = Record<string, string | string[] | undefined> & {
-  sortBy?: SortOptions
-  page?: string
-  optionValueIds?: string | string[]
-}
+export default async function StorePage(props: {
+  params: Promise<{ countryCode: string }>
+}) {
+  const { countryCode } = await props.params
+  const region = await getRegion(countryCode)
 
-type Params = {
-  searchParams: Promise<StorePageSearchParams>
-  params: Promise<{
-    countryCode: string
-  }>
-}
+  if (!region) {
+    notFound()
+  }
 
-export default async function StorePage(props: Params) {
-  const params = await props.params;
-  const searchParams = await props.searchParams;
-  const { sortBy, page } = searchParams
-  const optionValueIds = parseOptionValueIds(searchParams)
-
-  return (
-    <StoreTemplate
-      sortBy={sortBy}
-      page={page}
-      countryCode={params.countryCode}
-      optionValueIds={optionValueIds}
-    />
-  )
+  return <StoreTemplate currencyCode={region.currency_code} />
 }
