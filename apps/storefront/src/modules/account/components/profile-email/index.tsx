@@ -1,70 +1,34 @@
 "use client"
 
-import React, { useEffect, useActionState } from "react";
-
-import Input from "@modules/common/components/input"
-
-import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
-// import { updateCustomer } from "@lib/data/customer"
+import React from "react"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
 }
 
+/**
+ * The email is shown, not edited. In Medusa the address a customer signs in
+ * with lives on the auth identity, and the customer record's `email` is only a
+ * copy; changing the copy would leave the two disagreeing and lock the customer
+ * out of the address on their next sign-in. The starter's editor was a stub
+ * that reported "Email updated succesfully" while writing nothing, which is
+ * worse than saying so.
+ */
 const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
-  const [successState, setSuccessState] = React.useState(false)
-
-  // TODO: It seems we don't support updating emails now?
-  const updateCustomerEmail = (
-    _currentState: Record<string, unknown>,
-    _formData: FormData
-  ) => {
-    try {
-      // email: formData.get("email") as string
-      return { success: true, error: null }
-    } catch (error) {
-      return { success: false, error: String(error) }
-    }
-  }
-
-  const [state, formAction] = useActionState(updateCustomerEmail, {
-    error: null as string | null,
-    success: false,
-  })
-
-  const clearState = () => {
-    setSuccessState(false)
-  }
-
-  useEffect(() => {
-    setSuccessState(state.success)
-  }, [state])
-
   return (
-    <form action={formAction} className="w-full">
-      <AccountInfo
-        label="Email"
-        currentInfo={`${customer.email}`}
-        isSuccess={successState}
-        isError={!!state.error}
-        errorMessage={state.error || undefined}
-        clearState={clearState}
-        data-testid="account-email-editor"
-      >
-        <div className="grid grid-cols-1 gap-y-2">
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            defaultValue={customer.email}
-            data-testid="email-input"
-          />
-        </div>
-      </AccountInfo>
-    </form>
+    <div className="text-small" data-testid="account-email-editor">
+      <div className="flex flex-col gap-1">
+        <span className="text-small uppercase text-ink/70">Email</span>
+        <span className="font-semibold text-ink" data-testid="current-info">
+          {customer.email}
+        </span>
+      </div>
+      <p className="mt-2 max-w-prose text-ink/80">
+        This is the address you sign in with, so it can&apos;t be changed here.
+        To use a different address, create an account with it.
+      </p>
+    </div>
   )
 }
 

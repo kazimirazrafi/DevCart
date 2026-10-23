@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@modules/common/components/ui"
+import { Button } from "@modules/design-system"
 import React from "react"
 import { useFormStatus } from "react-dom"
 
@@ -21,11 +21,17 @@ export function SubmitButton({
 
   return (
     <Button
-      size={size}
-      className={className}
       type="submit"
-      isLoading={pending}
-      variant={variant || "primary"}
+      size={size}
+      // The starter's "transparent" variant has no equivalent in the design
+      // system; the outlined secondary button is the closest thing to it.
+      variant={
+        variant === "secondary" || variant === "transparent"
+          ? "secondary"
+          : "primary"
+      }
+      loading={pending}
+      className={className}
       data-testid={dataTestId}
     >
       {children}

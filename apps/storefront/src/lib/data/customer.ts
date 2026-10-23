@@ -1,7 +1,7 @@
 "use server"
 
 import { sdk } from "@lib/config"
-import medusaError from "@lib/util/medusa-error"
+import medusaErrorMessage, { medusaError } from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
 import { FetchError } from "@medusajs/js-sdk"
 import { revalidateTag } from "next/cache"
@@ -21,6 +21,8 @@ import {
 
 export type CustomerAuthState =
   | { state: "error"; error: string }
+  /** The email is already an account whose password is not the one submitted. */
+  | { state: "exists"; email: string }
   | { state: "verification_required"; email: string }
   | { state: "success" }
   | null
@@ -84,6 +86,46 @@ export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
   return updateRes
 }
 
+/*
+ * Whether the API rejected the submission because that email already has an
+ * identity. Medusa answers `401 Identity with email already exists` for it. The
+ * message is matched rather than a code because the SDK drops error codes (see
+ * `lib/util/medusa-error.ts`).
+ */
+const isDuplicateIdentity = (error: unknown) => {
+  const fetchError = error as FetchError
+
+  return (
+    fetchError.statusText === "Unauthorized" &&
+    fetchError.message === "Identity with email already exists"
+  )
+}
+
+/**
+ * Where to send the customer once they are signed in. A protected page leaves
+ * this behind as `?redirect=` (see `middleware.ts`), and the form carries it as
+ * a hidden field — so it is only ever followed when it names a path on this
+ * site. A second `//` would make it another origin.
+ */
+const afterSignIn = (formData: FormData) => {
+  const value = formData.get("redirect")
+
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) {
+    return null
+  }
+
+  return value
+}
+
+/** The auth token for these credentials, or null if they do not match. */
+async function tryLogin(email: string, password: string) {
+  const result = await sdk.auth
+    .login("customer", "emailpass", { email, password })
+    .catch(() => null)
+
+  return typeof result === "string" ? result : null
+}
+
 export async function signup(
   _currentState: unknown,
   formData: FormData
@@ -96,22 +138,34 @@ export async function signup(
     phone: formData.get("phone") as string,
   }
 
+  // Signing up with an email that already has an identity is answered with the
+  // credentials that were just typed. The password decides what it means:
+  //
+  //  - it matches (an admin user with this email, or someone re-submitting their
+  //    own signup) -> carry on and log in, which is the starter's behaviour and
+  //    still links a customer record;
+  //  - it does not match -> the email is somebody else's account, and saying
+  //    "invalid email or password" here would send them hunting for a typo in a
+  //    form that never had a working password. `exists` says what happened.
+  let authorizedToken: string | undefined
+
   try {
     await sdk.auth.register("customer", "emailpass", {
       email: customerForm.email,
       password,
     })
   } catch (error) {
-    const fetchError = error as FetchError
-    // An existing identity (for example, an admin user with the same email) is
-    // expected and handled: the customer can still log in to link a customer
-    // record. Any other error is surfaced.
-    if (
-      fetchError.statusText !== "Unauthorized" ||
-      fetchError.message !== "Identity with email already exists"
-    ) {
-      return { state: "error", error: String(error) }
+    if (!isDuplicateIdentity(error)) {
+      return { state: "error", error: medusaErrorMessage(error) }
     }
+
+    const token = await tryLogin(customerForm.email, password)
+
+    if (!token) {
+      return { state: "exists", email: customerForm.email }
+    }
+
+    authorizedToken = token
   }
 
   // Persist the extra signup fields. The customer record is created during
@@ -121,7 +175,7 @@ export async function signup(
 
   // Continue by logging in. The login response tells us whether the backend
   // requires email verification — we don't need a storefront-side flag.
-  return completeLogin(customerForm.email, password)
+  return finishAuth(formData, await completeLogin(customerForm.email, password, authorizedToken))
 }
 
 export async function login(
@@ -131,7 +185,28 @@ export async function login(
   const email = formData.get("email") as string
   const password = formData.get("password") as string
 
-  return completeLogin(email, password)
+  return finishAuth(formData, await completeLogin(email, password))
+}
+
+/**
+ * Sends a signed-in customer to the page that asked for them. Done here rather
+ * than in the form's effect because a `router.push` followed by the refresh the
+ * new session needs would cancel the navigation — measured: signing in from a
+ * protected page left the customer on the sign-in URL.
+ */
+function finishAuth(
+  formData: FormData,
+  result: CustomerAuthState
+): CustomerAuthState {
+  if (result?.state === "success") {
+    const target = afterSignIn(formData)
+
+    if (target) {
+      redirect(target)
+    }
+  }
+
+  return result
 }
 
 // Logs the customer in and reconciles the customer record. The behavior is
@@ -139,14 +214,24 @@ export async function login(
 // email verification is enabled.
 async function completeLogin(
   email: string,
-  password: string
+  password: string,
+  authorizedToken?: string
 ): Promise<CustomerAuthState> {
-  let result: Awaited<ReturnType<typeof sdk.auth.login>>
+  let result: Awaited<ReturnType<typeof sdk.auth.login>> | string
 
-  try {
-    result = await sdk.auth.login("customer", "emailpass", { email, password })
-  } catch (error) {
-    return { state: "error", error: String(error) }
+  if (authorizedToken) {
+    result = authorizedToken
+  } else {
+    try {
+      result = await sdk.auth.login("customer", "emailpass", {
+        email,
+        password,
+      })
+    } catch (error) {
+      // 401 for both a wrong password and an unknown address, which is what the
+      // customer is told — either way the fix is the same.
+      return { state: "error", error: medusaErrorMessage(error) }
+    }
   }
 
   // A `location` is returned by third-party auth providers, which this flow
@@ -212,7 +297,17 @@ async function completeLogin(
         password,
       })) as string
     } catch (error) {
-      return { state: "error", error: String(error) }
+      /*
+       * Medusa refuses a second account for an email that already has one
+       * ("Customer with this email already has an account"). That is the same
+       * situation the register form reports as `exists`, so it gets the same
+       * answer instead of a raw API sentence.
+       */
+      if (/already has an account/i.test(medusaErrorMessage(error))) {
+        return { state: "exists", email }
+      }
+
+      return { state: "error", error: medusaErrorMessage(error) }
     }
 
     await removePendingCustomer()
@@ -226,7 +321,7 @@ async function completeLogin(
   try {
     await transferCart()
   } catch (error) {
-    return { state: "error", error: String(error) }
+    return { state: "error", error: medusaErrorMessage(error) }
   }
 
   return { state: "success" }
@@ -278,104 +373,302 @@ export async function transferCart() {
   revalidateTag(cartCacheTag)
 }
 
-export const addCustomerAddress = async (
-  currentState: Record<string, unknown>,
-  formData: FormData
-): Promise<{ success: boolean; error: string | null }> => {
-  const isDefaultBilling = (currentState.isDefaultBilling as boolean) || false
-  const isDefaultShipping = (currentState.isDefaultShipping as boolean) || false
+/*
+ * A profile edit's result (A4). Same shape as the address mutations below:
+ * failures are returned, not thrown, because a production build replaces a
+ * thrown server-action message with generic copy (see `lib/util/medusa-error.ts`),
+ * and field errors are keyed by the input's name so the form can place each
+ * message next to the field it belongs to.
+ */
+export type CustomerProfileState =
+  | { ok: true }
+  | { ok: false; message: string; fields?: Record<string, string> }
+  | null
 
-  const address = {
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    company: formData.get("company") as string,
-    address_1: formData.get("address_1") as string,
-    address_2: formData.get("address_2") as string,
-    city: formData.get("city") as string,
-    postal_code: formData.get("postal_code") as string,
-    province: formData.get("province") as string,
-    country_code: formData.get("country_code") as string,
-    phone: formData.get("phone") as string,
-    is_default_billing: isDefaultBilling,
-    is_default_shipping: isDefaultShipping,
+const PROFILE_REVIEW = "Check the fields below and try again."
+
+/**
+ * The name on the account. Both parts are required by the storefront's forms
+ * and trimmed here, so a whitespace-only field is refused rather than stored
+ * as a blank name.
+ */
+export const updateCustomerName = async (
+  _currentState: CustomerProfileState,
+  formData: FormData
+): Promise<CustomerProfileState> => {
+  const first_name = String(formData.get("first_name") ?? "").trim()
+  const last_name = String(formData.get("last_name") ?? "").trim()
+  const fields: Record<string, string> = {}
+
+  if (!first_name) {
+    fields.first_name = "Enter a first name."
+  }
+
+  if (!last_name) {
+    fields.last_name = "Enter a last name."
+  }
+
+  if (Object.keys(fields).length) {
+    return { ok: false, message: PROFILE_REVIEW, fields }
+  }
+
+  try {
+    await updateCustomer({ first_name, last_name })
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  return { ok: true }
+}
+
+/**
+ * The phone number is optional. Empty is sent as null rather than "" so the
+ * profile keeps showing "Not set" instead of a blank where the number belongs,
+ * and a number that could not be dialled (letters, an unclosed bracket) is
+ * refused before it reaches the API.
+ */
+export const updateCustomerPhone = async (
+  _currentState: CustomerProfileState,
+  formData: FormData
+): Promise<CustomerProfileState> => {
+  const phone = String(formData.get("phone") ?? "").trim()
+
+  if (phone && !/^\+?[0-9()\s.-]{4,32}$/.test(phone)) {
+    return {
+      ok: false,
+      message: PROFILE_REVIEW,
+      fields: { phone: "Use digits, spaces, or + - ( )." },
+    }
+  }
+
+  try {
+    await updateCustomer({ phone: phone || null })
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  return { ok: true }
+}
+
+/*
+ * What an address form action reports back. Failures are returned, not thrown:
+ * a production build replaces a thrown server-action message with generic copy
+ * (see `lib/util/medusa-error.ts`). Field errors are keyed by the input's name so
+ * the form can place each message next to the field it belongs to.
+ */
+export type CustomerAddressState =
+  | { ok: true }
+  | { ok: false; message: string; fields?: Record<string, string> }
+  | null
+
+/** A non-null result of a one-click address action (delete, set default). */
+export type CustomerAddressResult =
+  | { ok: true }
+  | { ok: false; message: string }
+
+export type AddressDefaultField = "shipping" | "billing"
+
+/** The fields the form holds. Optional ones are empty strings, never null. */
+export type AddressFormValues = {
+  first_name: string
+  last_name: string
+  company: string
+  address_1: string
+  address_2: string
+  city: string
+  postal_code: string
+  province: string
+  country_code: string
+  phone: string
+}
+
+const REQUIRED_ADDRESS_FIELDS: [keyof AddressFormValues, string][] = [
+  ["first_name", "Enter a first name."],
+  ["last_name", "Enter a last name."],
+  ["address_1", "Enter a street address."],
+  ["city", "Enter a city."],
+  ["postal_code", "Enter a postal code."],
+  ["country_code", "Choose a country."],
+]
+
+const readAddress = (formData: FormData): AddressFormValues => {
+  const text = (name: string) => String(formData.get(name) ?? "").trim()
+
+  return {
+    first_name: text("first_name"),
+    last_name: text("last_name"),
+    company: text("company"),
+    address_1: text("address_1"),
+    address_2: text("address_2"),
+    city: text("city"),
+    postal_code: text("postal_code"),
+    province: text("province"),
+    country_code: text("country_code").toLowerCase(),
+    phone: text("phone"),
+  }
+}
+
+const addressErrors = (values: AddressFormValues) => {
+  const fields: Record<string, string> = {}
+
+  for (const [field, message] of REQUIRED_ADDRESS_FIELDS) {
+    if (!values[field]) {
+      fields[field] = message
+    }
+  }
+
+  return fields
+}
+
+/** Empty optional fields are sent as null, so they stay unset in the API. */
+const addressPayload = (values: AddressFormValues) => ({
+  ...values,
+  company: values.company || null,
+  address_2: values.address_2 || null,
+  province: values.province || null,
+  phone: values.phone || null,
+})
+
+const revalidateCustomerCache = async () => {
+  const customerCacheTag = await getCacheTag("customers")
+  revalidateTag(customerCacheTag)
+}
+
+const ADDRESS_REVIEW = "Check the fields below and try again."
+
+export const addCustomerAddress = async (
+  _currentState: CustomerAddressState,
+  formData: FormData
+): Promise<CustomerAddressState> => {
+  const values = readAddress(formData)
+  const fields = addressErrors(values)
+
+  if (Object.keys(fields).length) {
+    return { ok: false, message: ADDRESS_REVIEW, fields }
   }
 
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.customer
-    .createAddress(address, {}, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag)
-      return { success: true, error: null }
-    })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
-    })
+  try {
+    await sdk.store.customer.createAddress(
+      {
+        ...addressPayload(values),
+        is_default_shipping: formData.get("is_default_shipping") === "on",
+        is_default_billing: formData.get("is_default_billing") === "on",
+      },
+      {},
+      headers
+    )
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  await revalidateCustomerCache()
+
+  return { ok: true }
 }
 
 export const deleteCustomerAddress = async (
   addressId: string
-): Promise<void> => {
+): Promise<CustomerAddressResult> => {
+  if (!addressId) {
+    return { ok: false, message: "This address could not be found." }
+  }
+
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  await sdk.store.customer
-    .deleteAddress(addressId, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag)
-      return { success: true, error: null }
-    })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
-    })
+  try {
+    await sdk.store.customer.deleteAddress(addressId, headers)
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  await revalidateCustomerCache()
+
+  return { ok: true }
 }
 
 export const updateCustomerAddress = async (
-  currentState: Record<string, unknown>,
+  _currentState: CustomerAddressState,
   formData: FormData
-): Promise<{ success: boolean; error: string | null }> => {
-  const addressId =
-    (currentState.addressId as string) || (formData.get("addressId") as string)
+): Promise<CustomerAddressState> => {
+  const addressId = String(formData.get("addressId") ?? "")
 
   if (!addressId) {
-    return { success: false, error: "Address ID is required" }
+    return {
+      ok: false,
+      message: "This address could not be found. Reload the page and try again.",
+    }
   }
 
-  const address = {
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    company: formData.get("company") as string,
-    address_1: formData.get("address_1") as string,
-    address_2: formData.get("address_2") as string,
-    city: formData.get("city") as string,
-    postal_code: formData.get("postal_code") as string,
-    province: formData.get("province") as string,
-    country_code: formData.get("country_code") as string,
-  } as HttpTypes.StoreUpdateCustomerAddress
+  const values = readAddress(formData)
+  const fields = addressErrors(values)
 
-  const phone = formData.get("phone") as string
-
-  if (phone) {
-    address.phone = phone
+  if (Object.keys(fields).length) {
+    return { ok: false, message: ADDRESS_REVIEW, fields }
   }
 
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.customer
-    .updateAddress(addressId, address, {}, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag)
-      return { success: true, error: null }
-    })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
-    })
+  try {
+    // Default flags are deliberately not written here: the form does not edit
+    // them, and sending `false` would clear a default instead of leaving it.
+    await sdk.store.customer.updateAddress(
+      addressId,
+      addressPayload(values),
+      {},
+      headers
+    )
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  await revalidateCustomerCache()
+
+  return { ok: true }
+}
+
+/**
+ * Makes one saved address the default for shipping or billing. Medusa's own
+ * update workflow clears the previous default, so there is never more than one
+ * of each.
+ */
+export const setDefaultCustomerAddress = async (
+  addressId: string,
+  field: AddressDefaultField
+): Promise<CustomerAddressResult> => {
+  if (!addressId) {
+    return { ok: false, message: "This address could not be found." }
+  }
+
+  if (field !== "shipping" && field !== "billing") {
+    return { ok: false, message: "That default could not be changed." }
+  }
+
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  try {
+    await sdk.store.customer.updateAddress(
+      addressId,
+      field === "shipping"
+        ? { is_default_shipping: true }
+        : { is_default_billing: true },
+      {},
+      headers
+    )
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  await revalidateCustomerCache()
+
+  return { ok: true }
 }

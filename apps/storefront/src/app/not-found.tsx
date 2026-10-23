@@ -10,18 +10,26 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col gap-4 items-center justify-center min-h-[calc(100vh-64px)]">
-      <h1 className="text-2xl-semi text-ui-fg-base">Page not found</h1>
-      <p className="text-small-regular text-ui-fg-base">
+    /*
+     * A page outside every route group (Next renders this without the (main)
+     * or (checkout) layout), so its content is the document's `main`.
+     */
+    <main
+      id="main"
+      tabIndex={-1}
+      className="flex flex-col gap-4 items-center justify-center min-h-[calc(100vh-64px)]"
+    >
+      <h1 className="font-display text-h2 text-ink">Page not found</h1>
+      <p className="text-small text-ink">
         The page you tried to access does not exist.
       </p>
       <Link className="flex gap-x-1 items-center group" href="/">
-        <Text className="text-ui-fg-interactive">Go to frontpage</Text>
+        <Text className="text-riso-blue">Go to frontpage</Text>
         <ArrowUpRightMini
-          className="group-hover:rotate-45 ease-in-out duration-150"
-          color="var(--fg-interactive)"
+          className="text-riso-blue group-hover:rotate-45 ease-in-out duration-150 motion-reduce:transition-none"
+          color="currentColor"
         />
       </Link>
-    </div>
+    </main>
   )
 }

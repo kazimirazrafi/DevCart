@@ -1,6 +1,12 @@
+import { Metadata } from "next"
+
+import { getStoreName } from "@lib/util/env"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import ChevronDown from "@modules/common/icons/chevron-down"
-import MedusaCTA from "@modules/layout/components/medusa-cta"
+
+// The checkout is a session-specific flow; nothing in it belongs in an index.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 
 export default function CheckoutLayout({
   children,
@@ -8,36 +14,46 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full bg-white relative small:min-h-screen">
-      <div className="h-16 bg-white border-b ">
-        <nav className="flex h-full items-center content-container justify-between">
+    <div className="relative w-full bg-stock">
+      <header className="border-b border-ink">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-3 focus:z-[60] focus:border focus:border-ink focus:bg-stock focus:px-4 focus:py-2 focus:text-small focus:font-semibold focus:text-ink"
+          data-testid="skip-to-content"
+        >
+          Skip to content
+        </a>
+        <nav className="content-container flex h-16 items-center justify-between gap-4">
           <LocalizedClientLink
             href="/cart"
-            className="text-small-semi text-ui-fg-base flex items-center gap-x-2 uppercase flex-1 basis-0"
+            className="flex items-center gap-2 text-small font-semibold text-ink hover:text-riso-blue"
             data-testid="back-to-cart-link"
           >
-            <ChevronDown className="rotate-90" size={16} />
-            <span className="mt-px hidden small:block txt-compact-plus text-ui-fg-subtle hover:text-ui-fg-base ">
-              Back to shopping cart
-            </span>
-            <span className="mt-px block small:hidden txt-compact-plus text-ui-fg-subtle hover:text-ui-fg-base">
-              Back
-            </span>
+            <span aria-hidden="true">←</span>
+            <span className="hidden small:inline">Back to the cart</span>
+            <span className="small:hidden">Back</span>
           </LocalizedClientLink>
+
           <LocalizedClientLink
             href="/"
-            className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
+            className="font-display text-lead font-bold text-ink"
             data-testid="store-link"
           >
-            Medusa Store
+            {getStoreName()}
           </LocalizedClientLink>
-          <div className="flex-1 basis-0" />
+
+          <span className="flex-1 basis-0" />
         </nav>
-      </div>
-      <div className="relative" data-testid="checkout-container">{children}</div>
-      <div className="py-4 w-full flex items-center justify-center">
-        <MedusaCTA />
-      </div>
+      </header>
+
+      <main
+        id="main"
+        tabIndex={-1}
+        className="relative"
+        data-testid="checkout-container"
+      >
+        {children}
+      </main>
     </div>
   )
 }

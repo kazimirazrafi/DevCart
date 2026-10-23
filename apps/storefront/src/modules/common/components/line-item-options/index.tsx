@@ -1,5 +1,4 @@
 import { HttpTypes } from "@medusajs/types"
-import { Text } from "@modules/common/components/ui"
 
 type LineItemOptionsProps = {
   variant: HttpTypes.StoreProductVariant | undefined
@@ -7,19 +6,28 @@ type LineItemOptionsProps = {
   "data-value"?: HttpTypes.StoreProductVariant
 }
 
+/**
+ * What was ordered about the variant — the option values joined into its title
+ * ("M / Blue"). Printed plain, with no "Variant:" prefix: the value alone reads
+ * as the choice, and a label for one short line is noise.
+ */
 const LineItemOptions = ({
   variant,
   "data-testid": dataTestid,
   "data-value": dataValue,
 }: LineItemOptionsProps) => {
+  if (!variant?.title) {
+    return null
+  }
+
   return (
-    <Text
+    <p
       data-testid={dataTestid}
       data-value={dataValue}
-      className="inline-block txt-medium text-ui-fg-subtle w-full overflow-hidden text-ellipsis"
+      className="text-small text-ink/70"
     >
-      Variant: {variant?.title}
-    </Text>
+      {variant.title}
+    </p>
   )
 }
 

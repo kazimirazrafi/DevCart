@@ -115,6 +115,113 @@ export const removePendingCustomer = async () => {
   })
 }
 
+/*
+ * Where a redirect-based sign-in (Google) should land once it comes back. The
+ * round trip leaves this origin and returns on a *new* request, so the
+ * destination has to be kept somewhere the browser carries: the callback route
+ * has no memory of which page asked for the sign-in.
+ *
+ * `sameSite: "lax"` for the same reason as the auth cookie: returning from
+ * Google is a cross-site top-level navigation.
+ */
+export const setAuthReturnPath = async (path: string) => {
+  const cookies = await nextCookies()
+  cookies.set("_medusa_auth_return", path, {
+    maxAge: 60 * 15,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  })
+}
+
+export const getAuthReturnPath = async (): Promise<string | null> => {
+  try {
+    const cookies = await nextCookies()
+    return cookies.get("_medusa_auth_return")?.value ?? null
+  } catch {
+    return null
+  }
+}
+
+export const removeAuthReturnPath = async () => {
+  const cookies = await nextCookies()
+  cookies.set("_medusa_auth_return", "", {
+    maxAge: -1,
+  })
+}
+
+/*
+ * Proof that this browser confirmed the address it is checking out with.
+ *
+ * The token is signed by the backend and bound to one address; the storefront
+ * only carries it. It lives in an HttpOnly cookie so a script on the page
+ * cannot read it, and it is sent as a header when the cart is completed — the
+ * backend is what checks it, and it refuses a token for a different address.
+ *
+ * `sameSite: "lax"` for the same reason as the cart cookie: a redirect-based
+ * payment returns here with a cross-site top-level navigation.
+ */
+export type EmailVerificationCookie = {
+  email: string
+  /** Expiry is inside the token; the cookie's own lifetime mirrors it. */
+  token: string
+  expires_at: number
+}
+
+export const setEmailVerification = async ({
+  email,
+  token,
+  expires_at,
+}: EmailVerificationCookie) => {
+  const cookies = await nextCookies()
+
+  cookies.set(
+    "_medusa_email_verification",
+    JSON.stringify({ email, token, expires_at }),
+    {
+      maxAge: Math.max(0, Math.floor((expires_at - Date.now()) / 1000)),
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    }
+  )
+}
+
+export const getEmailVerification = async (): Promise<EmailVerificationCookie | null> => {
+  try {
+    const cookies = await nextCookies()
+    const value = cookies.get("_medusa_email_verification")?.value
+
+    if (!value) {
+      return null
+    }
+
+    const parsed = JSON.parse(value) as Partial<EmailVerificationCookie>
+
+    if (
+      typeof parsed.email !== "string" ||
+      typeof parsed.token !== "string" ||
+      typeof parsed.expires_at !== "number" ||
+      parsed.expires_at <= Date.now()
+    ) {
+      return null
+    }
+
+    return {
+      email: parsed.email,
+      token: parsed.token,
+      expires_at: parsed.expires_at,
+    }
+  } catch {
+    return null
+  }
+}
+
+export const removeEmailVerification = async () => {
+  const cookies = await nextCookies()
+  cookies.set("_medusa_email_verification", "", { maxAge: -1 })
+}
+
 export const getCartId = async () => {
   const cookies = await nextCookies()
   return cookies.get("_medusa_cart_id")?.value

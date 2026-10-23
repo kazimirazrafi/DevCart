@@ -1,68 +1,71 @@
 "use client"
 
-import React, { useEffect, useActionState } from "react";
+import React, { useEffect, useActionState, useState } from "react"
 
-import Input from "@modules/common/components/input"
+import { HttpTypes } from "@medusajs/types"
+import { Input } from "@modules/design-system"
+import {
+  updateCustomerPhone,
+  type CustomerProfileState,
+} from "@lib/data/customer"
+import { useRouter } from "next/navigation"
 
 import AccountInfo from "../account-info"
-import { HttpTypes } from "@medusajs/types"
-import { updateCustomer } from "@lib/data/customer"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
 }
 
-const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
-  const [successState, setSuccessState] = React.useState(false)
+const ProfilePhone: React.FC<MyInformationProps> = ({ customer }) => {
+  const router = useRouter()
+  const [successState, setSuccessState] = useState(false)
+  // Controlled for the same reason as the name fields: a rejected number has to
+  // stay in front of the customer next to its message.
+  const [phone, setPhone] = useState(customer.phone ?? "")
 
-  const updateCustomerPhone = async (
-    _currentState: Record<string, unknown>,
-    formData: FormData
-  ) => {
-    const customer = {
-      phone: formData.get("phone") as string,
+  const [state, formAction] = useActionState<
+    CustomerProfileState,
+    FormData
+  >(updateCustomerPhone, null)
+
+  const fields = state && !state.ok ? state.fields ?? {} : {}
+
+  useEffect(() => {
+    if (!state) return
+
+    setSuccessState(state.ok)
+
+    if (state.ok) {
+      router.refresh()
     }
-
-    try {
-      await updateCustomer(customer)
-      return { success: true, error: null }
-    } catch (error) {
-      return { success: false, error: String(error) }
-    }
-  }
-
-  const [state, formAction] = useActionState(updateCustomerPhone, {
-    error: null as string | null,
-    success: false,
-  })
+  }, [state, router])
 
   const clearState = () => {
     setSuccessState(false)
   }
 
-  useEffect(() => {
-    setSuccessState(state.success)
-  }, [state])
-
   return (
     <form action={formAction} className="w-full">
       <AccountInfo
         label="Phone"
-        currentInfo={`${customer.phone}`}
+        currentInfo={customer.phone || "Not set"}
         isSuccess={successState}
-        isError={!!state.error}
-        errorMessage={state.error || undefined}
+        isError={!!state && !state.ok}
+        errorMessage={state && !state.ok ? state.message : undefined}
         clearState={clearState}
         data-testid="account-phone-editor"
       >
-        <div className="grid grid-cols-1 gap-y-2">
+        <div className="grid grid-cols-1 gap-4">
           <Input
-            label="Phone"
+            id="profile-phone"
+            label="Phone (optional)"
             name="phone"
-            type="phone"
-            autoComplete="phone"
-            required
-            defaultValue={customer.phone ?? ""}
+            type="tel"
+            autoComplete="tel"
+            value={phone}
+            onChange={(event) => setPhone(event.target.value)}
+            error={fields.phone}
+            hint="Leave it empty to remove the number."
             data-testid="phone-input"
           />
         </div>
@@ -71,4 +74,4 @@ const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
   )
 }
 
-export default ProfileEmail
+export default ProfilePhone

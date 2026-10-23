@@ -1,23 +1,17 @@
 "use client"
 
 import { Popover, PopoverPanel, Transition } from "@headlessui/react"
-import useToggleState from "@lib/hooks/use-toggle-state"
-import { ArrowRightMini, XMark } from "@medusajs/icons"
+import { ArrowRightMini, BarsThree, XMark } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { Text, clx } from "@modules/common/components/ui"
+import { Text } from "@modules/common/components/ui"
 import { Fragment } from "react"
+import { NAV_LINKS } from "../../lib/nav-links"
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
+import ThemeSwitcher from "../theme-switcher"
 import { Locale } from "@lib/data/locales"
-
-
-const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Account: "/account",
-  Cart: "/cart",
-}
+import { getStoreName } from "@lib/util/env"
 
 type SideMenuProps = {
   regions: HttpTypes.StoreRegion[] | null
@@ -26,9 +20,6 @@ type SideMenuProps = {
 }
 
 const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
-  const countryToggleState = useToggleState()
-  const languageToggleState = useToggleState()
-
   return (
     <div className="h-full">
       <div className="flex items-center h-full">
@@ -36,17 +27,23 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
           {({ open, close }) => (
             <>
               <div className="relative flex h-full">
+                {/*
+                 * An icon rather than the word: the header's controls are
+                 * read at a glance, and the name is carried for assistive
+                 * technology instead of being drawn.
+                 */}
                 <Popover.Button
                   data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
+                  aria-label="Open menu"
+                  className="relative h-full flex items-center px-1.5 transition-all ease-out duration-200 focus:outline-none hover:text-ink"
                 >
-                  Menu
+                  <BarsThree aria-hidden="true" className="h-5 w-5" />
                 </Popover.Button>
               </div>
 
               {open && (
                 <div
-                  className="fixed inset-0 z-[50] bg-black/0 pointer-events-auto"
+                  className="fixed inset-0 z-[50] bg-transparent pointer-events-auto"
                   onClick={close}
                   data-testid="side-menu-backdrop"
                 />
@@ -62,72 +59,65 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                 leaveFrom="opacity-100 backdrop-blur-2xl"
                 leaveTo="opacity-0"
               >
-                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
+                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-stock m-2 backdrop-blur-2xl">
                   <div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6"
+                    className="flex flex-col h-full bg-ink/90 rounded-rounded justify-between p-6"
                   >
                     <div className="flex justify-end" id="xmark">
-                      <button data-testid="close-menu-button" onClick={close}>
-                        <XMark />
+                      <button
+                        type="button"
+                        data-testid="close-menu-button"
+                        onClick={close}
+                        /* The icon carries no text, so the button needs its own name. */
+                        aria-label="Close menu"
+                      >
+                        <XMark aria-hidden="true" />
                       </button>
                     </div>
                     <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
+                      {NAV_LINKS.map((link) => {
                         return (
-                          <li key={name}>
+                          <li key={link.label}>
                             <LocalizedClientLink
-                              href={href}
-                              className="text-3xl leading-10 hover:text-ui-fg-disabled"
+                              href={link.href}
+                              className="text-3xl leading-10 hover:text-stock/60"
                               onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
+                              data-testid={`${link.label.toLowerCase()}-link`}
                             >
-                              {name}
+                              {link.label}
                             </LocalizedClientLink>
                           </li>
                         )
                       })}
                     </ul>
                     <div className="flex flex-col gap-y-6">
+                      {/*
+                       * The panel carries every destination, including the
+                       * ones the header already shows, and the colour control
+                       * with them — so the navigation has one home on a phone
+                       * and two on a wide screen, never a missing one.
+                       */}
+                      <ThemeSwitcher
+                        variant="full"
+                        tone="on-ink"
+                        testIdPrefix="theme"
+                      />
                       {!!locales?.length && (
-                        <div
-                          className="flex justify-between"
-                          onMouseEnter={languageToggleState.open}
-                          onMouseLeave={languageToggleState.close}
-                        >
+                        <div className="flex justify-between">
                           <LanguageSelect
-                            toggleState={languageToggleState}
                             locales={locales}
                             currentLocale={currentLocale}
                           />
-                          <ArrowRightMini
-                            className={clx(
-                              "transition-transform duration-150",
-                              languageToggleState.state ? "-rotate-90" : ""
-                            )}
-                          />
+                          <ArrowRightMini aria-hidden="true" />
                         </div>
                       )}
-                      <div
-                        className="flex justify-between"
-                        onMouseEnter={countryToggleState.open}
-                        onMouseLeave={countryToggleState.close}
-                      >
-                        {regions && (
-                          <CountrySelect
-                            toggleState={countryToggleState}
-                            regions={regions}
-                          />
-                        )}
-                        <ArrowRightMini
-                          className={clx(
-                            "transition-transform duration-150",
-                            countryToggleState.state ? "-rotate-90" : ""
-                          )}
-                        />
+                      <div className="flex justify-between">
+                        {regions && <CountrySelect regions={regions} />}
+                        <ArrowRightMini aria-hidden="true" />
                       </div>
                       <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
+                        © {new Date().getFullYear()} {getStoreName()}. All rights
                         reserved.
                       </Text>
                     </div>

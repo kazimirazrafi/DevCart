@@ -37,20 +37,9 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
     (addr) => addr.is_default_billing
   )
 
-  const initialState: Record<string, unknown> = {
-    isDefaultBilling: true,
-    isDefaultShipping: false,
-    error: false,
-    success: false,
-  }
-
-  if (billingAddress) {
-    initialState.addressId = billingAddress.id
-  }
-
   const [state, formAction] = useActionState(
     billingAddress ? updateCustomerAddress : addCustomerAddress,
-    initialState
+    null
   )
 
   const clearState = () => {
@@ -58,7 +47,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
   }
 
   useEffect(() => {
-    setSuccessState(!!state.success)
+    setSuccessState(!!state?.ok)
   }, [state])
 
   const currentInfo = useMemo(() => {
@@ -91,12 +80,24 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
 
   return (
     <form action={formAction} onReset={() => clearState()} className="w-full">
-      <input type="hidden" name="addressId" value={billingAddress?.id} />
+      {/* Always a string: an `undefined` value here is an uncontrolled input,
+          and the page turns controlled once the address exists. */}
+      <input
+        type="hidden"
+        name="addressId"
+        value={billingAddress?.id ?? ""}
+      />
+      {!billingAddress && (
+        // The address saved here *is* the billing default, which is what the
+        // profile page means by "billing address".
+        <input type="hidden" name="is_default_billing" value="on" />
+      )}
       <AccountInfo
         label="Billing address"
         currentInfo={currentInfo}
         isSuccess={successState}
-        isError={!!state.error}
+        isError={!!(state && !state.ok)}
+        errorMessage={state && !state.ok ? state.message : undefined}
         clearState={clearState}
         data-testid="account-billing-address-editor"
       >

@@ -5,12 +5,10 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
-  Transition,
 } from "@headlessui/react"
-import { Fragment, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import ReactCountryFlag from "react-country-flag"
 
-import { StateType } from "@lib/hooks/use-toggle-state"
 import { useParams, usePathname } from "next/navigation"
 import { updateRegion } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
@@ -22,17 +20,20 @@ type CountryOption = {
 }
 
 type CountrySelectProps = {
-  toggleState: StateType
   regions: HttpTypes.StoreRegion[]
 }
 
-const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
-  const [current, setCurrent] = useState<CountryOption | undefined>(undefined)
-
+/*
+ * The listbox owns its own open state, which is what makes it keyboard
+ * operable: Enter or Space on the button opens it, the arrow keys move through
+ * the countries, Enter picks one, Escape closes it and returns focus to the
+ * button. An earlier version rendered the options only while a *separate*
+ * hover state said so, so a keyboard user could open nothing at all — the menu
+ * looked interactive and was mouse-only.
+ */
+const CountrySelect = ({ regions }: CountrySelectProps) => {
   const { countryCode } = useParams()
   const currentPath = usePathname().split(`/${countryCode}`)[1]
-
-  const { state, close } = toggleState
 
   const options = useMemo(() => {
     return regions
@@ -48,6 +49,15 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
       .sort((a, b) => a.label.localeCompare(b.label))
   }, [regions])
 
+  /*
+   * Seeded from the URL rather than left undefined: the Listbox is given a
+   * `value`, and handing it `undefined` first made React warn that a field was
+   * changing from uncontrolled to controlled on the first open.
+   */
+  const [current, setCurrent] = useState<CountryOption | undefined>(() =>
+    options?.find((o) => o.country === countryCode)
+  )
+
   useEffect(() => {
     if (countryCode) {
       const option = options?.find((o) => o?.country === countryCode)
@@ -57,27 +67,26 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
 
   const handleChange = (option: CountryOption) => {
     updateRegion(option.country, currentPath)
-    close()
   }
 
   return (
     <div>
-      <Listbox
-        as="span"
-        onChange={handleChange}
-        defaultValue={
-          countryCode
-            ? options?.find((o) => o?.country === countryCode)
-            : undefined
-        }
-      >
-        <ListboxButton className="py-1 w-full">
+      <Listbox as="div" value={current} onChange={handleChange}>
+        <ListboxButton
+          className="py-1 w-full"
+          aria-label={
+            current
+              ? `Shipping to ${current.label}. Change country`
+              : "Choose a shipping country"
+          }
+        >
           <div className="txt-compact-small flex items-start gap-x-2">
             <span>Shipping to:</span>
             {current && (
               <span className="txt-compact-small flex items-center gap-x-2">
                 <ReactCountryFlag
                   svg
+                  aria-hidden="true"
                   style={{
                     width: "16px",
                     height: "16px",
@@ -90,38 +99,32 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
           </div>
         </ListboxButton>
         <div className="flex relative w-full min-w-[320px]">
-          <Transition
-            show={state}
-            as={Fragment}
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+          <ListboxOptions
+            transition
+            className="absolute -bottom-[calc(100%-36px)] left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-stock drop-shadow-md text-small-regular uppercase text-ink border border-ink/20 no-scrollbar rounded-rounded w-full transition duration-150 ease-out data-[closed]:opacity-0 motion-reduce:transition-none"
           >
-            <ListboxOptions
-              className="absolute -bottom-[calc(100%-36px)] left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-white drop-shadow-md text-small-regular uppercase text-black no-scrollbar rounded-rounded w-full"
-              static
-            >
-              {options?.map((o, index) => {
-                return (
-                  <ListboxOption
-                    key={index}
-                    value={o}
-                    className="py-2 hover:bg-gray-200 px-3 cursor-pointer flex items-center gap-x-2"
-                  >
-                    <ReactCountryFlag
-                      svg
-                      style={{
-                        width: "16px",
-                        height: "16px",
-                      }}
-                      countryCode={o?.country ?? ""}
-                    />{" "}
-                    {o?.label}
-                  </ListboxOption>
-                )
-              })}
-            </ListboxOptions>
-          </Transition>
+            {options?.map((o, index) => {
+              return (
+                <ListboxOption
+                  key={index}
+                  value={o}
+                  className="py-2 hover:bg-ink/5 px-3 cursor-pointer flex items-center gap-x-2 data-[focus]:bg-ink/5"
+                >
+                  <ReactCountryFlag
+                    svg
+                    aria-hidden="true"
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                    }}
+                    countryCode={o?.country ?? ""}
+                  />
+                  {" "}
+                  {o?.label}
+                </ListboxOption>
+              )
+            })}
+          </ListboxOptions>
         </div>
       </Listbox>
     </div>

@@ -40,8 +40,8 @@ const StoreSearchBox = () => {
   }
 
   return (
-    <div className="mb-6 flex items-center gap-x-3 border-b border-ui-border-base">
-      <MagnifyingGlass className="shrink-0 text-ui-fg-muted" />
+    <div className="mb-6 flex items-center gap-x-3 border-b border-ink/20">
+      <MagnifyingGlass className="shrink-0 text-ink/70" />
       <input
         type="search"
         value={inputValue}
@@ -51,7 +51,7 @@ const StoreSearchBox = () => {
         }}
         placeholder="Search products"
         aria-label="Search products"
-        className="txt-medium w-full bg-transparent py-3 text-ui-fg-base outline-none placeholder:text-ui-fg-muted [&::-webkit-search-cancel-button]:hidden"
+        className="txt-medium w-full bg-transparent py-3 text-ink outline-none placeholder:text-ink/70 [&::-webkit-search-cancel-button]:hidden"
         data-testid="store-search-input"
       />
       {inputValue && (
@@ -59,7 +59,7 @@ const StoreSearchBox = () => {
           type="button"
           onClick={clear}
           aria-label="Clear search"
-          className="shrink-0 text-ui-fg-muted hover:text-ui-fg-base"
+          className="shrink-0 text-ink/70 hover:text-ink"
           data-testid="store-search-clear"
         >
           <XMarkMini />

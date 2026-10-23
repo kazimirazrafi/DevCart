@@ -2,6 +2,103 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/*
+ * DevCart theme tokens.
+ *
+ * Colours are stored as raw sRGB channels so Tailwind can build `rgb(... / <alpha-value>)`
+ * utilities from them and opacity modifiers keep working. The hex value in each comment is
+ * the source of truth for design work; docs/DESIGN.md §2.1 records the contrast ratios.
+ */
+@layer base {
+  :root {
+    --dc-stock: 232 233 227; /* #E8E9E3 */
+    --dc-ink: 23 24 27; /* #17181B */
+    --dc-riso-blue: 0 109 174; /* #006DAE */
+    --dc-riso-pink: 251 0 142; /* #FB008E */
+    --dc-riso-yellow: 255 212 0; /* #FFD400 */
+    --dc-riso-green: 0 121 66; /* #007942 */
+
+    /* The browser's own furniture (scrollbars, form controls) is light too. */
+    color-scheme: light;
+
+    /* Spacing scale. `--dc-gutter` is the page edge, `--dc-section` the space
+       between bands, `--dc-content` the max width of a reading column. */
+    --dc-gutter: 1.5rem;
+    --dc-section: 6rem;
+    --dc-content: 80rem;
+
+    /* The system is square. Kept as a variable so the value is stated once. */
+    --dc-radius: 0px;
+
+    /* Single focus treatment, reused by every interactive component. */
+    --dc-focus-ring-width: 2px;
+    --dc-focus-ring-offset: 2px;
+  }
+
+  /*
+   * Dark mode is the same print, inverted: the sheet becomes the ink's own
+   * near-black and the type becomes the stock. Every component already paints
+   * with these six tokens, so nothing else in the codebase names a mode.
+   *
+   * The riso inks cannot simply be carried over — `#006DAE` on a near-black
+   * sheet is 2.6:1 — so each one is re-mixed at print strength for a dark
+   * ground while keeping its hue. Two consequences follow, and both are the
+   * rules below in practice:
+   *
+   * - blue, pink and green become the *light* inks here, so the type that sits
+   *   on a fill of one of them is `stock` (the near-black), exactly as it is in
+   *   light mode. `bg-riso-blue text-stock` reads at 7.99:1 either way.
+   * - yellow stays a fill rather than a text colour, but it becomes a dark
+   *   mustard so that `ink` (now the paper) still reads on it: 5.75:1.
+   *
+   * The measurements are recorded in docs/DESIGN.md §2.2.
+   */
+  .dark {
+    --dc-stock: 20 21 26; /* #14151A */
+    --dc-ink: 232 233 227; /* #E8E9E3 */
+    --dc-riso-blue: 111 179 224; /* #6FB3E0 */
+    --dc-riso-pink: 242 122 184; /* #F27AB8 */
+    --dc-riso-yellow: 107 87 0; /* #6B5700 */
+    --dc-riso-green: 86 192 141; /* #56C08D */
+
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  body {
+    background-color: rgb(var(--dc-stock));
+    color: rgb(var(--dc-ink));
+  }
+
+  /*
+   * One visible focus ring for the whole system. Components do not repeat it
+   * except where they paint their own background and need an offset colour.
+   */
+  :focus-visible {
+    outline: var(--dc-focus-ring-width) solid rgb(var(--dc-riso-blue));
+    outline-offset: var(--dc-focus-ring-offset);
+  }
+
+  /*
+   * Reduced motion is a preference, not a suggestion. The design is mostly
+   * still, but panels slide, the accordion chevron turns and skeletons pulse;
+   * for a visitor who has asked the system not to animate, all of it settles
+   * to its end state instead. `0.01ms` rather than `none` keeps transition
+   * `end` handlers firing, which Headless UI relies on to unmount a panel.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -26,6 +123,12 @@
     @apply left-0;
   }
 
+  /*
+   * Chrome paints an autofilled field in its own yellow-white and ignores the
+   * field's background. The inset shadow is the only way to repaint it, so it
+   * has to name the theme's paper rather than white — otherwise a filled-in
+   * email address glows light in dark mode.
+   */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -35,9 +138,9 @@
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    border: 1px solid #212121;
-    -webkit-text-fill-color: #212121;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    border: 1px solid rgb(var(--dc-ink));
+    -webkit-text-fill-color: rgb(var(--dc-ink));
+    -webkit-box-shadow: 0 0 0px 1000px rgb(var(--dc-stock)) inset;
     transition: background-color 5000s ease-in-out 0s;
   }
 
@@ -55,7 +158,7 @@
   }
 
   .contrast-btn {
-    @apply px-4 py-2 border border-black rounded-full hover:bg-black hover:text-white transition-colors duration-200 ease-in;
+    @apply px-4 py-2 border border-ink rounded-full hover:bg-ink hover:text-stock transition-colors duration-200 ease-in;
   }
 
   .text-xsmall-regular {

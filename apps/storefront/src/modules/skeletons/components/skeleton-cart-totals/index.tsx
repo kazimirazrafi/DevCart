@@ -1,28 +1,37 @@
-const SkeletonCartTotals = ({ header = true }) => {
+import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
+import { Rule } from "@modules/design-system"
+
+/**
+ * The money block while the figures are on their way: the same rows, the same
+ * heavy rule before the total, in mono-width bars so the columns line up with
+ * the real ones.
+ */
+const SkeletonCartTotals = ({ header = true }: { header?: boolean }) => {
   return (
-    <div className="flex flex-col">
-      {header && <div className="w-32 h-4 bg-gray-100 mb-4"></div>}
-      <div className="flex items-center justify-between">
-        <div className="w-32 h-3 bg-gray-100"></div>
-        <div className="w-32 h-3 bg-gray-100"></div>
+    <div className="flex flex-col gap-3">
+      {header && <SkeletonBar className="mb-1 h-4 w-32" />}
+
+      <div className="flex items-center justify-between gap-4">
+        <SkeletonBar className="h-3 w-40" />
+        <SkeletonBar className="h-3 w-16" />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <SkeletonBar className="h-3 w-20" />
+        <SkeletonBar className="h-3 w-16" />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <SkeletonBar className="h-3 w-24" />
+        <SkeletonBar className="h-3 w-16" />
       </div>
 
-      <div className="flex items-center justify-between my-4">
-        <div className="w-24 h-3 bg-gray-100"></div>
-        <div className="w-24 h-3 bg-gray-100"></div>
+      <Rule weight="heavy" className="my-3" />
+
+      <div className="flex items-center justify-between gap-4">
+        <SkeletonBar className="h-5 w-20" />
+        <SkeletonBar className="h-5 w-24" />
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="w-28 h-3 bg-gray-100 "></div>
-        <div className="w-20 h-3 bg-gray-100"></div>
-      </div>
-
-      <div className="w-full border-b border-gray-200 border-dashed my-4"></div>
-
-      <div className="flex items-center justify-between">
-        <div className="w-32 h-6 bg-gray-100 mb-4"></div>
-        <div className="w-24 h-6 bg-gray-100 mb-4"></div>
-      </div>
+      <Rule className="mt-3" />
     </div>
   )
 }

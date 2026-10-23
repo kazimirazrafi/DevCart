@@ -1,0 +1,6165 @@
+[
+ {
+  "id": 1,
+  "handle": "essence-mascara-lash-princess",
+  "title": "Essence Mascara Lash Princess",
+  "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+  "category": "beauty",
+  "brand": "Essence",
+  "price": 9.99,
+  "stock": 99,
+  "sku": "BEA-ESS-ESS-001",
+  "weight": 4,
+  "dimensions": {
+   "width": 15.14,
+   "height": 13.08,
+   "depth": 22.99
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
+  ],
+  "rating": 2.56,
+  "reviewCount": 3,
+  "discountPercentage": 10.48,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "No return policy",
+  "minimumOrder": 48,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 2,
+  "handle": "eyeshadow-palette-with-mirror",
+  "title": "Eyeshadow Palette with Mirror",
+  "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
+  "category": "beauty",
+  "brand": "Glamour Beauty",
+  "price": 19.99,
+  "stock": 34,
+  "sku": "BEA-GLA-EYE-002",
+  "weight": 9,
+  "dimensions": {
+   "width": 9.26,
+   "height": 22.47,
+   "depth": 27.67
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp"
+  ],
+  "rating": 2.86,
+  "reviewCount": 3,
+  "discountPercentage": 18.19,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 20,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 3,
+  "handle": "powder-canister",
+  "title": "Powder Canister",
+  "description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish.",
+  "category": "beauty",
+  "brand": "Velvet Touch",
+  "price": 14.99,
+  "stock": 89,
+  "sku": "BEA-VEL-POW-003",
+  "weight": 8,
+  "dimensions": {
+   "width": 29.27,
+   "height": 27.93,
+   "depth": 20.59
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
+  ],
+  "rating": 4.64,
+  "reviewCount": 3,
+  "discountPercentage": 9.84,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "No return policy",
+  "minimumOrder": 22,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 4,
+  "handle": "red-lipstick",
+  "title": "Red Lipstick",
+  "description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish.",
+  "category": "beauty",
+  "brand": "Chic Cosmetics",
+  "price": 12.99,
+  "stock": 91,
+  "sku": "BEA-CHI-LIP-004",
+  "weight": 1,
+  "dimensions": {
+   "width": 18.11,
+   "height": 28.38,
+   "depth": 22.17
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp"
+  ],
+  "rating": 4.36,
+  "reviewCount": 3,
+  "discountPercentage": 12.16,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 40,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 5,
+  "handle": "red-nail-polish",
+  "title": "Red Nail Polish",
+  "description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home.",
+  "category": "beauty",
+  "brand": "Nail Couture",
+  "price": 8.99,
+  "stock": 79,
+  "sku": "BEA-NAI-NAI-005",
+  "weight": 8,
+  "dimensions": {
+   "width": 21.63,
+   "height": 16.48,
+   "depth": 29.84
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/1.webp"
+  ],
+  "rating": 4.32,
+  "reviewCount": 3,
+  "discountPercentage": 11.44,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 22,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 6,
+  "handle": "calvin-klein-ck-one",
+  "title": "Calvin Klein CK One",
+  "description": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear.",
+  "category": "fragrances",
+  "brand": "Calvin Klein",
+  "price": 49.99,
+  "stock": 29,
+  "sku": "FRA-CAL-CAL-006",
+  "weight": 7,
+  "dimensions": {
+   "width": 29.36,
+   "height": 27.76,
+   "depth": 20.72
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/2.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp"
+  ],
+  "rating": 4.37,
+  "reviewCount": 3,
+  "discountPercentage": 1.89,
+  "warranty": "1 week warranty",
+  "shipping": "Ships overnight",
+  "returns": "90 days return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 7,
+  "handle": "chanel-coco-noir-eau-de",
+  "title": "Chanel Coco Noir Eau De",
+  "description": "Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions.",
+  "category": "fragrances",
+  "brand": "Chanel",
+  "price": 129.99,
+  "stock": 58,
+  "sku": "FRA-CHA-CHA-007",
+  "weight": 7,
+  "dimensions": {
+   "width": 24.5,
+   "height": 25.7,
+   "depth": 25.98
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/1.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/2.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/3.webp"
+  ],
+  "rating": 4.26,
+  "reviewCount": 3,
+  "discountPercentage": 16.51,
+  "warranty": "3 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": []
+ },
+ {
+  "id": 8,
+  "handle": "dior-j-adore",
+  "title": "Dior J'adore",
+  "description": "J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication.",
+  "category": "fragrances",
+  "brand": "Dior",
+  "price": 89.99,
+  "stock": 98,
+  "sku": "FRA-DIO-DIO-008",
+  "weight": 4,
+  "dimensions": {
+   "width": 27.67,
+   "height": 28.28,
+   "depth": 11.83
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/1.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/2.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/3.webp"
+  ],
+  "rating": 3.8,
+  "reviewCount": 3,
+  "discountPercentage": 14.72,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 10,
+  "tags": []
+ },
+ {
+  "id": 9,
+  "handle": "dolce-shine-eau-de",
+  "title": "Dolce Shine Eau de",
+  "description": "Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent.",
+  "category": "fragrances",
+  "brand": "Dolce & Gabbana",
+  "price": 69.99,
+  "stock": 4,
+  "sku": "FRA-DOL-DOL-009",
+  "weight": 6,
+  "dimensions": {
+   "width": 27.28,
+   "height": 29.88,
+   "depth": 18.3
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/1.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/2.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/3.webp"
+  ],
+  "rating": 3.96,
+  "reviewCount": 3,
+  "discountPercentage": 0.62,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "7 days return policy",
+  "minimumOrder": 2,
+  "tags": [
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 10,
+  "handle": "gucci-bloom-eau-de",
+  "title": "Gucci Bloom Eau de",
+  "description": "Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent.",
+  "category": "fragrances",
+  "brand": "Gucci",
+  "price": 79.99,
+  "stock": 91,
+  "sku": "FRA-GUC-GUC-010",
+  "weight": 7,
+  "dimensions": {
+   "width": 20.92,
+   "height": 21.68,
+   "depth": 11.2
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/1.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/2.webp",
+   "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/3.webp"
+  ],
+  "rating": 2.74,
+  "reviewCount": 3,
+  "discountPercentage": 14.39,
+  "warranty": "6 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 2,
+  "tags": []
+ },
+ {
+  "id": 11,
+  "handle": "annibale-colombo-bed",
+  "title": "Annibale Colombo Bed",
+  "description": "The Annibale Colombo Bed is a luxurious and elegant bed frame, crafted with high-quality materials for a comfortable and stylish bedroom.",
+  "category": "furniture",
+  "brand": "Annibale Colombo",
+  "price": 1899.99,
+  "stock": 88,
+  "sku": "FUR-ANN-ANN-011",
+  "weight": 10,
+  "dimensions": {
+   "width": 28.16,
+   "height": 25.36,
+   "depth": 17.28
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/1.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/2.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/3.webp"
+  ],
+  "rating": 4.77,
+  "reviewCount": 3,
+  "discountPercentage": 8.57,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "bestseller",
+   "premium"
+  ]
+ },
+ {
+  "id": 12,
+  "handle": "annibale-colombo-sofa",
+  "title": "Annibale Colombo Sofa",
+  "description": "The Annibale Colombo Sofa is a sophisticated and comfortable seating option, featuring exquisite design and premium upholstery for your living room.",
+  "category": "furniture",
+  "brand": "Annibale Colombo",
+  "price": 2499.99,
+  "stock": 60,
+  "sku": "FUR-ANN-ANN-012",
+  "weight": 6,
+  "dimensions": {
+   "width": 12.75,
+   "height": 20.55,
+   "depth": 19.06
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/1.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/2.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/3.webp"
+  ],
+  "rating": 3.92,
+  "reviewCount": 3,
+  "discountPercentage": 14.4,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 13,
+  "handle": "bedside-table-african-cherry",
+  "title": "Bedside Table African Cherry",
+  "description": "The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance.",
+  "category": "furniture",
+  "brand": "Furniture Co.",
+  "price": 299.99,
+  "stock": 64,
+  "sku": "FUR-FUR-BED-013",
+  "weight": 2,
+  "dimensions": {
+   "width": 13.47,
+   "height": 24.99,
+   "depth": 27.35
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/1.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/2.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/3.webp"
+  ],
+  "rating": 2.87,
+  "reviewCount": 3,
+  "discountPercentage": 19.09,
+  "warranty": "5 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 3,
+  "tags": []
+ },
+ {
+  "id": 14,
+  "handle": "knoll-saarinen-executive-conference-chair",
+  "title": "Knoll Saarinen Executive Conference Chair",
+  "description": "The Knoll Saarinen Executive Conference Chair is a modern and ergonomic chair, perfect for your office or conference room with its timeless design.",
+  "category": "furniture",
+  "brand": "Knoll",
+  "price": 499.99,
+  "stock": 26,
+  "sku": "FUR-KNO-KNO-014",
+  "weight": 10,
+  "dimensions": {
+   "width": 13.81,
+   "height": 7.5,
+   "depth": 5.62
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/1.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/2.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/3.webp"
+  ],
+  "rating": 4.88,
+  "reviewCount": 3,
+  "discountPercentage": 2.01,
+  "warranty": "2 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 15,
+  "handle": "wooden-bathroom-sink-with-mirror",
+  "title": "Wooden Bathroom Sink With Mirror",
+  "description": "The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.",
+  "category": "furniture",
+  "brand": "Bath Trends",
+  "price": 799.99,
+  "stock": 7,
+  "sku": "FUR-BAT-WOO-015",
+  "weight": 10,
+  "dimensions": {
+   "width": 7.98,
+   "height": 8.88,
+   "depth": 28.46
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/1.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/2.webp",
+   "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/3.webp"
+  ],
+  "rating": 3.59,
+  "reviewCount": 3,
+  "discountPercentage": 8.8,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 2,
+  "tags": [
+   "limited-stock",
+   "premium"
+  ]
+ },
+ {
+  "id": 16,
+  "handle": "apple",
+  "title": "Apple",
+  "description": "Fresh and crisp apples, perfect for snacking or incorporating into various recipes.",
+  "category": "groceries",
+  "brand": null,
+  "price": 1.99,
+  "stock": 8,
+  "sku": "GRO-BRD-APP-016",
+  "weight": 9,
+  "dimensions": {
+   "width": 13.66,
+   "height": 11.01,
+   "depth": 9.73
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/apple/1.webp"
+  ],
+  "rating": 4.19,
+  "reviewCount": 3,
+  "discountPercentage": 12.62,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "90 days return policy",
+  "minimumOrder": 7,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 17,
+  "handle": "beef-steak",
+  "title": "Beef Steak",
+  "description": "High-quality beef steak, great for grilling or cooking to your preferred level of doneness.",
+  "category": "groceries",
+  "brand": null,
+  "price": 12.99,
+  "stock": 86,
+  "sku": "GRO-BRD-BEE-017",
+  "weight": 10,
+  "dimensions": {
+   "width": 18.9,
+   "height": 5.77,
+   "depth": 18.57
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/beef-steak/1.webp"
+  ],
+  "rating": 4.47,
+  "reviewCount": 3,
+  "discountPercentage": 9.61,
+  "warranty": "3 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 43,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 18,
+  "handle": "cat-food",
+  "title": "Cat Food",
+  "description": "Nutritious cat food formulated to meet the dietary needs of your feline friend.",
+  "category": "groceries",
+  "brand": null,
+  "price": 8.99,
+  "stock": 46,
+  "sku": "GRO-BRD-FOO-018",
+  "weight": 10,
+  "dimensions": {
+   "width": 18.08,
+   "height": 9.26,
+   "depth": 21.86
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/cat-food/1.webp"
+  ],
+  "rating": 3.13,
+  "reviewCount": 3,
+  "discountPercentage": 9.58,
+  "warranty": "1 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 18,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 19,
+  "handle": "chicken-meat",
+  "title": "Chicken Meat",
+  "description": "Fresh and tender chicken meat, suitable for various culinary preparations.",
+  "category": "groceries",
+  "brand": null,
+  "price": 9.99,
+  "stock": 97,
+  "sku": "GRO-BRD-CHI-019",
+  "weight": 1,
+  "dimensions": {
+   "width": 11.03,
+   "height": 22.11,
+   "depth": 16.01
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/1.webp",
+   "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/2.webp"
+  ],
+  "rating": 3.19,
+  "reviewCount": 3,
+  "discountPercentage": 13.7,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "7 days return policy",
+  "minimumOrder": 22,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 20,
+  "handle": "cooking-oil",
+  "title": "Cooking Oil",
+  "description": "Versatile cooking oil suitable for frying, sautéing, and various culinary applications.",
+  "category": "groceries",
+  "brand": null,
+  "price": 4.99,
+  "stock": 10,
+  "sku": "GRO-BRD-COO-020",
+  "weight": 5,
+  "dimensions": {
+   "width": 19.95,
+   "height": 27.54,
+   "depth": 24.86
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/1.webp"
+  ],
+  "rating": 4.8,
+  "reviewCount": 3,
+  "discountPercentage": 9.33,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 46,
+  "tags": [
+   "bestseller",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 21,
+  "handle": "cucumber",
+  "title": "Cucumber",
+  "description": "Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side.",
+  "category": "groceries",
+  "brand": null,
+  "price": 1.49,
+  "stock": 84,
+  "sku": "GRO-BRD-CUC-021",
+  "weight": 4,
+  "dimensions": {
+   "width": 12.8,
+   "height": 28.38,
+   "depth": 21.34
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/cucumber/1.webp"
+  ],
+  "rating": 4.07,
+  "reviewCount": 3,
+  "discountPercentage": 0.16,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 2,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 22,
+  "handle": "dog-food",
+  "title": "Dog Food",
+  "description": "Specially formulated dog food designed to provide essential nutrients for your canine companion.",
+  "category": "groceries",
+  "brand": null,
+  "price": 10.99,
+  "stock": 71,
+  "sku": "GRO-BRD-FOO-022",
+  "weight": 10,
+  "dimensions": {
+   "width": 16.93,
+   "height": 27.15,
+   "depth": 9.29
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/dog-food/1.webp"
+  ],
+  "rating": 4.55,
+  "reviewCount": 3,
+  "discountPercentage": 10.27,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 43,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 23,
+  "handle": "eggs",
+  "title": "Eggs",
+  "description": "Fresh eggs, a versatile ingredient for baking, cooking, or breakfast.",
+  "category": "groceries",
+  "brand": null,
+  "price": 2.99,
+  "stock": 9,
+  "sku": "GRO-BRD-EGG-023",
+  "weight": 2,
+  "dimensions": {
+   "width": 11.42,
+   "height": 7.44,
+   "depth": 16.95
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/eggs/1.webp"
+  ],
+  "rating": 2.53,
+  "reviewCount": 3,
+  "discountPercentage": 11.05,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 32,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 24,
+  "handle": "fish-steak",
+  "title": "Fish Steak",
+  "description": "Quality fish steak, suitable for grilling, baking, or pan-searing.",
+  "category": "groceries",
+  "brand": null,
+  "price": 14.99,
+  "stock": 74,
+  "sku": "GRO-BRD-FIS-024",
+  "weight": 6,
+  "dimensions": {
+   "width": 14.95,
+   "height": 26.31,
+   "depth": 11.27
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/fish-steak/1.webp"
+  ],
+  "rating": 3.78,
+  "reviewCount": 3,
+  "discountPercentage": 4.23,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 50,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 25,
+  "handle": "green-bell-pepper",
+  "title": "Green Bell Pepper",
+  "description": "Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes.",
+  "category": "groceries",
+  "brand": null,
+  "price": 1.29,
+  "stock": 33,
+  "sku": "GRO-BRD-GRE-025",
+  "weight": 2,
+  "dimensions": {
+   "width": 15.33,
+   "height": 26.65,
+   "depth": 14.44
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/1.webp"
+  ],
+  "rating": 3.25,
+  "reviewCount": 3,
+  "discountPercentage": 0.16,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "30 days return policy",
+  "minimumOrder": 12,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 26,
+  "handle": "green-chili-pepper",
+  "title": "Green Chili Pepper",
+  "description": "Spicy green chili pepper, ideal for adding heat to your favorite recipes.",
+  "category": "groceries",
+  "brand": null,
+  "price": 0.99,
+  "stock": 3,
+  "sku": "GRO-BRD-GRE-026",
+  "weight": 7,
+  "dimensions": {
+   "width": 15.38,
+   "height": 18.12,
+   "depth": 19.92
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/green-chili-pepper/1.webp"
+  ],
+  "rating": 3.66,
+  "reviewCount": 3,
+  "discountPercentage": 1,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "30 days return policy",
+  "minimumOrder": 39,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 27,
+  "handle": "honey-jar",
+  "title": "Honey Jar",
+  "description": "Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food.",
+  "category": "groceries",
+  "brand": null,
+  "price": 6.99,
+  "stock": 34,
+  "sku": "GRO-BRD-HON-027",
+  "weight": 2,
+  "dimensions": {
+   "width": 9.28,
+   "height": 21.72,
+   "depth": 17.74
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/honey-jar/1.webp"
+  ],
+  "rating": 3.97,
+  "reviewCount": 3,
+  "discountPercentage": 14.4,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 47,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 28,
+  "handle": "ice-cream",
+  "title": "Ice Cream",
+  "description": "Creamy and delicious ice cream, available in various flavors for a delightful treat.",
+  "category": "groceries",
+  "brand": null,
+  "price": 5.49,
+  "stock": 27,
+  "sku": "GRO-BRD-CRE-028",
+  "weight": 1,
+  "dimensions": {
+   "width": 14.83,
+   "height": 15.07,
+   "depth": 24.2
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/ice-cream/1.webp",
+   "https://cdn.dummyjson.com/product-images/groceries/ice-cream/2.webp",
+   "https://cdn.dummyjson.com/product-images/groceries/ice-cream/3.webp",
+   "https://cdn.dummyjson.com/product-images/groceries/ice-cream/4.webp"
+  ],
+  "rating": 3.39,
+  "reviewCount": 3,
+  "discountPercentage": 8.69,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 42,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 29,
+  "handle": "juice",
+  "title": "Juice",
+  "description": "Refreshing fruit juice, packed with vitamins and great for staying hydrated.",
+  "category": "groceries",
+  "brand": null,
+  "price": 3.99,
+  "stock": 50,
+  "sku": "GRO-BRD-JUI-029",
+  "weight": 1,
+  "dimensions": {
+   "width": 18.56,
+   "height": 21.46,
+   "depth": 28.02
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/juice/1.webp"
+  ],
+  "rating": 3.94,
+  "reviewCount": 3,
+  "discountPercentage": 12.06,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 25,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 30,
+  "handle": "kiwi",
+  "title": "Kiwi",
+  "description": "Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes.",
+  "category": "groceries",
+  "brand": null,
+  "price": 2.49,
+  "stock": 99,
+  "sku": "GRO-BRD-KIW-030",
+  "weight": 5,
+  "dimensions": {
+   "width": 19.4,
+   "height": 18.67,
+   "depth": 17.13
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/kiwi/1.webp"
+  ],
+  "rating": 4.93,
+  "reviewCount": 3,
+  "discountPercentage": 15.22,
+  "warranty": "6 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 30,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 31,
+  "handle": "lemon",
+  "title": "Lemon",
+  "description": "Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages.",
+  "category": "groceries",
+  "brand": null,
+  "price": 0.79,
+  "stock": 31,
+  "sku": "GRO-BRD-LEM-031",
+  "weight": 3,
+  "dimensions": {
+   "width": 23.77,
+   "height": 9.22,
+   "depth": 12.05
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/lemon/1.webp"
+  ],
+  "rating": 3.53,
+  "reviewCount": 3,
+  "discountPercentage": 9.7,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "7 days return policy",
+  "minimumOrder": 29,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 32,
+  "handle": "milk",
+  "title": "Milk",
+  "description": "Fresh and nutritious milk, a staple for various recipes and daily consumption.",
+  "category": "groceries",
+  "brand": null,
+  "price": 3.49,
+  "stock": 27,
+  "sku": "GRO-BRD-MIL-032",
+  "weight": 5,
+  "dimensions": {
+   "width": 12.92,
+   "height": 15.76,
+   "depth": 11.29
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/milk/1.webp"
+  ],
+  "rating": 2.61,
+  "reviewCount": 3,
+  "discountPercentage": 13.74,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 33,
+  "handle": "mulberry",
+  "title": "Mulberry",
+  "description": "Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals.",
+  "category": "groceries",
+  "brand": null,
+  "price": 4.99,
+  "stock": 99,
+  "sku": "GRO-BRD-MUL-033",
+  "weight": 5,
+  "dimensions": {
+   "width": 12.8,
+   "height": 18.54,
+   "depth": 6.31
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/mulberry/1.webp"
+  ],
+  "rating": 4.95,
+  "reviewCount": 3,
+  "discountPercentage": 12.87,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 43,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 34,
+  "handle": "nescafe-coffee",
+  "title": "Nescafe Coffee",
+  "description": "Quality coffee from Nescafe, available in various blends for a rich and satisfying cup.",
+  "category": "groceries",
+  "brand": null,
+  "price": 7.99,
+  "stock": 57,
+  "sku": "GRO-BRD-NES-034",
+  "weight": 6,
+  "dimensions": {
+   "width": 20.54,
+   "height": 29.49,
+   "depth": 29.2
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/1.webp"
+  ],
+  "rating": 4.82,
+  "reviewCount": 3,
+  "discountPercentage": 1.59,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 35,
+  "handle": "potatoes",
+  "title": "Potatoes",
+  "description": "Versatile and starchy potatoes, great for roasting, mashing, or as a side dish.",
+  "category": "groceries",
+  "brand": null,
+  "price": 2.29,
+  "stock": 13,
+  "sku": "GRO-BRD-POT-035",
+  "weight": 9,
+  "dimensions": {
+   "width": 22.65,
+   "height": 9.83,
+   "depth": 21.75
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/potatoes/1.webp"
+  ],
+  "rating": 4.81,
+  "reviewCount": 3,
+  "discountPercentage": 5.38,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "bestseller",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 36,
+  "handle": "protein-powder",
+  "title": "Protein Powder",
+  "description": "Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins.",
+  "category": "groceries",
+  "brand": null,
+  "price": 19.99,
+  "stock": 80,
+  "sku": "GRO-BRD-PRO-036",
+  "weight": 9,
+  "dimensions": {
+   "width": 9.01,
+   "height": 12.53,
+   "depth": 22.35
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/protein-powder/1.webp"
+  ],
+  "rating": 4.18,
+  "reviewCount": 3,
+  "discountPercentage": 7.59,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "No return policy",
+  "minimumOrder": 6,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 37,
+  "handle": "red-onions",
+  "title": "Red Onions",
+  "description": "Flavorful and aromatic red onions, perfect for adding depth to your savory dishes.",
+  "category": "groceries",
+  "brand": null,
+  "price": 1.99,
+  "stock": 82,
+  "sku": "GRO-BRD-ONI-037",
+  "weight": 9,
+  "dimensions": {
+   "width": 16.01,
+   "height": 24.96,
+   "depth": 12.74
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/red-onions/1.webp"
+  ],
+  "rating": 4.2,
+  "reviewCount": 3,
+  "discountPercentage": 9.9,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 38,
+  "handle": "rice",
+  "title": "Rice",
+  "description": "High-quality rice, a staple for various cuisines and a versatile base for many dishes.",
+  "category": "groceries",
+  "brand": null,
+  "price": 5.99,
+  "stock": 59,
+  "sku": "GRO-BRD-RIC-038",
+  "weight": 5,
+  "dimensions": {
+   "width": 17.21,
+   "height": 9.88,
+   "depth": 17.16
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/rice/1.webp"
+  ],
+  "rating": 3.18,
+  "reviewCount": 3,
+  "discountPercentage": 9.29,
+  "warranty": "6 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 20,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 39,
+  "handle": "soft-drinks",
+  "title": "Soft Drinks",
+  "description": "Assorted soft drinks in various flavors, perfect for refreshing beverages.",
+  "category": "groceries",
+  "brand": null,
+  "price": 1.99,
+  "stock": 53,
+  "sku": "GRO-BRD-SOF-039",
+  "weight": 9,
+  "dimensions": {
+   "width": 19.75,
+   "height": 6.79,
+   "depth": 9.33
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/soft-drinks/1.webp"
+  ],
+  "rating": 4.75,
+  "reviewCount": 3,
+  "discountPercentage": 17.48,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 10,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 40,
+  "handle": "strawberry",
+  "title": "Strawberry",
+  "description": "Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies.",
+  "category": "groceries",
+  "brand": null,
+  "price": 3.99,
+  "stock": 46,
+  "sku": "GRO-BRD-STR-040",
+  "weight": 1,
+  "dimensions": {
+   "width": 28.18,
+   "height": 21.25,
+   "depth": 28.54
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/strawberry/1.webp"
+  ],
+  "rating": 3.08,
+  "reviewCount": 3,
+  "discountPercentage": 1.12,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "No return policy",
+  "minimumOrder": 12,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 41,
+  "handle": "tissue-paper-box",
+  "title": "Tissue Paper Box",
+  "description": "Convenient tissue paper box for everyday use, providing soft and absorbent tissues.",
+  "category": "groceries",
+  "brand": null,
+  "price": 2.49,
+  "stock": 86,
+  "sku": "GRO-BRD-TIS-041",
+  "weight": 1,
+  "dimensions": {
+   "width": 18.75,
+   "height": 17.58,
+   "depth": 12.43
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/tissue-paper-box/1.webp",
+   "https://cdn.dummyjson.com/product-images/groceries/tissue-paper-box/2.webp"
+  ],
+  "rating": 2.69,
+  "reviewCount": 3,
+  "discountPercentage": 13.28,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 44,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 42,
+  "handle": "water",
+  "title": "Water",
+  "description": "Pure and refreshing bottled water, essential for staying hydrated throughout the day.",
+  "category": "groceries",
+  "brand": null,
+  "price": 0.99,
+  "stock": 53,
+  "sku": "GRO-BRD-WAT-042",
+  "weight": 4,
+  "dimensions": {
+   "width": 18.43,
+   "height": 7.4,
+   "depth": 17.79
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/groceries/water/1.webp"
+  ],
+  "rating": 4.96,
+  "reviewCount": 3,
+  "discountPercentage": 14.92,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "7 days return policy",
+  "minimumOrder": 28,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 43,
+  "handle": "decoration-swing",
+  "title": "Decoration Swing",
+  "description": "The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room.",
+  "category": "home-decoration",
+  "brand": null,
+  "price": 59.99,
+  "stock": 47,
+  "sku": "HOM-BRD-DEC-043",
+  "weight": 4,
+  "dimensions": {
+   "width": 23.84,
+   "height": 15.19,
+   "depth": 26.05
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/1.webp",
+   "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/2.webp",
+   "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/3.webp"
+  ],
+  "rating": 3.16,
+  "reviewCount": 3,
+  "discountPercentage": 10.41,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "90 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 44,
+  "handle": "family-tree-photo-frame",
+  "title": "Family Tree Photo Frame",
+  "description": "The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones.",
+  "category": "home-decoration",
+  "brand": null,
+  "price": 29.99,
+  "stock": 77,
+  "sku": "HOM-BRD-FAM-044",
+  "weight": 1,
+  "dimensions": {
+   "width": 17.27,
+   "height": 14.81,
+   "depth": 29.11
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/1.webp"
+  ],
+  "rating": 4.53,
+  "reviewCount": 3,
+  "discountPercentage": 14.87,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 15,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 45,
+  "handle": "house-showpiece-plant",
+  "title": "House Showpiece Plant",
+  "description": "The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space.",
+  "category": "home-decoration",
+  "brand": null,
+  "price": 39.99,
+  "stock": 28,
+  "sku": "HOM-BRD-HOU-045",
+  "weight": 8,
+  "dimensions": {
+   "width": 8.55,
+   "height": 14.62,
+   "depth": 17.25
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/1.webp",
+   "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/2.webp",
+   "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/3.webp"
+  ],
+  "rating": 4.67,
+  "reviewCount": 3,
+  "discountPercentage": 7.46,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 46,
+  "handle": "plant-pot",
+  "title": "Plant Pot",
+  "description": "The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display.",
+  "category": "home-decoration",
+  "brand": null,
+  "price": 14.99,
+  "stock": 59,
+  "sku": "HOM-BRD-PLA-046",
+  "weight": 9,
+  "dimensions": {
+   "width": 9.83,
+   "height": 20.28,
+   "depth": 13.49
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/1.webp",
+   "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/2.webp",
+   "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/3.webp",
+   "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/4.webp"
+  ],
+  "rating": 3.01,
+  "reviewCount": 3,
+  "discountPercentage": 6.84,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 31,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 47,
+  "handle": "table-lamp",
+  "title": "Table Lamp",
+  "description": "The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere.",
+  "category": "home-decoration",
+  "brand": null,
+  "price": 49.99,
+  "stock": 9,
+  "sku": "HOM-BRD-TAB-047",
+  "weight": 4,
+  "dimensions": {
+   "width": 8.98,
+   "height": 13.41,
+   "depth": 5.65
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/home-decoration/table-lamp/1.webp"
+  ],
+  "rating": 3.55,
+  "reviewCount": 3,
+  "discountPercentage": 7.09,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 2,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 48,
+  "handle": "bamboo-spatula",
+  "title": "Bamboo Spatula",
+  "description": "The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 7.99,
+  "stock": 37,
+  "sku": "KIT-BRD-BAM-048",
+  "weight": 3,
+  "dimensions": {
+   "width": 21.32,
+   "height": 23.03,
+   "depth": 25.94
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/1.webp"
+  ],
+  "rating": 3.27,
+  "reviewCount": 3,
+  "discountPercentage": 2.84,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 29,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 49,
+  "handle": "black-aluminium-cup",
+  "title": "Black Aluminium Cup",
+  "description": "The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 5.99,
+  "stock": 75,
+  "sku": "KIT-BRD-BLA-049",
+  "weight": 7,
+  "dimensions": {
+   "width": 5.88,
+   "height": 5.11,
+   "depth": 10.03
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/1.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/2.webp"
+  ],
+  "rating": 4.46,
+  "reviewCount": 3,
+  "discountPercentage": 15.65,
+  "warranty": "1 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "30 days return policy",
+  "minimumOrder": 48,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 50,
+  "handle": "black-whisk",
+  "title": "Black Whisk",
+  "description": "The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 9.99,
+  "stock": 73,
+  "sku": "KIT-BRD-BLA-050",
+  "weight": 1,
+  "dimensions": {
+   "width": 13.03,
+   "height": 5.99,
+   "depth": 20.64
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-whisk/1.webp"
+  ],
+  "rating": 3.9,
+  "reviewCount": 3,
+  "discountPercentage": 10.24,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "30 days return policy",
+  "minimumOrder": 40,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 51,
+  "handle": "boxed-blender",
+  "title": "Boxed Blender",
+  "description": "The Boxed Blender is a powerful and compact blender perfect for smoothies, shakes, and more. Its convenient design and multiple functions make it a versatile kitchen appliance.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 39.99,
+  "stock": 9,
+  "sku": "KIT-BRD-BOX-051",
+  "weight": 1,
+  "dimensions": {
+   "width": 9.05,
+   "height": 19.45,
+   "depth": 17.59
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/1.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/2.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/3.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/4.webp"
+  ],
+  "rating": 4.56,
+  "reviewCount": 3,
+  "discountPercentage": 7.26,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 4,
+  "tags": [
+   "bestseller",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 52,
+  "handle": "carbon-steel-wok",
+  "title": "Carbon Steel Wok",
+  "description": "The Carbon Steel Wok is a versatile cooking pan suitable for stir-frying, sautéing, and deep frying. Its sturdy construction ensures even heat distribution for delicious meals.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 29.99,
+  "stock": 40,
+  "sku": "KIT-BRD-CAR-052",
+  "weight": 2,
+  "dimensions": {
+   "width": 27.69,
+   "height": 7.54,
+   "depth": 10.11
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/carbon-steel-wok/1.webp"
+  ],
+  "rating": 4.05,
+  "reviewCount": 3,
+  "discountPercentage": 6.53,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 53,
+  "handle": "chopping-board",
+  "title": "Chopping Board",
+  "description": "The Chopping Board is an essential kitchen accessory for food preparation. Made from durable material, it provides a safe and hygienic surface for cutting and chopping.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 12.99,
+  "stock": 14,
+  "sku": "KIT-BRD-CHO-053",
+  "weight": 2,
+  "dimensions": {
+   "width": 15.6,
+   "height": 6.93,
+   "depth": 8.51
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/chopping-board/1.webp"
+  ],
+  "rating": 3.7,
+  "reviewCount": 3,
+  "discountPercentage": 8.03,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 54,
+  "handle": "citrus-squeezer-yellow",
+  "title": "Citrus Squeezer Yellow",
+  "description": "The Citrus Squeezer in Yellow is a handy tool for extracting juice from citrus fruits. Its vibrant color adds a cheerful touch to your kitchen gadgets.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 8.99,
+  "stock": 22,
+  "sku": "KIT-BRD-CIT-054",
+  "weight": 2,
+  "dimensions": {
+   "width": 17.16,
+   "height": 26.8,
+   "depth": 16.29
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/citrus-squeezer-yellow/1.webp"
+  ],
+  "rating": 4.63,
+  "reviewCount": 3,
+  "discountPercentage": 12.1,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 38,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 55,
+  "handle": "egg-slicer",
+  "title": "Egg Slicer",
+  "description": "The Egg Slicer is a convenient tool for slicing boiled eggs evenly. It's perfect for salads, sandwiches, and other dishes where sliced eggs are desired.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 6.99,
+  "stock": 40,
+  "sku": "KIT-BRD-SLI-055",
+  "weight": 2,
+  "dimensions": {
+   "width": 10.81,
+   "height": 19.15,
+   "depth": 13.18
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/egg-slicer/1.webp"
+  ],
+  "rating": 3.09,
+  "reviewCount": 3,
+  "discountPercentage": 14.76,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "No return policy",
+  "minimumOrder": 32,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 56,
+  "handle": "electric-stove",
+  "title": "Electric Stove",
+  "description": "The Electric Stove provides a portable and efficient cooking solution. Ideal for small kitchens or as an additional cooking surface for various culinary needs.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 49.99,
+  "stock": 21,
+  "sku": "KIT-BRD-ELE-056",
+  "weight": 5,
+  "dimensions": {
+   "width": 24.17,
+   "height": 22.55,
+   "depth": 27.49
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/electric-stove/1.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/electric-stove/2.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/electric-stove/3.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/electric-stove/4.webp"
+  ],
+  "rating": 4.11,
+  "reviewCount": 3,
+  "discountPercentage": 14.04,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 57,
+  "handle": "fine-mesh-strainer",
+  "title": "Fine Mesh Strainer",
+  "description": "The Fine Mesh Strainer is a versatile tool for straining liquids and sifting dry ingredients. Its fine mesh ensures efficient filtering for smooth cooking and baking.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 9.99,
+  "stock": 85,
+  "sku": "KIT-BRD-FIN-057",
+  "weight": 9,
+  "dimensions": {
+   "width": 18.02,
+   "height": 13.23,
+   "depth": 15.92
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/fine-mesh-strainer/1.webp"
+  ],
+  "rating": 3.04,
+  "reviewCount": 3,
+  "discountPercentage": 3.5,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 43,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 58,
+  "handle": "fork",
+  "title": "Fork",
+  "description": "The Fork is a classic utensil for various dining and serving purposes. Its durable and ergonomic design makes it a reliable choice for everyday use.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 3.99,
+  "stock": 7,
+  "sku": "KIT-BRD-FOR-058",
+  "weight": 9,
+  "dimensions": {
+   "width": 12.3,
+   "height": 25.91,
+   "depth": 22.57
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/fork/1.webp"
+  ],
+  "rating": 3.11,
+  "reviewCount": 3,
+  "discountPercentage": 8.07,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "No return policy",
+  "minimumOrder": 36,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 59,
+  "handle": "glass",
+  "title": "Glass",
+  "description": "The Glass is a versatile and elegant drinking vessel suitable for a variety of beverages. Its clear design allows you to enjoy the colors and textures of your drinks.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 4.99,
+  "stock": 46,
+  "sku": "KIT-BRD-GLA-059",
+  "weight": 10,
+  "dimensions": {
+   "width": 20.23,
+   "height": 24.56,
+   "depth": 26.97
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/glass/1.webp"
+  ],
+  "rating": 4.02,
+  "reviewCount": 3,
+  "discountPercentage": 7.92,
+  "warranty": "3 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 17,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 60,
+  "handle": "grater-black",
+  "title": "Grater Black",
+  "description": "The Grater in Black is a handy kitchen tool for grating cheese, vegetables, and more. Its sleek design and sharp blades make food preparation efficient and easy.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 10.99,
+  "stock": 84,
+  "sku": "KIT-BRD-GRA-060",
+  "weight": 3,
+  "dimensions": {
+   "width": 6.32,
+   "height": 23.11,
+   "depth": 24.64
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/grater-black/1.webp"
+  ],
+  "rating": 3.21,
+  "reviewCount": 3,
+  "discountPercentage": 3.56,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "60 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 61,
+  "handle": "hand-blender",
+  "title": "Hand Blender",
+  "description": "The Hand Blender is a versatile kitchen appliance for blending, pureeing, and mixing. Its compact design and powerful motor make it a convenient tool for various recipes.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 34.99,
+  "stock": 84,
+  "sku": "KIT-BRD-HAN-061",
+  "weight": 5,
+  "dimensions": {
+   "width": 27.31,
+   "height": 21,
+   "depth": 24.27
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/hand-blender/1.webp"
+  ],
+  "rating": 3.86,
+  "reviewCount": 3,
+  "discountPercentage": 17.02,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 11,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 62,
+  "handle": "ice-cube-tray",
+  "title": "Ice Cube Tray",
+  "description": "The Ice Cube Tray is a practical accessory for making ice cubes in various shapes. Perfect for keeping your drinks cool and adding a fun element to your beverages.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 5.99,
+  "stock": 13,
+  "sku": "KIT-BRD-CUB-062",
+  "weight": 3,
+  "dimensions": {
+   "width": 26.67,
+   "height": 18.14,
+   "depth": 5.31
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/ice-cube-tray/1.webp"
+  ],
+  "rating": 4.71,
+  "reviewCount": 3,
+  "discountPercentage": 0.63,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 16,
+  "tags": [
+   "bestseller",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 63,
+  "handle": "kitchen-sieve",
+  "title": "Kitchen Sieve",
+  "description": "The Kitchen Sieve is a versatile tool for sifting and straining dry and wet ingredients. Its fine mesh design ensures smooth results in your cooking and baking.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 7.99,
+  "stock": 68,
+  "sku": "KIT-BRD-KIT-063",
+  "weight": 5,
+  "dimensions": {
+   "width": 20.68,
+   "height": 6.5,
+   "depth": 7.86
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/kitchen-sieve/1.webp"
+  ],
+  "rating": 3.09,
+  "reviewCount": 3,
+  "discountPercentage": 18.91,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 64,
+  "handle": "knife",
+  "title": "Knife",
+  "description": "The Knife is an essential kitchen tool for chopping, slicing, and dicing. Its sharp blade and ergonomic handle make it a reliable choice for food preparation.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 14.99,
+  "stock": 7,
+  "sku": "KIT-BRD-KNI-064",
+  "weight": 3,
+  "dimensions": {
+   "width": 25.19,
+   "height": 18.52,
+   "depth": 20.5
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/knife/1.webp"
+  ],
+  "rating": 3.26,
+  "reviewCount": 3,
+  "discountPercentage": 18.86,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 50,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 65,
+  "handle": "lunch-box",
+  "title": "Lunch Box",
+  "description": "The Lunch Box is a convenient and portable container for packing and carrying your meals. With compartments for different foods, it's perfect for on-the-go dining.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 12.99,
+  "stock": 94,
+  "sku": "KIT-BRD-LUN-065",
+  "weight": 9,
+  "dimensions": {
+   "width": 12.45,
+   "height": 19.08,
+   "depth": 8.24
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/lunch-box/1.webp"
+  ],
+  "rating": 4.93,
+  "reviewCount": 3,
+  "discountPercentage": 10.34,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 39,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 66,
+  "handle": "microwave-oven",
+  "title": "Microwave Oven",
+  "description": "The Microwave Oven is a versatile kitchen appliance for quick and efficient cooking, reheating, and defrosting. Its compact size makes it suitable for various kitchen setups.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 89.99,
+  "stock": 59,
+  "sku": "KIT-BRD-MIC-066",
+  "weight": 9,
+  "dimensions": {
+   "width": 16.31,
+   "height": 27.45,
+   "depth": 13.05
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/microwave-oven/1.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/microwave-oven/2.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/microwave-oven/3.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/microwave-oven/4.webp"
+  ],
+  "rating": 4.82,
+  "reviewCount": 3,
+  "discountPercentage": 12.13,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 4,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 67,
+  "handle": "mug-tree-stand",
+  "title": "Mug Tree Stand",
+  "description": "The Mug Tree Stand is a stylish and space-saving solution for organizing your mugs. Keep your favorite mugs easily accessible and neatly displayed in your kitchen.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 15.99,
+  "stock": 88,
+  "sku": "KIT-BRD-TRE-067",
+  "weight": 3,
+  "dimensions": {
+   "width": 18.99,
+   "height": 27.14,
+   "depth": 27.29
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/mug-tree-stand/1.webp",
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/mug-tree-stand/2.webp"
+  ],
+  "rating": 2.64,
+  "reviewCount": 3,
+  "discountPercentage": 9.25,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "30 days return policy",
+  "minimumOrder": 45,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 68,
+  "handle": "pan",
+  "title": "Pan",
+  "description": "The Pan is a versatile and essential cookware item for frying, sautéing, and cooking various dishes. Its non-stick coating ensures easy food release and cleanup.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 24.99,
+  "stock": 90,
+  "sku": "KIT-BRD-PRD-068",
+  "weight": 8,
+  "dimensions": {
+   "width": 17.14,
+   "height": 21.7,
+   "depth": 25.75
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/pan/1.webp"
+  ],
+  "rating": 2.79,
+  "reviewCount": 3,
+  "discountPercentage": 3,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 17,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 69,
+  "handle": "plate",
+  "title": "Plate",
+  "description": "The Plate is a classic and essential dishware item for serving meals. Its durable and stylish design makes it suitable for everyday use or special occasions.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 3.99,
+  "stock": 66,
+  "sku": "KIT-BRD-PLA-069",
+  "weight": 4,
+  "dimensions": {
+   "width": 16.46,
+   "height": 5.39,
+   "depth": 13.15
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/plate/1.webp"
+  ],
+  "rating": 3.65,
+  "reviewCount": 3,
+  "discountPercentage": 7.31,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 6,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 70,
+  "handle": "red-tongs",
+  "title": "Red Tongs",
+  "description": "The Red Tongs are versatile kitchen tongs suitable for various cooking and serving tasks. Their vibrant color adds a pop of excitement to your kitchen utensils.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 6.99,
+  "stock": 82,
+  "sku": "KIT-BRD-TON-070",
+  "weight": 7,
+  "dimensions": {
+   "width": 22.86,
+   "height": 26.2,
+   "depth": 17
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/red-tongs/1.webp"
+  ],
+  "rating": 4.42,
+  "reviewCount": 3,
+  "discountPercentage": 14.52,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "30 days return policy",
+  "minimumOrder": 23,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 71,
+  "handle": "silver-pot-with-glass-cap",
+  "title": "Silver Pot With Glass Cap",
+  "description": "The Silver Pot with Glass Cap is a stylish and functional cookware item for boiling, simmering, and preparing delicious meals. Its glass cap allows you to monitor cooking progress.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 39.99,
+  "stock": 40,
+  "sku": "KIT-BRD-SIL-071",
+  "weight": 7,
+  "dimensions": {
+   "width": 21.03,
+   "height": 11.7,
+   "depth": 6.69
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/silver-pot-with-glass-cap/1.webp"
+  ],
+  "rating": 3.22,
+  "reviewCount": 3,
+  "discountPercentage": 5.7,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "90 days return policy",
+  "minimumOrder": 10,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 72,
+  "handle": "slotted-turner",
+  "title": "Slotted Turner",
+  "description": "The Slotted Turner is a kitchen utensil designed for flipping and turning food items. Its slotted design allows excess liquid to drain, making it ideal for frying and sautéing.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 8.99,
+  "stock": 88,
+  "sku": "KIT-BRD-SLO-072",
+  "weight": 8,
+  "dimensions": {
+   "width": 14.41,
+   "height": 27.15,
+   "depth": 14.76
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/slotted-turner/1.webp"
+  ],
+  "rating": 3.4,
+  "reviewCount": 3,
+  "discountPercentage": 13.35,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 34,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 73,
+  "handle": "spice-rack",
+  "title": "Spice Rack",
+  "description": "The Spice Rack is a convenient organizer for your spices and seasonings. Keep your kitchen essentials within reach and neatly arranged with this stylish spice rack.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 19.99,
+  "stock": 79,
+  "sku": "KIT-BRD-SPI-073",
+  "weight": 7,
+  "dimensions": {
+   "width": 28.06,
+   "height": 22.43,
+   "depth": 26.34
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/spice-rack/1.webp"
+  ],
+  "rating": 4.87,
+  "reviewCount": 3,
+  "discountPercentage": 12.09,
+  "warranty": "1 week warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 18,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 74,
+  "handle": "spoon",
+  "title": "Spoon",
+  "description": "The Spoon is a versatile kitchen utensil for stirring, serving, and tasting. Its ergonomic design and durable construction make it an essential tool for every kitchen.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 4.99,
+  "stock": 59,
+  "sku": "KIT-BRD-SPO-074",
+  "weight": 6,
+  "dimensions": {
+   "width": 8.49,
+   "height": 26.04,
+   "depth": 27.78
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/spoon/1.webp"
+  ],
+  "rating": 4.03,
+  "reviewCount": 3,
+  "discountPercentage": 1.53,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 15,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 75,
+  "handle": "tray",
+  "title": "Tray",
+  "description": "The Tray is a functional and decorative item for serving snacks, appetizers, or drinks. Its stylish design makes it a versatile accessory for entertaining guests.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 16.99,
+  "stock": 71,
+  "sku": "KIT-BRD-TRA-075",
+  "weight": 10,
+  "dimensions": {
+   "width": 12.7,
+   "height": 7.52,
+   "depth": 9.72
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/tray/1.webp"
+  ],
+  "rating": 4.62,
+  "reviewCount": 3,
+  "discountPercentage": 7.48,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 23,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 76,
+  "handle": "wooden-rolling-pin",
+  "title": "Wooden Rolling Pin",
+  "description": "The Wooden Rolling Pin is a classic kitchen tool for rolling out dough for baking. Its smooth surface and sturdy handles make it easy to achieve uniform thickness.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 11.99,
+  "stock": 80,
+  "sku": "KIT-BRD-WOO-076",
+  "weight": 7,
+  "dimensions": {
+   "width": 5.92,
+   "height": 10.87,
+   "depth": 19.55
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/wooden-rolling-pin/1.webp"
+  ],
+  "rating": 2.92,
+  "reviewCount": 3,
+  "discountPercentage": 9.75,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "30 days return policy",
+  "minimumOrder": 11,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 77,
+  "handle": "yellow-peeler",
+  "title": "Yellow Peeler",
+  "description": "The Yellow Peeler is a handy tool for peeling fruits and vegetables with ease. Its bright yellow color adds a cheerful touch to your kitchen gadgets.",
+  "category": "kitchen-accessories",
+  "brand": null,
+  "price": 5.99,
+  "stock": 35,
+  "sku": "KIT-BRD-YEL-077",
+  "weight": 7,
+  "dimensions": {
+   "width": 9.7,
+   "height": 6.43,
+   "depth": 17.93
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/kitchen-accessories/yellow-peeler/1.webp"
+  ],
+  "rating": 4.24,
+  "reviewCount": 3,
+  "discountPercentage": 12.48,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 6,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 78,
+  "handle": "apple-macbook-pro-14-inch-space-grey",
+  "title": "Apple MacBook Pro 14 Inch Space Grey",
+  "description": "The MacBook Pro 14 Inch in Space Grey is a powerful and sleek laptop, featuring Apple's M1 Pro chip for exceptional performance and a stunning Retina display.",
+  "category": "laptops",
+  "brand": "Apple",
+  "price": 1999.99,
+  "stock": 24,
+  "sku": "LAP-APP-APP-078",
+  "weight": 9,
+  "dimensions": {
+   "width": 20.03,
+   "height": 9.54,
+   "depth": 14.82
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/1.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/2.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/3.webp"
+  ],
+  "rating": 3.65,
+  "reviewCount": 3,
+  "discountPercentage": 4.69,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "90 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 79,
+  "handle": "asus-zenbook-pro-dual-screen-laptop",
+  "title": "Asus Zenbook Pro Dual Screen Laptop",
+  "description": "The Asus Zenbook Pro Dual Screen Laptop is a high-performance device with dual screens, providing productivity and versatility for creative professionals.",
+  "category": "laptops",
+  "brand": "Asus",
+  "price": 1799.99,
+  "stock": 45,
+  "sku": "LAP-ASU-ASU-079",
+  "weight": 9,
+  "dimensions": {
+   "width": 16.6,
+   "height": 11.49,
+   "depth": 10.89
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/1.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/2.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/3.webp"
+  ],
+  "rating": 3.95,
+  "reviewCount": 3,
+  "discountPercentage": 11.14,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 80,
+  "handle": "huawei-matebook-x-pro",
+  "title": "Huawei Matebook X Pro",
+  "description": "The Huawei Matebook X Pro is a slim and stylish laptop with a high-resolution touchscreen display, offering a premium experience for users on the go.",
+  "category": "laptops",
+  "brand": "Huawei",
+  "price": 1399.99,
+  "stock": 75,
+  "sku": "LAP-HUA-HUA-080",
+  "weight": 9,
+  "dimensions": {
+   "width": 18.21,
+   "height": 22.83,
+   "depth": 17.26
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/1.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/2.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/3.webp"
+  ],
+  "rating": 4.98,
+  "reviewCount": 3,
+  "discountPercentage": 9.38,
+  "warranty": "No warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "bestseller",
+   "premium"
+  ]
+ },
+ {
+  "id": 81,
+  "handle": "lenovo-yoga-920",
+  "title": "Lenovo Yoga 920",
+  "description": "The Lenovo Yoga 920 is a 2-in-1 convertible laptop with a flexible hinge, allowing you to use it as a laptop or tablet, offering versatility and portability.",
+  "category": "laptops",
+  "brand": "Lenovo",
+  "price": 1099.99,
+  "stock": 40,
+  "sku": "LAP-LEN-LEN-081",
+  "weight": 9,
+  "dimensions": {
+   "width": 20.84,
+   "height": 22.68,
+   "depth": 17.39
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/1.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/2.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/3.webp"
+  ],
+  "rating": 2.86,
+  "reviewCount": 3,
+  "discountPercentage": 6.55,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 82,
+  "handle": "new-dell-xps-13-9300-laptop",
+  "title": "New DELL XPS 13 9300 Laptop",
+  "description": "The New DELL XPS 13 9300 Laptop is a compact and powerful device, featuring a virtually borderless InfinityEdge display and high-end performance for various tasks.",
+  "category": "laptops",
+  "brand": "Dell",
+  "price": 1499.99,
+  "stock": 74,
+  "sku": "LAP-DEL-DEL-082",
+  "weight": 2,
+  "dimensions": {
+   "width": 13.76,
+   "height": 29,
+   "depth": 21.42
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/1.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/2.webp",
+   "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/3.webp"
+  ],
+  "rating": 2.67,
+  "reviewCount": 3,
+  "discountPercentage": 11.89,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "60 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 83,
+  "handle": "blue-black-check-shirt",
+  "title": "Blue & Black Check Shirt",
+  "description": "The Blue & Black Check Shirt is a stylish and comfortable men's shirt featuring a classic check pattern. Made from high-quality fabric, it's suitable for both casual and semi-formal occasions.",
+  "category": "mens-shirts",
+  "brand": "Fashion Trends",
+  "price": 29.99,
+  "stock": 38,
+  "sku": "MEN-FAS-BLU-083",
+  "weight": 4,
+  "dimensions": {
+   "width": 27.49,
+   "height": 23.73,
+   "depth": 28.61
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/4.webp"
+  ],
+  "rating": 3.64,
+  "reviewCount": 3,
+  "discountPercentage": 15.35,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 18,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 84,
+  "handle": "gigabyte-aorus-men-tshirt",
+  "title": "Gigabyte Aorus Men Tshirt",
+  "description": "The Gigabyte Aorus Men Tshirt is a cool and casual shirt for gaming enthusiasts. With the Aorus logo and sleek design, it's perfect for expressing your gaming style.",
+  "category": "mens-shirts",
+  "brand": "Gigabyte",
+  "price": 24.99,
+  "stock": 90,
+  "sku": "MEN-GIG-GIG-084",
+  "weight": 4,
+  "dimensions": {
+   "width": 22.31,
+   "height": 26.47,
+   "depth": 13.27
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/4.webp"
+  ],
+  "rating": 3.18,
+  "reviewCount": 3,
+  "discountPercentage": 0.94,
+  "warranty": "3 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "30 days return policy",
+  "minimumOrder": 16,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 85,
+  "handle": "man-plaid-shirt",
+  "title": "Man Plaid Shirt",
+  "description": "The Man Plaid Shirt is a timeless and versatile men's shirt with a classic plaid pattern. Its comfortable fit and casual style make it a wardrobe essential for various occasions.",
+  "category": "mens-shirts",
+  "brand": "Classic Wear",
+  "price": 34.99,
+  "stock": 82,
+  "sku": "MEN-CLA-PLA-085",
+  "weight": 3,
+  "dimensions": {
+   "width": 9.34,
+   "height": 5.97,
+   "depth": 10.85
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/4.webp"
+  ],
+  "rating": 3.46,
+  "reviewCount": 3,
+  "discountPercentage": 19.5,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 13,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 86,
+  "handle": "man-short-sleeve-shirt",
+  "title": "Man Short Sleeve Shirt",
+  "description": "The Man Short Sleeve Shirt is a breezy and stylish option for warm days. With a comfortable fit and short sleeves, it's perfect for a laid-back yet polished look.",
+  "category": "mens-shirts",
+  "brand": "Casual Comfort",
+  "price": 19.99,
+  "stock": 2,
+  "sku": "MEN-CAS-SHO-086",
+  "weight": 2,
+  "dimensions": {
+   "width": 5.02,
+   "height": 16.57,
+   "depth": 9.6
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-short-sleeve-shirt/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-short-sleeve-shirt/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-short-sleeve-shirt/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/man-short-sleeve-shirt/4.webp"
+  ],
+  "rating": 2.9,
+  "reviewCount": 3,
+  "discountPercentage": 6.83,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "30 days return policy",
+  "minimumOrder": 4,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 87,
+  "handle": "men-check-shirt",
+  "title": "Men Check Shirt",
+  "description": "The Men Check Shirt is a classic and versatile shirt featuring a stylish check pattern. Suitable for various occasions, it adds a smart and polished touch to your wardrobe.",
+  "category": "mens-shirts",
+  "brand": "Urban Chic",
+  "price": 27.99,
+  "stock": 95,
+  "sku": "MEN-URB-CHE-087",
+  "weight": 10,
+  "dimensions": {
+   "width": 23.48,
+   "height": 7.03,
+   "depth": 27.33
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shirts/men-check-shirt/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/men-check-shirt/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/men-check-shirt/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shirts/men-check-shirt/4.webp"
+  ],
+  "rating": 2.72,
+  "reviewCount": 3,
+  "discountPercentage": 11.38,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 12,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 88,
+  "handle": "nike-air-jordan-1-red-and-black",
+  "title": "Nike Air Jordan 1 Red And Black",
+  "description": "The Nike Air Jordan 1 in Red and Black is an iconic basketball sneaker known for its stylish design and high-performance features, making it a favorite among sneaker enthusiasts and athletes.",
+  "category": "mens-shoes",
+  "brand": "Nike",
+  "price": 149.99,
+  "stock": 7,
+  "sku": "MEN-NIK-NIK-088",
+  "weight": 3,
+  "dimensions": {
+   "width": 17.44,
+   "height": 9.52,
+   "depth": 27
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/4.webp"
+  ],
+  "rating": 4.77,
+  "reviewCount": 3,
+  "discountPercentage": 4.12,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "bestseller",
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 89,
+  "handle": "nike-baseball-cleats",
+  "title": "Nike Baseball Cleats",
+  "description": "Nike Baseball Cleats are designed for maximum traction and performance on the baseball field. They provide stability and support for players during games and practices.",
+  "category": "mens-shoes",
+  "brand": "Nike",
+  "price": 79.99,
+  "stock": 12,
+  "sku": "MEN-NIK-NIK-089",
+  "weight": 9,
+  "dimensions": {
+   "width": 11.75,
+   "height": 26.65,
+   "depth": 19.6
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/4.webp"
+  ],
+  "rating": 3.88,
+  "reviewCount": 3,
+  "discountPercentage": 18.04,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 90,
+  "handle": "puma-future-rider-trainers",
+  "title": "Puma Future Rider Trainers",
+  "description": "The Puma Future Rider Trainers offer a blend of retro style and modern comfort. Perfect for casual wear, these trainers provide a fashionable and comfortable option for everyday use.",
+  "category": "mens-shoes",
+  "brand": "Puma",
+  "price": 89.99,
+  "stock": 90,
+  "sku": "MEN-PUM-PUM-090",
+  "weight": 6,
+  "dimensions": {
+   "width": 17.45,
+   "height": 15.58,
+   "depth": 23.13
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/4.webp"
+  ],
+  "rating": 4.9,
+  "reviewCount": 3,
+  "discountPercentage": 4.2,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 10,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 91,
+  "handle": "sports-sneakers-off-white-red",
+  "title": "Sports Sneakers Off White & Red",
+  "description": "The Sports Sneakers in Off White and Red combine style and functionality, making them a fashionable choice for sports enthusiasts. The red and off-white color combination adds a bold and energetic touch.",
+  "category": "mens-shoes",
+  "brand": "Off White",
+  "price": 119.99,
+  "stock": 17,
+  "sku": "MEN-OFF-SPO-091",
+  "weight": 7,
+  "dimensions": {
+   "width": 14.37,
+   "height": 23.44,
+   "depth": 12.84
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-&-red/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-&-red/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-&-red/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-&-red/4.webp"
+  ],
+  "rating": 4.77,
+  "reviewCount": 3,
+  "discountPercentage": 4.97,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 92,
+  "handle": "sports-sneakers-off-white-red-92",
+  "title": "Sports Sneakers Off White Red",
+  "description": "Another variant of the Sports Sneakers in Off White Red, featuring a unique design. These sneakers offer style and comfort for casual occasions.",
+  "category": "mens-shoes",
+  "brand": "Off White",
+  "price": 109.99,
+  "stock": 62,
+  "sku": "MEN-OFF-SPO-092",
+  "weight": 9,
+  "dimensions": {
+   "width": 21.43,
+   "height": 9.86,
+   "depth": 28.5
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-red/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-red/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-red/3.webp",
+   "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-red/4.webp"
+  ],
+  "rating": 4.69,
+  "reviewCount": 3,
+  "discountPercentage": 0.04,
+  "warranty": "3 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 93,
+  "handle": "brown-leather-belt-watch",
+  "title": "Brown Leather Belt Watch",
+  "description": "The Brown Leather Belt Watch is a stylish timepiece with a classic design. Featuring a genuine leather strap and a sleek dial, it adds a touch of sophistication to your look.",
+  "category": "mens-watches",
+  "brand": "Fashion Timepieces",
+  "price": 89.99,
+  "stock": 32,
+  "sku": "MEN-FAS-BRO-093",
+  "weight": 10,
+  "dimensions": {
+   "width": 16.65,
+   "height": 6.15,
+   "depth": 20.18
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/3.webp"
+  ],
+  "rating": 4.19,
+  "reviewCount": 3,
+  "discountPercentage": 5.99,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "30 days return policy",
+  "minimumOrder": 7,
+  "tags": []
+ },
+ {
+  "id": 94,
+  "handle": "longines-master-collection",
+  "title": "Longines Master Collection",
+  "description": "The Longines Master Collection is an elegant and refined watch known for its precision and craftsmanship. With a timeless design, it's a symbol of luxury and sophistication.",
+  "category": "mens-watches",
+  "brand": "Longines",
+  "price": 1499.99,
+  "stock": 100,
+  "sku": "MEN-LON-LON-094",
+  "weight": 4,
+  "dimensions": {
+   "width": 15.39,
+   "height": 10.06,
+   "depth": 20.32
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/3.webp"
+  ],
+  "rating": 3.87,
+  "reviewCount": 3,
+  "discountPercentage": 17.24,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 95,
+  "handle": "rolex-cellini-date-black-dial",
+  "title": "Rolex Cellini Date Black Dial",
+  "description": "The Rolex Cellini Date with Black Dial is a classic and prestigious watch. With a black dial and date complication, it exudes sophistication and is a symbol of Rolex's heritage.",
+  "category": "mens-watches",
+  "brand": "Rolex",
+  "price": 8999.99,
+  "stock": 40,
+  "sku": "MEN-ROL-ROL-095",
+  "weight": 2,
+  "dimensions": {
+   "width": 13.46,
+   "height": 26.1,
+   "depth": 17.9
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/3.webp"
+  ],
+  "rating": 4.97,
+  "reviewCount": 3,
+  "discountPercentage": 8.88,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "90 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "bestseller",
+   "premium"
+  ]
+ },
+ {
+  "id": 96,
+  "handle": "rolex-cellini-moonphase",
+  "title": "Rolex Cellini Moonphase",
+  "description": "The Rolex Cellini Moonphase is a masterpiece of horology, featuring a moon phase complication and exquisite design. It reflects Rolex's commitment to precision and elegance.",
+  "category": "mens-watches",
+  "brand": "Rolex",
+  "price": 12999.99,
+  "stock": 36,
+  "sku": "MEN-ROL-ROL-096",
+  "weight": 2,
+  "dimensions": {
+   "width": 26.06,
+   "height": 25.19,
+   "depth": 13.17
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-moonphase/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-moonphase/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-moonphase/3.webp"
+  ],
+  "rating": 2.58,
+  "reviewCount": 3,
+  "discountPercentage": 17.52,
+  "warranty": "6 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 97,
+  "handle": "rolex-datejust",
+  "title": "Rolex Datejust",
+  "description": "The Rolex Datejust is an iconic and versatile timepiece with a date window. Known for its timeless design and reliability, it's a symbol of Rolex's watchmaking excellence.",
+  "category": "mens-watches",
+  "brand": "Rolex",
+  "price": 10999.99,
+  "stock": 86,
+  "sku": "MEN-ROL-ROL-097",
+  "weight": 4,
+  "dimensions": {
+   "width": 23.11,
+   "height": 19.97,
+   "depth": 27.04
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-datejust/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-datejust/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-datejust/3.webp"
+  ],
+  "rating": 3.66,
+  "reviewCount": 3,
+  "discountPercentage": 3.73,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 98,
+  "handle": "rolex-submariner-watch",
+  "title": "Rolex Submariner Watch",
+  "description": "The Rolex Submariner is a legendary dive watch with a rich history. Known for its durability and water resistance, it's a symbol of adventure and exploration.",
+  "category": "mens-watches",
+  "brand": "Rolex",
+  "price": 13999.99,
+  "stock": 55,
+  "sku": "MEN-ROL-ROL-098",
+  "weight": 4,
+  "dimensions": {
+   "width": 17.69,
+   "height": 12.48,
+   "depth": 8.75
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-submariner-watch/1.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-submariner-watch/2.webp",
+   "https://cdn.dummyjson.com/product-images/mens-watches/rolex-submariner-watch/3.webp"
+  ],
+  "rating": 2.69,
+  "reviewCount": 3,
+  "discountPercentage": 5.05,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "90 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 99,
+  "handle": "amazon-echo-plus",
+  "title": "Amazon Echo Plus",
+  "description": "The Amazon Echo Plus is a smart speaker with built-in Alexa voice control. It features premium sound quality and serves as a hub for controlling smart home devices.",
+  "category": "mobile-accessories",
+  "brand": "Amazon",
+  "price": 99.99,
+  "stock": 61,
+  "sku": "MOB-AMA-AMA-099",
+  "weight": 5,
+  "dimensions": {
+   "width": 12.68,
+   "height": 15.24,
+   "depth": 27.46
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/1.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/2.webp"
+  ],
+  "rating": 4.99,
+  "reviewCount": 3,
+  "discountPercentage": 12.07,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 100,
+  "handle": "apple-airpods",
+  "title": "Apple Airpods",
+  "description": "The Apple Airpods offer a seamless wireless audio experience. With easy pairing, high-quality sound, and Siri integration, they are perfect for on-the-go listening.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 129.99,
+  "stock": 67,
+  "sku": "MOB-APP-APP-100",
+  "weight": 4,
+  "dimensions": {
+   "width": 25.79,
+   "height": 18.38,
+   "depth": 11.53
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/1.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/2.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/3.webp"
+  ],
+  "rating": 4.15,
+  "reviewCount": 3,
+  "discountPercentage": 15.54,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "No return policy",
+  "minimumOrder": 4,
+  "tags": []
+ },
+ {
+  "id": 101,
+  "handle": "apple-airpods-max-silver",
+  "title": "Apple AirPods Max Silver",
+  "description": "The Apple AirPods Max in Silver are premium over-ear headphones with high-fidelity audio, adaptive EQ, and active noise cancellation. Experience immersive sound in style.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 549.99,
+  "stock": 59,
+  "sku": "MOB-APP-APP-101",
+  "weight": 2,
+  "dimensions": {
+   "width": 24.88,
+   "height": 14.9,
+   "depth": 27.54
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods-max-silver/1.webp"
+  ],
+  "rating": 3.47,
+  "reviewCount": 3,
+  "discountPercentage": 13.67,
+  "warranty": "No warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 102,
+  "handle": "apple-airpower-wireless-charger",
+  "title": "Apple Airpower Wireless Charger",
+  "description": "The Apple AirPower Wireless Charger provides a convenient way to charge your compatible Apple devices wirelessly. Simply place your devices on the charging mat for effortless charging.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 79.99,
+  "stock": 1,
+  "sku": "MOB-APP-APP-102",
+  "weight": 5,
+  "dimensions": {
+   "width": 25.25,
+   "height": 25.44,
+   "depth": 10.98
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpower-wireless-charger/1.webp"
+  ],
+  "rating": 3.68,
+  "reviewCount": 3,
+  "discountPercentage": 4.48,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "90 days return policy",
+  "minimumOrder": 7,
+  "tags": [
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 103,
+  "handle": "apple-homepod-mini-cosmic-grey",
+  "title": "Apple HomePod Mini Cosmic Grey",
+  "description": "The Apple HomePod Mini in Cosmic Grey is a compact smart speaker that delivers impressive audio and integrates seamlessly with the Apple ecosystem for a smart home experience.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 99.99,
+  "stock": 27,
+  "sku": "MOB-APP-APP-103",
+  "weight": 10,
+  "dimensions": {
+   "width": 16.02,
+   "height": 29.2,
+   "depth": 19.81
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-homepod-mini-cosmic-grey/1.webp"
+  ],
+  "rating": 4.62,
+  "reviewCount": 3,
+  "discountPercentage": 18.1,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "90 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 104,
+  "handle": "apple-iphone-charger",
+  "title": "Apple iPhone Charger",
+  "description": "The Apple iPhone Charger is a high-quality charger designed for fast and efficient charging of your iPhone. Ensure your device stays powered up and ready to go.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 19.99,
+  "stock": 31,
+  "sku": "MOB-APP-APP-104",
+  "weight": 1,
+  "dimensions": {
+   "width": 13.63,
+   "height": 26.25,
+   "depth": 5.95
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-iphone-charger/1.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-iphone-charger/2.webp"
+  ],
+  "rating": 4.15,
+  "reviewCount": 3,
+  "discountPercentage": 18.52,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "90 days return policy",
+  "minimumOrder": 14,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 105,
+  "handle": "apple-magsafe-battery-pack",
+  "title": "Apple MagSafe Battery Pack",
+  "description": "The Apple MagSafe Battery Pack is a portable and convenient way to add extra battery life to your MagSafe-compatible iPhone. Attach it magnetically for a secure connection.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 99.99,
+  "stock": 1,
+  "sku": "MOB-APP-APP-105",
+  "weight": 6,
+  "dimensions": {
+   "width": 15.4,
+   "height": 11.89,
+   "depth": 19.67
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-magsafe-battery-pack/1.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-magsafe-battery-pack/2.webp"
+  ],
+  "rating": 3.62,
+  "reviewCount": 3,
+  "discountPercentage": 17.17,
+  "warranty": "2 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 4,
+  "tags": [
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 106,
+  "handle": "apple-watch-series-4-gold",
+  "title": "Apple Watch Series 4 Gold",
+  "description": "The Apple Watch Series 4 in Gold is a stylish and advanced smartwatch with features like heart rate monitoring, fitness tracking, and a beautiful Retina display.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 349.99,
+  "stock": 33,
+  "sku": "MOB-APP-APP-106",
+  "weight": 6,
+  "dimensions": {
+   "width": 27.69,
+   "height": 28.03,
+   "depth": 7.11
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-watch-series-4-gold/1.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-watch-series-4-gold/2.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-watch-series-4-gold/3.webp"
+  ],
+  "rating": 2.74,
+  "reviewCount": 3,
+  "discountPercentage": 12.02,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "No return policy",
+  "minimumOrder": 3,
+  "tags": []
+ },
+ {
+  "id": 107,
+  "handle": "beats-flex-wireless-earphones",
+  "title": "Beats Flex Wireless Earphones",
+  "description": "The Beats Flex Wireless Earphones offer a comfortable and versatile audio experience. With magnetic earbuds and up to 12 hours of battery life, they are ideal for everyday use.",
+  "category": "mobile-accessories",
+  "brand": "Beats",
+  "price": 49.99,
+  "stock": 50,
+  "sku": "MOB-BEA-BEA-107",
+  "weight": 8,
+  "dimensions": {
+   "width": 17.86,
+   "height": 25.74,
+   "depth": 23.09
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/beats-flex-wireless-earphones/1.webp"
+  ],
+  "rating": 4.24,
+  "reviewCount": 3,
+  "discountPercentage": 5.73,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 17,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 108,
+  "handle": "iphone-12-silicone-case-with-magsafe-plum",
+  "title": "iPhone 12 Silicone Case with MagSafe Plum",
+  "description": "The iPhone 12 Silicone Case with MagSafe in Plum is a stylish and protective case designed for the iPhone 12. It features MagSafe technology for easy attachment of accessories.",
+  "category": "mobile-accessories",
+  "brand": "Apple",
+  "price": 29.99,
+  "stock": 69,
+  "sku": "MOB-APP-IPH-108",
+  "weight": 7,
+  "dimensions": {
+   "width": 12.49,
+   "height": 11.29,
+   "depth": 23.52
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/iphone-12-silicone-case-with-magsafe-plum/1.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/iphone-12-silicone-case-with-magsafe-plum/2.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/iphone-12-silicone-case-with-magsafe-plum/3.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/iphone-12-silicone-case-with-magsafe-plum/4.webp"
+  ],
+  "rating": 3.62,
+  "reviewCount": 3,
+  "discountPercentage": 13.85,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 4,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 109,
+  "handle": "monopod",
+  "title": "Monopod",
+  "description": "The Monopod is a versatile camera accessory for stable and adjustable shooting. Perfect for capturing selfies, group photos, and videos with ease.",
+  "category": "mobile-accessories",
+  "brand": "TechGear",
+  "price": 19.99,
+  "stock": 48,
+  "sku": "MOB-TEC-MON-109",
+  "weight": 10,
+  "dimensions": {
+   "width": 8.8,
+   "height": 12.93,
+   "depth": 21.1
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/monopod/1.webp",
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/monopod/2.webp"
+  ],
+  "rating": 4.43,
+  "reviewCount": 3,
+  "discountPercentage": 8.58,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 30,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 110,
+  "handle": "selfie-lamp-with-iphone",
+  "title": "Selfie Lamp with iPhone",
+  "description": "The Selfie Lamp with iPhone is a portable and adjustable LED light designed to enhance your selfies and video calls. Attach it to your iPhone for well-lit photos.",
+  "category": "mobile-accessories",
+  "brand": "GadgetMaster",
+  "price": 14.99,
+  "stock": 58,
+  "sku": "MOB-GAD-SEL-110",
+  "weight": 10,
+  "dimensions": {
+   "width": 5.26,
+   "height": 13.84,
+   "depth": 22.83
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/selfie-lamp-with-iphone/1.webp"
+  ],
+  "rating": 3.55,
+  "reviewCount": 3,
+  "discountPercentage": 19.4,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "60 days return policy",
+  "minimumOrder": 22,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 111,
+  "handle": "selfie-stick-monopod",
+  "title": "Selfie Stick Monopod",
+  "description": "The Selfie Stick Monopod is a extendable and foldable device for capturing the perfect selfie or group photo. Compatible with smartphones and cameras.",
+  "category": "mobile-accessories",
+  "brand": "SnapTech",
+  "price": 12.99,
+  "stock": 11,
+  "sku": "MOB-SNA-SEL-111",
+  "weight": 2,
+  "dimensions": {
+   "width": 24.76,
+   "height": 26.38,
+   "depth": 21.39
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/selfie-stick-monopod/1.webp"
+  ],
+  "rating": 3.88,
+  "reviewCount": 3,
+  "discountPercentage": 19.12,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 112,
+  "handle": "tv-studio-camera-pedestal",
+  "title": "TV Studio Camera Pedestal",
+  "description": "The TV Studio Camera Pedestal is a professional-grade camera support system for smooth and precise camera movements in a studio setting. Ideal for broadcast and production.",
+  "category": "mobile-accessories",
+  "brand": "ProVision",
+  "price": 499.99,
+  "stock": 15,
+  "sku": "MOB-PRO-STU-112",
+  "weight": 4,
+  "dimensions": {
+   "width": 29.84,
+   "height": 11.01,
+   "depth": 6.81
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/mobile-accessories/tv-studio-camera-pedestal/1.webp"
+  ],
+  "rating": 2.78,
+  "reviewCount": 3,
+  "discountPercentage": 8.31,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 113,
+  "handle": "generic-motorcycle",
+  "title": "Generic Motorcycle",
+  "description": "The Generic Motorcycle is a versatile and reliable bike suitable for various riding preferences. With a balanced design, it provides a comfortable and efficient riding experience.",
+  "category": "motorcycle",
+  "brand": "Generic Motors",
+  "price": 3999.99,
+  "stock": 34,
+  "sku": "MOT-GEN-GEN-113",
+  "weight": 8,
+  "dimensions": {
+   "width": 26.23,
+   "height": 14.04,
+   "depth": 17.87
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/motorcycle/generic-motorcycle/1.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/generic-motorcycle/2.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/generic-motorcycle/3.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/generic-motorcycle/4.webp"
+  ],
+  "rating": 4.91,
+  "reviewCount": 3,
+  "discountPercentage": 12.1,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "bestseller",
+   "premium"
+  ]
+ },
+ {
+  "id": 114,
+  "handle": "kawasaki-z800",
+  "title": "Kawasaki Z800",
+  "description": "The Kawasaki Z800 is a powerful and agile sportbike known for its striking design and performance. It's equipped with advanced features, making it a favorite among motorcycle enthusiasts.",
+  "category": "motorcycle",
+  "brand": "Kawasaki",
+  "price": 8999.99,
+  "stock": 52,
+  "sku": "MOT-KAW-KAW-114",
+  "weight": 9,
+  "dimensions": {
+   "width": 18.3,
+   "height": 18.27,
+   "depth": 16.06
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/motorcycle/kawasaki-z800/1.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/kawasaki-z800/2.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/kawasaki-z800/3.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/kawasaki-z800/4.webp"
+  ],
+  "rating": 3.98,
+  "reviewCount": 3,
+  "discountPercentage": 9.77,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 115,
+  "handle": "motogp-ci-h1",
+  "title": "MotoGP CI.H1",
+  "description": "The MotoGP CI.H1 is a high-performance motorcycle inspired by MotoGP racing technology. It offers cutting-edge features and precision engineering for an exhilarating riding experience.",
+  "category": "motorcycle",
+  "brand": "MotoGP",
+  "price": 14999.99,
+  "stock": 10,
+  "sku": "MOT-MOT-MOT-115",
+  "weight": 1,
+  "dimensions": {
+   "width": 19.33,
+   "height": 17.31,
+   "depth": 12.05
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/motorcycle/motogp-ci.h1/1.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/motogp-ci.h1/2.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/motogp-ci.h1/3.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/motogp-ci.h1/4.webp"
+  ],
+  "rating": 2.97,
+  "reviewCount": 3,
+  "discountPercentage": 6.92,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "limited-stock",
+   "premium"
+  ]
+ },
+ {
+  "id": 116,
+  "handle": "scooter-motorcycle",
+  "title": "Scooter Motorcycle",
+  "description": "The Scooter Motorcycle is a practical and fuel-efficient bike ideal for urban commuting. It features a step-through design and user-friendly controls for easy maneuverability.",
+  "category": "motorcycle",
+  "brand": "ScootMaster",
+  "price": 2999.99,
+  "stock": 84,
+  "sku": "MOT-SCO-SCO-116",
+  "weight": 7,
+  "dimensions": {
+   "width": 27.31,
+   "height": 19.34,
+   "depth": 26.72
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/motorcycle/scooter-motorcycle/1.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/scooter-motorcycle/2.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/scooter-motorcycle/3.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/scooter-motorcycle/4.webp"
+  ],
+  "rating": 2.53,
+  "reviewCount": 3,
+  "discountPercentage": 6.27,
+  "warranty": "5 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 117,
+  "handle": "sportbike-motorcycle",
+  "title": "Sportbike Motorcycle",
+  "description": "The Sportbike Motorcycle is designed for speed and agility, with a sleek and aerodynamic profile. It's suitable for riders looking for a dynamic and thrilling riding experience.",
+  "category": "motorcycle",
+  "brand": "SpeedMaster",
+  "price": 7499.99,
+  "stock": 0,
+  "sku": "MOT-SPE-SPO-117",
+  "weight": 10,
+  "dimensions": {
+   "width": 22.5,
+   "height": 22.74,
+   "depth": 8.38
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/motorcycle/sportbike-motorcycle/1.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/sportbike-motorcycle/2.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/sportbike-motorcycle/3.webp",
+   "https://cdn.dummyjson.com/product-images/motorcycle/sportbike-motorcycle/4.webp"
+  ],
+  "rating": 3.94,
+  "reviewCount": 3,
+  "discountPercentage": 11.58,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "30 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 118,
+  "handle": "attitude-super-leaves-hand-soap",
+  "title": "Attitude Super Leaves Hand Soap",
+  "description": "Attitude Super Leaves Hand Soap is a natural and nourishing hand soap enriched with the goodness of super leaves. It cleanses and moisturizes your hands, leaving them feeling fresh and soft.",
+  "category": "skin-care",
+  "brand": "Attitude",
+  "price": 8.99,
+  "stock": 94,
+  "sku": "SKI-ATT-ATT-118",
+  "weight": 1,
+  "dimensions": {
+   "width": 14.05,
+   "height": 8.3,
+   "depth": 16.62
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/1.webp",
+   "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/2.webp",
+   "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/3.webp"
+  ],
+  "rating": 3.19,
+  "reviewCount": 3,
+  "discountPercentage": 18.49,
+  "warranty": "6 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 41,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 119,
+  "handle": "olay-ultra-moisture-shea-butter-body-wash",
+  "title": "Olay Ultra Moisture Shea Butter Body Wash",
+  "description": "Olay Ultra Moisture Shea Butter Body Wash is a luxurious body wash that hydrates and nourishes your skin with the moisturizing power of shea butter. Enjoy a rich lather and silky-smooth skin.",
+  "category": "skin-care",
+  "brand": "Olay",
+  "price": 12.99,
+  "stock": 34,
+  "sku": "SKI-OLA-OLA-119",
+  "weight": 4,
+  "dimensions": {
+   "width": 25.23,
+   "height": 28.33,
+   "depth": 11.89
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/skin-care/olay-ultra-moisture-shea-butter-body-wash/1.webp",
+   "https://cdn.dummyjson.com/product-images/skin-care/olay-ultra-moisture-shea-butter-body-wash/2.webp",
+   "https://cdn.dummyjson.com/product-images/skin-care/olay-ultra-moisture-shea-butter-body-wash/3.webp"
+  ],
+  "rating": 4.51,
+  "reviewCount": 3,
+  "discountPercentage": 16.39,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 33,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 120,
+  "handle": "vaseline-men-body-and-face-lotion",
+  "title": "Vaseline Men Body and Face Lotion",
+  "description": "Vaseline Men Body and Face Lotion is a specially formulated lotion designed to provide long-lasting moisture to men's skin. It absorbs quickly and helps keep the skin hydrated and healthy.",
+  "category": "skin-care",
+  "brand": "Vaseline",
+  "price": 9.99,
+  "stock": 95,
+  "sku": "SKI-VAS-VAS-120",
+  "weight": 4,
+  "dimensions": {
+   "width": 21.83,
+   "height": 17.38,
+   "depth": 24.76
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/skin-care/vaseline-men-body-and-face-lotion/1.webp",
+   "https://cdn.dummyjson.com/product-images/skin-care/vaseline-men-body-and-face-lotion/2.webp",
+   "https://cdn.dummyjson.com/product-images/skin-care/vaseline-men-body-and-face-lotion/3.webp"
+  ],
+  "rating": 3.16,
+  "reviewCount": 3,
+  "discountPercentage": 13.39,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships overnight",
+  "returns": "90 days return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 121,
+  "handle": "iphone-5s",
+  "title": "iPhone 5s",
+  "description": "The iPhone 5s is a classic smartphone known for its compact design and advanced features during its release. While it's an older model, it still provides a reliable user experience.",
+  "category": "smartphones",
+  "brand": "Apple",
+  "price": 199.99,
+  "stock": 25,
+  "sku": "SMA-APP-IPH-121",
+  "weight": 2,
+  "dimensions": {
+   "width": 5.29,
+   "height": 18.38,
+   "depth": 17.72
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/3.webp"
+  ],
+  "rating": 2.83,
+  "reviewCount": 3,
+  "discountPercentage": 12.91,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 3,
+  "tags": []
+ },
+ {
+  "id": 122,
+  "handle": "iphone-6",
+  "title": "iPhone 6",
+  "description": "The iPhone 6 is a stylish and capable smartphone with a larger display and improved performance. It introduced new features and design elements, making it a popular choice in its time.",
+  "category": "smartphones",
+  "brand": "Apple",
+  "price": 299.99,
+  "stock": 60,
+  "sku": "SMA-APP-IPH-122",
+  "weight": 7,
+  "dimensions": {
+   "width": 11,
+   "height": 9.1,
+   "depth": 9.67
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/3.webp"
+  ],
+  "rating": 3.41,
+  "reviewCount": 3,
+  "discountPercentage": 6.69,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 5,
+  "tags": []
+ },
+ {
+  "id": 123,
+  "handle": "iphone-13-pro",
+  "title": "iPhone 13 Pro",
+  "description": "The iPhone 13 Pro is a cutting-edge smartphone with a powerful camera system, high-performance chip, and stunning display. It offers advanced features for users who demand top-notch technology.",
+  "category": "smartphones",
+  "brand": "Apple",
+  "price": 1099.99,
+  "stock": 56,
+  "sku": "SMA-APP-IPH-123",
+  "weight": 8,
+  "dimensions": {
+   "width": 12.63,
+   "height": 5.28,
+   "depth": 14.29
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/3.webp"
+  ],
+  "rating": 4.12,
+  "reviewCount": 3,
+  "discountPercentage": 9.37,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 124,
+  "handle": "iphone-x",
+  "title": "iPhone X",
+  "description": "The iPhone X is a flagship smartphone featuring a bezel-less OLED display, facial recognition technology (Face ID), and impressive performance. It represents a milestone in iPhone design and innovation.",
+  "category": "smartphones",
+  "brand": "Apple",
+  "price": 899.99,
+  "stock": 37,
+  "sku": "SMA-APP-IPH-124",
+  "weight": 1,
+  "dimensions": {
+   "width": 21.88,
+   "height": 24.19,
+   "depth": 14.19
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-x/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-x/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/iphone-x/3.webp"
+  ],
+  "rating": 2.51,
+  "reviewCount": 3,
+  "discountPercentage": 19.59,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 2,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 125,
+  "handle": "oppo-a57",
+  "title": "Oppo A57",
+  "description": "The Oppo A57 is a mid-range smartphone known for its sleek design and capable features. It offers a balance of performance and affordability, making it a popular choice.",
+  "category": "smartphones",
+  "brand": "Oppo",
+  "price": 249.99,
+  "stock": 19,
+  "sku": "SMA-OPP-OPP-125",
+  "weight": 5,
+  "dimensions": {
+   "width": 7.2,
+   "height": 10.74,
+   "depth": 23.68
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-a57/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-a57/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-a57/3.webp"
+  ],
+  "rating": 3.94,
+  "reviewCount": 3,
+  "discountPercentage": 2.43,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "90 days return policy",
+  "minimumOrder": 3,
+  "tags": []
+ },
+ {
+  "id": 126,
+  "handle": "oppo-f19-pro-plus",
+  "title": "Oppo F19 Pro Plus",
+  "description": "The Oppo F19 Pro Plus is a feature-rich smartphone with a focus on camera capabilities. It boasts advanced photography features and a powerful performance for a premium user experience.",
+  "category": "smartphones",
+  "brand": "Oppo",
+  "price": 399.99,
+  "stock": 78,
+  "sku": "SMA-OPP-OPP-126",
+  "weight": 6,
+  "dimensions": {
+   "width": 6.78,
+   "height": 25.17,
+   "depth": 8.4
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-f19-pro-plus/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-f19-pro-plus/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-f19-pro-plus/3.webp"
+  ],
+  "rating": 3.51,
+  "reviewCount": 3,
+  "discountPercentage": 18.64,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "90 days return policy",
+  "minimumOrder": 1,
+  "tags": []
+ },
+ {
+  "id": 127,
+  "handle": "oppo-k1",
+  "title": "Oppo K1",
+  "description": "The Oppo K1 series offers a range of smartphones with various features and specifications. Known for their stylish design and reliable performance, the Oppo K1 series caters to diverse user preferences.",
+  "category": "smartphones",
+  "brand": "Oppo",
+  "price": 299.99,
+  "stock": 55,
+  "sku": "SMA-OPP-OPP-127",
+  "weight": 5,
+  "dimensions": {
+   "width": 13.89,
+   "height": 10.63,
+   "depth": 16.6
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-k1/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-k1/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-k1/3.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/oppo-k1/4.webp"
+  ],
+  "rating": 4.25,
+  "reviewCount": 3,
+  "discountPercentage": 18.29,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 5,
+  "tags": []
+ },
+ {
+  "id": 128,
+  "handle": "realme-c35",
+  "title": "Realme C35",
+  "description": "The Realme C35 is a budget-friendly smartphone with a focus on providing essential features for everyday use. It offers a reliable performance and user-friendly experience.",
+  "category": "smartphones",
+  "brand": "Realme",
+  "price": 149.99,
+  "stock": 48,
+  "sku": "SMA-REA-REA-128",
+  "weight": 2,
+  "dimensions": {
+   "width": 25.28,
+   "height": 8.14,
+   "depth": 29.53
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-c35/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-c35/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-c35/3.webp"
+  ],
+  "rating": 4.2,
+  "reviewCount": 3,
+  "discountPercentage": 15.3,
+  "warranty": "3 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "90 days return policy",
+  "minimumOrder": 3,
+  "tags": []
+ },
+ {
+  "id": 129,
+  "handle": "realme-x",
+  "title": "Realme X",
+  "description": "The Realme X is a mid-range smartphone known for its sleek design and impressive display. It offers a good balance of performance and camera capabilities for users seeking a quality device.",
+  "category": "smartphones",
+  "brand": "Realme",
+  "price": 299.99,
+  "stock": 12,
+  "sku": "SMA-REA-REA-129",
+  "weight": 4,
+  "dimensions": {
+   "width": 25.59,
+   "height": 21.42,
+   "depth": 12.75
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-x/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-x/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-x/3.webp"
+  ],
+  "rating": 3.7,
+  "reviewCount": 3,
+  "discountPercentage": 6.95,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "No return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 130,
+  "handle": "realme-xt",
+  "title": "Realme XT",
+  "description": "The Realme XT is a feature-rich smartphone with a focus on camera technology. It comes equipped with advanced camera sensors, delivering high-quality photos and videos for photography enthusiasts.",
+  "category": "smartphones",
+  "brand": "Realme",
+  "price": 349.99,
+  "stock": 80,
+  "sku": "SMA-REA-REA-130",
+  "weight": 3,
+  "dimensions": {
+   "width": 24.98,
+   "height": 26.73,
+   "depth": 6.5
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-xt/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-xt/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/realme-xt/3.webp"
+  ],
+  "rating": 4.58,
+  "reviewCount": 3,
+  "discountPercentage": 11.51,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "bestseller"
+  ]
+ },
+ {
+  "id": 131,
+  "handle": "samsung-galaxy-s7",
+  "title": "Samsung Galaxy S7",
+  "description": "The Samsung Galaxy S7 is a flagship smartphone known for its sleek design and advanced features. It features a high-resolution display, powerful camera, and robust performance.",
+  "category": "smartphones",
+  "brand": "Samsung",
+  "price": 299.99,
+  "stock": 67,
+  "sku": "SMA-SAM-SAM-131",
+  "weight": 10,
+  "dimensions": {
+   "width": 13.55,
+   "height": 24.24,
+   "depth": 5.63
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s7/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s7/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s7/3.webp"
+  ],
+  "rating": 3.3,
+  "reviewCount": 3,
+  "discountPercentage": 19.55,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": []
+ },
+ {
+  "id": 132,
+  "handle": "samsung-galaxy-s8",
+  "title": "Samsung Galaxy S8",
+  "description": "The Samsung Galaxy S8 is a premium smartphone with an Infinity Display, offering a stunning visual experience. It boasts advanced camera capabilities and cutting-edge technology.",
+  "category": "smartphones",
+  "brand": "Samsung",
+  "price": 499.99,
+  "stock": 0,
+  "sku": "SMA-SAM-SAM-132",
+  "weight": 6,
+  "dimensions": {
+   "width": 23.05,
+   "height": 26.88,
+   "depth": 15.73
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s8/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s8/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s8/3.webp"
+  ],
+  "rating": 4.4,
+  "reviewCount": 3,
+  "discountPercentage": 19.45,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 4,
+  "tags": []
+ },
+ {
+  "id": 133,
+  "handle": "samsung-galaxy-s10",
+  "title": "Samsung Galaxy S10",
+  "description": "The Samsung Galaxy S10 is a flagship device featuring a dynamic AMOLED display, versatile camera system, and powerful performance. It represents innovation and excellence in smartphone technology.",
+  "category": "smartphones",
+  "brand": "Samsung",
+  "price": 699.99,
+  "stock": 19,
+  "sku": "SMA-SAM-SAM-133",
+  "weight": 9,
+  "dimensions": {
+   "width": 27.41,
+   "height": 15.26,
+   "depth": 27.02
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s10/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s10/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s10/3.webp"
+  ],
+  "rating": 3.06,
+  "reviewCount": 3,
+  "discountPercentage": 5.59,
+  "warranty": "No warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "30 days return policy",
+  "minimumOrder": 2,
+  "tags": [
+   "premium"
+  ]
+ },
+ {
+  "id": 134,
+  "handle": "vivo-s1",
+  "title": "Vivo S1",
+  "description": "The Vivo S1 is a stylish and mid-range smartphone offering a blend of design and performance. It features a vibrant display, capable camera system, and reliable functionality.",
+  "category": "smartphones",
+  "brand": "Vivo",
+  "price": 249.99,
+  "stock": 50,
+  "sku": "SMA-VIV-VIV-134",
+  "weight": 4,
+  "dimensions": {
+   "width": 14.06,
+   "height": 11.79,
+   "depth": 6.78
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-s1/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-s1/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-s1/3.webp"
+  ],
+  "rating": 3.5,
+  "reviewCount": 3,
+  "discountPercentage": 10.17,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": []
+ },
+ {
+  "id": 135,
+  "handle": "vivo-v9",
+  "title": "Vivo V9",
+  "description": "The Vivo V9 is a smartphone known for its sleek design and emphasis on capturing high-quality selfies. It features a notch display, dual-camera setup, and a modern design.",
+  "category": "smartphones",
+  "brand": "Vivo",
+  "price": 299.99,
+  "stock": 82,
+  "sku": "SMA-VIV-VIV-135",
+  "weight": 4,
+  "dimensions": {
+   "width": 19.85,
+   "height": 21.83,
+   "depth": 13.04
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-v9/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-v9/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-v9/3.webp"
+  ],
+  "rating": 3.6,
+  "reviewCount": 3,
+  "discountPercentage": 17.67,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 2,
+  "tags": []
+ },
+ {
+  "id": 136,
+  "handle": "vivo-x21",
+  "title": "Vivo X21",
+  "description": "The Vivo X21 is a premium smartphone with a focus on cutting-edge technology. It features an in-display fingerprint sensor, a high-resolution display, and advanced camera capabilities.",
+  "category": "smartphones",
+  "brand": "Vivo",
+  "price": 499.99,
+  "stock": 7,
+  "sku": "SMA-VIV-VIV-136",
+  "weight": 10,
+  "dimensions": {
+   "width": 22.49,
+   "height": 21.62,
+   "depth": 27.88
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-x21/1.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-x21/2.webp",
+   "https://cdn.dummyjson.com/product-images/smartphones/vivo-x21/3.webp"
+  ],
+  "rating": 4.26,
+  "reviewCount": 3,
+  "discountPercentage": 17.41,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "limited-stock"
+  ]
+ },
+ {
+  "id": 137,
+  "handle": "american-football",
+  "title": "American Football",
+  "description": "The American Football is a classic ball used in American football games. It is designed for throwing and catching, making it an essential piece of equipment for the sport.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 19.99,
+  "stock": 53,
+  "sku": "SPO-BRD-AME-137",
+  "weight": 2,
+  "dimensions": {
+   "width": 6.88,
+   "height": 5.82,
+   "depth": 21.96
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/american-football/1.webp"
+  ],
+  "rating": 4.91,
+  "reviewCount": 3,
+  "discountPercentage": 4.93,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "90 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 138,
+  "handle": "baseball-ball",
+  "title": "Baseball Ball",
+  "description": "The Baseball Ball is a standard baseball used in baseball games. It features a durable leather cover and is designed for pitching, hitting, and fielding in the game of baseball.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 8.99,
+  "stock": 100,
+  "sku": "SPO-BRD-BAS-138",
+  "weight": 5,
+  "dimensions": {
+   "width": 14.42,
+   "height": 22.65,
+   "depth": 15.89
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-ball/1.webp"
+  ],
+  "rating": 2.57,
+  "reviewCount": 3,
+  "discountPercentage": 1.71,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "30 days return policy",
+  "minimumOrder": 11,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 139,
+  "handle": "baseball-glove",
+  "title": "Baseball Glove",
+  "description": "The Baseball Glove is a protective glove worn by baseball players. It is designed to catch and field the baseball, providing players with comfort and control during the game.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 24.99,
+  "stock": 22,
+  "sku": "SPO-BRD-BAS-139",
+  "weight": 1,
+  "dimensions": {
+   "width": 23.84,
+   "height": 11.12,
+   "depth": 5.85
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-glove/1.webp",
+   "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-glove/2.webp",
+   "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-glove/3.webp"
+  ],
+  "rating": 3.96,
+  "reviewCount": 3,
+  "discountPercentage": 2.9,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "90 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 140,
+  "handle": "basketball",
+  "title": "Basketball",
+  "description": "The Basketball is a standard ball used in basketball games. It is designed for dribbling, shooting, and passing in the game of basketball, suitable for both indoor and outdoor play.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 14.99,
+  "stock": 75,
+  "sku": "SPO-BRD-BAS-140",
+  "weight": 7,
+  "dimensions": {
+   "width": 27.86,
+   "height": 10.64,
+   "depth": 18.75
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/basketball/1.webp"
+  ],
+  "rating": 4.66,
+  "reviewCount": 3,
+  "discountPercentage": 7.44,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "90 days return policy",
+  "minimumOrder": 11,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 141,
+  "handle": "basketball-rim",
+  "title": "Basketball Rim",
+  "description": "The Basketball Rim is a sturdy hoop and net assembly mounted on a basketball backboard. It provides a target for shooting and scoring in the game of basketball.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 39.99,
+  "stock": 43,
+  "sku": "SPO-BRD-BAS-141",
+  "weight": 1,
+  "dimensions": {
+   "width": 15.83,
+   "height": 20.87,
+   "depth": 7.27
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/basketball-rim/1.webp"
+  ],
+  "rating": 4.6,
+  "reviewCount": 3,
+  "discountPercentage": 7.74,
+  "warranty": "3 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 142,
+  "handle": "cricket-ball",
+  "title": "Cricket Ball",
+  "description": "The Cricket Ball is a hard leather ball used in the sport of cricket. It is bowled and batted in the game, and its hardness and seam contribute to the dynamics of cricket play.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 12.99,
+  "stock": 30,
+  "sku": "SPO-BRD-CRI-142",
+  "weight": 7,
+  "dimensions": {
+   "width": 28.51,
+   "height": 20.77,
+   "depth": 17.66
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-ball/1.webp"
+  ],
+  "rating": 3.53,
+  "reviewCount": 3,
+  "discountPercentage": 8.63,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 11,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 143,
+  "handle": "cricket-bat",
+  "title": "Cricket Bat",
+  "description": "The Cricket Bat is an essential piece of cricket equipment used by batsmen to hit the cricket ball. It is made of wood and comes in various sizes and designs.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 29.99,
+  "stock": 98,
+  "sku": "SPO-BRD-CRI-143",
+  "weight": 10,
+  "dimensions": {
+   "width": 27.44,
+   "height": 23.65,
+   "depth": 16.62
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-bat/1.webp"
+  ],
+  "rating": 3.17,
+  "reviewCount": 3,
+  "discountPercentage": 3.29,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "No return policy",
+  "minimumOrder": 16,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 144,
+  "handle": "cricket-helmet",
+  "title": "Cricket Helmet",
+  "description": "The Cricket Helmet is a protective headgear worn by cricket players, especially batsmen and wicketkeepers. It provides protection against fast bowling and bouncers.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 44.99,
+  "stock": 10,
+  "sku": "SPO-BRD-CRI-144",
+  "weight": 10,
+  "dimensions": {
+   "width": 6.34,
+   "height": 6.25,
+   "depth": 21.68
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-helmet/1.webp",
+   "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-helmet/2.webp",
+   "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-helmet/3.webp",
+   "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-helmet/4.webp"
+  ],
+  "rating": 4.69,
+  "reviewCount": 3,
+  "discountPercentage": 9.64,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 4,
+  "tags": [
+   "bestseller",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 145,
+  "handle": "cricket-wicket",
+  "title": "Cricket Wicket",
+  "description": "The Cricket Wicket is a set of three stumps and two bails, forming a wicket used in the sport of cricket. Batsmen aim to protect the wicket while scoring runs.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 29.99,
+  "stock": 25,
+  "sku": "SPO-BRD-CRI-145",
+  "weight": 5,
+  "dimensions": {
+   "width": 15.99,
+   "height": 15.23,
+   "depth": 22.81
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-wicket/1.webp"
+  ],
+  "rating": 4.73,
+  "reviewCount": 3,
+  "discountPercentage": 16.93,
+  "warranty": "3 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 20,
+  "tags": [
+   "bestseller",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 146,
+  "handle": "feather-shuttlecock",
+  "title": "Feather Shuttlecock",
+  "description": "The Feather Shuttlecock is used in the sport of badminton. It features natural feathers and is designed for high-speed play, providing stability and accuracy during matches.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 5.99,
+  "stock": 95,
+  "sku": "SPO-BRD-FEA-146",
+  "weight": 4,
+  "dimensions": {
+   "width": 19.63,
+   "height": 23.73,
+   "depth": 18.56
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/feather-shuttlecock/1.webp"
+  ],
+  "rating": 2.85,
+  "reviewCount": 3,
+  "discountPercentage": 2.95,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 30,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 147,
+  "handle": "football",
+  "title": "Football",
+  "description": "The Football, also known as a soccer ball, is the standard ball used in the sport of football (soccer). It is designed for kicking and passing in the game.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 17.99,
+  "stock": 96,
+  "sku": "SPO-BRD-FOO-147",
+  "weight": 1,
+  "dimensions": {
+   "width": 28.93,
+   "height": 23.01,
+   "depth": 11.71
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/football/1.webp"
+  ],
+  "rating": 3.28,
+  "reviewCount": 3,
+  "discountPercentage": 5.15,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 27,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 148,
+  "handle": "golf-ball",
+  "title": "Golf Ball",
+  "description": "The Golf Ball is a small ball used in the sport of golf. It features dimples on its surface, providing aerodynamic lift and distance when struck by a golf club.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 9.99,
+  "stock": 84,
+  "sku": "SPO-BRD-GOL-148",
+  "weight": 3,
+  "dimensions": {
+   "width": 24.89,
+   "height": 23.39,
+   "depth": 12.47
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/golf-ball/1.webp"
+  ],
+  "rating": 4.3,
+  "reviewCount": 3,
+  "discountPercentage": 17.37,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "No return policy",
+  "minimumOrder": 40,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 149,
+  "handle": "iron-golf",
+  "title": "Iron Golf",
+  "description": "The Iron Golf is a type of golf club designed for various golf shots. It features a solid metal head and is used for approach shots, chipping, and other golfing techniques.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 49.99,
+  "stock": 90,
+  "sku": "SPO-BRD-IRO-149",
+  "weight": 2,
+  "dimensions": {
+   "width": 10.15,
+   "height": 19.55,
+   "depth": 5.91
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/iron-golf/1.webp"
+  ],
+  "rating": 4.41,
+  "reviewCount": 3,
+  "discountPercentage": 6.53,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 150,
+  "handle": "metal-baseball-bat",
+  "title": "Metal Baseball Bat",
+  "description": "The Metal Baseball Bat is a durable and lightweight baseball bat made from metal alloys. It is commonly used in baseball games for hitting and batting practice.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 29.99,
+  "stock": 16,
+  "sku": "SPO-BRD-MET-150",
+  "weight": 7,
+  "dimensions": {
+   "width": 28.43,
+   "height": 14.3,
+   "depth": 7.36
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/metal-baseball-bat/1.webp"
+  ],
+  "rating": 4.66,
+  "reviewCount": 3,
+  "discountPercentage": 19.51,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "60 days return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "bestseller",
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 151,
+  "handle": "tennis-ball",
+  "title": "Tennis Ball",
+  "description": "The Tennis Ball is a standard ball used in the sport of tennis. It is designed for bouncing and hitting with tennis rackets during matches or practice sessions.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 6.99,
+  "stock": 28,
+  "sku": "SPO-BRD-TEN-151",
+  "weight": 3,
+  "dimensions": {
+   "width": 8.04,
+   "height": 20.35,
+   "depth": 12.24
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/tennis-ball/1.webp"
+  ],
+  "rating": 4.06,
+  "reviewCount": 3,
+  "discountPercentage": 11.76,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 6,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 152,
+  "handle": "tennis-racket",
+  "title": "Tennis Racket",
+  "description": "The Tennis Racket is an essential piece of equipment used in the sport of tennis. It features a frame with strings and a grip, allowing players to hit the tennis ball.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 49.99,
+  "stock": 6,
+  "sku": "SPO-BRD-TEN-152",
+  "weight": 7,
+  "dimensions": {
+   "width": 17.7,
+   "height": 16.38,
+   "depth": 18.74
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/tennis-racket/1.webp"
+  ],
+  "rating": 4.03,
+  "reviewCount": 3,
+  "discountPercentage": 19.61,
+  "warranty": "5 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "new-arrival",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 153,
+  "handle": "volleyball",
+  "title": "Volleyball",
+  "description": "The Volleyball is a standard ball used in the sport of volleyball. It is designed for passing, setting, and spiking over the net during volleyball matches.",
+  "category": "sports-accessories",
+  "brand": null,
+  "price": 11.99,
+  "stock": 0,
+  "sku": "SPO-BRD-VOL-153",
+  "weight": 3,
+  "dimensions": {
+   "width": 17.01,
+   "height": 20.05,
+   "depth": 9.94
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sports-accessories/volleyball/1.webp"
+  ],
+  "rating": 3.84,
+  "reviewCount": 3,
+  "discountPercentage": 12.25,
+  "warranty": "1 week warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "90 days return policy",
+  "minimumOrder": 44,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 154,
+  "handle": "black-sun-glasses",
+  "title": "Black Sun Glasses",
+  "description": "The Black Sun Glasses are a classic and stylish choice, featuring a sleek black frame and tinted lenses. They provide both UV protection and a fashionable look.",
+  "category": "sunglasses",
+  "brand": "Fashion Shades",
+  "price": 29.99,
+  "stock": 60,
+  "sku": "SUN-FAS-BLA-154",
+  "weight": 1,
+  "dimensions": {
+   "width": 18.51,
+   "height": 15.69,
+   "depth": 10.11
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sunglasses/black-sun-glasses/1.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/black-sun-glasses/2.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/black-sun-glasses/3.webp"
+  ],
+  "rating": 4.41,
+  "reviewCount": 3,
+  "discountPercentage": 4.94,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 17,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 155,
+  "handle": "classic-sun-glasses",
+  "title": "Classic Sun Glasses",
+  "description": "The Classic Sun Glasses offer a timeless design with a neutral frame and UV-protected lenses. These sunglasses are versatile and suitable for various occasions.",
+  "category": "sunglasses",
+  "brand": "Fashion Shades",
+  "price": 24.99,
+  "stock": 1,
+  "sku": "SUN-FAS-CLA-155",
+  "weight": 8,
+  "dimensions": {
+   "width": 19.87,
+   "height": 16.73,
+   "depth": 11.07
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/1.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/2.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/3.webp"
+  ],
+  "rating": 3.86,
+  "reviewCount": 3,
+  "discountPercentage": 4.94,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "90 days return policy",
+  "minimumOrder": 18,
+  "tags": [
+   "new-arrival",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 156,
+  "handle": "green-and-black-glasses",
+  "title": "Green and Black Glasses",
+  "description": "The Green and Black Glasses feature a bold combination of green and black colors, adding a touch of vibrancy to your eyewear collection. They are both stylish and eye-catching.",
+  "category": "sunglasses",
+  "brand": "Fashion Shades",
+  "price": 34.99,
+  "stock": 24,
+  "sku": "SUN-FAS-GRE-156",
+  "weight": 7,
+  "dimensions": {
+   "width": 26.13,
+   "height": 9.8,
+   "depth": 25.94
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/1.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/2.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/3.webp"
+  ],
+  "rating": 4.55,
+  "reviewCount": 3,
+  "discountPercentage": 1.01,
+  "warranty": "1 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "30 days return policy",
+  "minimumOrder": 15,
+  "tags": [
+   "bestseller",
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 157,
+  "handle": "party-glasses",
+  "title": "Party Glasses",
+  "description": "The Party Glasses are designed to add flair to your party outfit. With unique shapes or colorful frames, they're perfect for adding a playful touch to your look during celebrations.",
+  "category": "sunglasses",
+  "brand": "Fashion Fun",
+  "price": 19.99,
+  "stock": 86,
+  "sku": "SUN-FAS-PAR-157",
+  "weight": 9,
+  "dimensions": {
+   "width": 19.59,
+   "height": 22.06,
+   "depth": 27.53
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/1.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/2.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/3.webp"
+  ],
+  "rating": 2.79,
+  "reviewCount": 3,
+  "discountPercentage": 11.22,
+  "warranty": "3 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 39,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 158,
+  "handle": "sunglasses",
+  "title": "Sunglasses",
+  "description": "The Sunglasses offer a classic and simple design with a focus on functionality. These sunglasses provide essential UV protection while maintaining a timeless look.",
+  "category": "sunglasses",
+  "brand": "Fashion Shades",
+  "price": 22.99,
+  "stock": 27,
+  "sku": "SUN-FAS-SUN-158",
+  "weight": 1,
+  "dimensions": {
+   "width": 16.15,
+   "height": 24.59,
+   "depth": 10.31
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/sunglasses/sunglasses/1.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/sunglasses/2.webp",
+   "https://cdn.dummyjson.com/product-images/sunglasses/sunglasses/3.webp"
+  ],
+  "rating": 3.02,
+  "reviewCount": 3,
+  "discountPercentage": 1.51,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 159,
+  "handle": "ipad-mini-2021-starlight",
+  "title": "iPad Mini 2021 Starlight",
+  "description": "The iPad Mini 2021 in Starlight is a compact and powerful tablet from Apple. Featuring a stunning Retina display, powerful A-series chip, and a sleek design, it offers a premium tablet experience.",
+  "category": "tablets",
+  "brand": "Apple",
+  "price": 499.99,
+  "stock": 47,
+  "sku": "TAB-APP-IPA-159",
+  "weight": 5,
+  "dimensions": {
+   "width": 17.03,
+   "height": 5.34,
+   "depth": 29.62
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/1.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/2.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/3.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/4.webp"
+  ],
+  "rating": 3.18,
+  "reviewCount": 3,
+  "discountPercentage": 3.64,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "No return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 160,
+  "handle": "samsung-galaxy-tab-s8-plus-grey",
+  "title": "Samsung Galaxy Tab S8 Plus Grey",
+  "description": "The Samsung Galaxy Tab S8 Plus in Grey is a high-performance Android tablet by Samsung. With a large AMOLED display, powerful processor, and S Pen support, it's ideal for productivity and entertainment.",
+  "category": "tablets",
+  "brand": "Samsung",
+  "price": 599.99,
+  "stock": 62,
+  "sku": "TAB-SAM-SAM-160",
+  "weight": 1,
+  "dimensions": {
+   "width": 6.11,
+   "height": 25.85,
+   "depth": 26.85
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/1.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/2.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/3.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/4.webp"
+  ],
+  "rating": 4.68,
+  "reviewCount": 3,
+  "discountPercentage": 13.31,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "bestseller",
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 161,
+  "handle": "samsung-galaxy-tab-white",
+  "title": "Samsung Galaxy Tab White",
+  "description": "The Samsung Galaxy Tab in White is a sleek and versatile Android tablet. With a vibrant display, long-lasting battery, and a range of features, it offers a great user experience for various tasks.",
+  "category": "tablets",
+  "brand": "Samsung",
+  "price": 349.99,
+  "stock": 92,
+  "sku": "TAB-SAM-SAM-161",
+  "weight": 5,
+  "dimensions": {
+   "width": 15.05,
+   "height": 5.37,
+   "depth": 11.82
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-white/1.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-white/2.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-white/3.webp",
+   "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-white/4.webp"
+  ],
+  "rating": 3.72,
+  "reviewCount": 3,
+  "discountPercentage": 18.2,
+  "warranty": "3 months warranty",
+  "shipping": "Ships overnight",
+  "returns": "7 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 162,
+  "handle": "blue-frock",
+  "title": "Blue Frock",
+  "description": "The Blue Frock is a charming and stylish dress for various occasions. With a vibrant blue color and a comfortable design, it adds a touch of elegance to your wardrobe.",
+  "category": "tops",
+  "brand": null,
+  "price": 29.99,
+  "stock": 52,
+  "sku": "TOP-BRD-BLU-162",
+  "weight": 5,
+  "dimensions": {
+   "width": 24.25,
+   "height": 5.91,
+   "depth": 8.79
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tops/blue-frock/1.webp",
+   "https://cdn.dummyjson.com/product-images/tops/blue-frock/2.webp",
+   "https://cdn.dummyjson.com/product-images/tops/blue-frock/3.webp",
+   "https://cdn.dummyjson.com/product-images/tops/blue-frock/4.webp"
+  ],
+  "rating": 4.17,
+  "reviewCount": 3,
+  "discountPercentage": 12.13,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "60 days return policy",
+  "minimumOrder": 4,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 163,
+  "handle": "girl-summer-dress",
+  "title": "Girl Summer Dress",
+  "description": "The Girl Summer Dress is a cute and breezy dress designed for warm weather. With playful patterns and lightweight fabric, it's perfect for keeping cool and stylish during the summer.",
+  "category": "tops",
+  "brand": null,
+  "price": 19.99,
+  "stock": 43,
+  "sku": "TOP-BRD-GIR-163",
+  "weight": 5,
+  "dimensions": {
+   "width": 26.19,
+   "height": 20.65,
+   "depth": 10.1
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tops/girl-summer-dress/1.webp",
+   "https://cdn.dummyjson.com/product-images/tops/girl-summer-dress/2.webp",
+   "https://cdn.dummyjson.com/product-images/tops/girl-summer-dress/3.webp",
+   "https://cdn.dummyjson.com/product-images/tops/girl-summer-dress/4.webp"
+  ],
+  "rating": 4.77,
+  "reviewCount": 3,
+  "discountPercentage": 19.2,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 46,
+  "tags": [
+   "bestseller",
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 164,
+  "handle": "gray-dress",
+  "title": "Gray Dress",
+  "description": "The Gray Dress is a versatile and chic option for various occasions. With a neutral gray color, it can be dressed up or down, making it a wardrobe staple for any fashion-forward individual.",
+  "category": "tops",
+  "brand": null,
+  "price": 34.99,
+  "stock": 55,
+  "sku": "TOP-BRD-GRA-164",
+  "weight": 1,
+  "dimensions": {
+   "width": 11.91,
+   "height": 25.72,
+   "depth": 18.55
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tops/gray-dress/1.webp",
+   "https://cdn.dummyjson.com/product-images/tops/gray-dress/2.webp",
+   "https://cdn.dummyjson.com/product-images/tops/gray-dress/3.webp",
+   "https://cdn.dummyjson.com/product-images/tops/gray-dress/4.webp"
+  ],
+  "rating": 2.72,
+  "reviewCount": 3,
+  "discountPercentage": 14.28,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "90 days return policy",
+  "minimumOrder": 13,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 165,
+  "handle": "short-frock",
+  "title": "Short Frock",
+  "description": "The Short Frock is a playful and trendy dress with a shorter length. Ideal for casual outings or special occasions, it combines style and comfort for a fashionable look.",
+  "category": "tops",
+  "brand": null,
+  "price": 24.99,
+  "stock": 22,
+  "sku": "TOP-BRD-SHO-165",
+  "weight": 10,
+  "dimensions": {
+   "width": 24.29,
+   "height": 6.79,
+   "depth": 28.12
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tops/short-frock/1.webp",
+   "https://cdn.dummyjson.com/product-images/tops/short-frock/2.webp",
+   "https://cdn.dummyjson.com/product-images/tops/short-frock/3.webp",
+   "https://cdn.dummyjson.com/product-images/tops/short-frock/4.webp"
+  ],
+  "rating": 3.23,
+  "reviewCount": 3,
+  "discountPercentage": 13.45,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "30 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 166,
+  "handle": "tartan-dress",
+  "title": "Tartan Dress",
+  "description": "The Tartan Dress features a classic tartan pattern, bringing a timeless and sophisticated touch to your wardrobe. Perfect for fall and winter, it adds a hint of traditional charm.",
+  "category": "tops",
+  "brand": null,
+  "price": 39.99,
+  "stock": 73,
+  "sku": "TOP-BRD-TAR-166",
+  "weight": 8,
+  "dimensions": {
+   "width": 23.14,
+   "height": 12.44,
+   "depth": 12.67
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/tops/tartan-dress/1.webp",
+   "https://cdn.dummyjson.com/product-images/tops/tartan-dress/2.webp",
+   "https://cdn.dummyjson.com/product-images/tops/tartan-dress/3.webp",
+   "https://cdn.dummyjson.com/product-images/tops/tartan-dress/4.webp"
+  ],
+  "rating": 4.05,
+  "reviewCount": 3,
+  "discountPercentage": 12.95,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 167,
+  "handle": "300-touring",
+  "title": "300 Touring",
+  "description": "The 300 Touring is a stylish and comfortable sedan, known for its luxurious features and smooth performance.",
+  "category": "vehicle",
+  "brand": "Chrysler",
+  "price": 28999.99,
+  "stock": 54,
+  "sku": "VEH-CHR-TOU-167",
+  "weight": 9,
+  "dimensions": {
+   "width": 19.2,
+   "height": 26.17,
+   "depth": 17.28
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/vehicle/300-touring/1.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/300-touring/2.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/300-touring/3.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/300-touring/4.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/300-touring/5.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/300-touring/6.webp"
+  ],
+  "rating": 4.05,
+  "reviewCount": 3,
+  "discountPercentage": 3.98,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "30 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 168,
+  "handle": "charger-sxt-rwd",
+  "title": "Charger SXT RWD",
+  "description": "The Charger SXT RWD is a powerful and sporty rear-wheel-drive sedan, offering a blend of performance and practicality.",
+  "category": "vehicle",
+  "brand": "Dodge",
+  "price": 32999.99,
+  "stock": 57,
+  "sku": "VEH-DOD-CHA-168",
+  "weight": 6,
+  "dimensions": {
+   "width": 16.77,
+   "height": 23.03,
+   "depth": 8.18
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/vehicle/charger-sxt-rwd/1.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/charger-sxt-rwd/2.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/charger-sxt-rwd/3.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/charger-sxt-rwd/4.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/charger-sxt-rwd/5.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/charger-sxt-rwd/6.webp"
+  ],
+  "rating": 2.58,
+  "reviewCount": 3,
+  "discountPercentage": 8.23,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 169,
+  "handle": "dodge-hornet-gt-plus",
+  "title": "Dodge Hornet GT Plus",
+  "description": "The Dodge Hornet GT Plus is a compact and agile hatchback, perfect for urban driving with a touch of sportiness.",
+  "category": "vehicle",
+  "brand": "Dodge",
+  "price": 24999.99,
+  "stock": 82,
+  "sku": "VEH-DOD-DOD-169",
+  "weight": 8,
+  "dimensions": {
+   "width": 19.89,
+   "height": 9.8,
+   "depth": 17.8
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/1.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/2.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/3.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/4.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/5.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/6.webp"
+  ],
+  "rating": 2.65,
+  "reviewCount": 3,
+  "discountPercentage": 2.63,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 170,
+  "handle": "durango-sxt-rwd",
+  "title": "Durango SXT RWD",
+  "description": "The Durango SXT RWD is a spacious and versatile SUV, known for its strong performance and family-friendly features.",
+  "category": "vehicle",
+  "brand": "Dodge",
+  "price": 36999.99,
+  "stock": 95,
+  "sku": "VEH-DOD-DUR-170",
+  "weight": 1,
+  "dimensions": {
+   "width": 19.02,
+   "height": 29.52,
+   "depth": 24.36
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/vehicle/durango-sxt-rwd/1.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/durango-sxt-rwd/2.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/durango-sxt-rwd/3.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/durango-sxt-rwd/4.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/durango-sxt-rwd/5.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/durango-sxt-rwd/6.webp"
+  ],
+  "rating": 4.07,
+  "reviewCount": 3,
+  "discountPercentage": 16.44,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "30 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 171,
+  "handle": "pacifica-touring",
+  "title": "Pacifica Touring",
+  "description": "The Pacifica Touring is a stylish and well-equipped minivan, offering comfort and convenience for family journeys.",
+  "category": "vehicle",
+  "brand": "Chrysler",
+  "price": 31999.99,
+  "stock": 53,
+  "sku": "VEH-CHR-PAC-171",
+  "weight": 9,
+  "dimensions": {
+   "width": 7.11,
+   "height": 15.51,
+   "depth": 18.1
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/vehicle/pacifica-touring/1.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/pacifica-touring/2.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/pacifica-touring/3.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/pacifica-touring/4.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/pacifica-touring/5.webp",
+   "https://cdn.dummyjson.com/product-images/vehicle/pacifica-touring/6.webp"
+  ],
+  "rating": 3.62,
+  "reviewCount": 3,
+  "discountPercentage": 14.76,
+  "warranty": "1 month warranty",
+  "shipping": "Ships overnight",
+  "returns": "60 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 172,
+  "handle": "blue-women-s-handbag",
+  "title": "Blue Women's Handbag",
+  "description": "The Blue Women's Handbag is a stylish and spacious accessory for everyday use. With a vibrant blue color and multiple compartments, it combines fashion and functionality.",
+  "category": "womens-bags",
+  "brand": "Fashionista",
+  "price": 49.99,
+  "stock": 76,
+  "sku": "WOM-FAS-BLU-172",
+  "weight": 7,
+  "dimensions": {
+   "width": 14.12,
+   "height": 11.89,
+   "depth": 25.69
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/3.webp"
+  ],
+  "rating": 2.92,
+  "reviewCount": 3,
+  "discountPercentage": 17.88,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "7 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 173,
+  "handle": "heshe-women-s-leather-bag",
+  "title": "Heshe Women's Leather Bag",
+  "description": "The Heshe Women's Leather Bag is a luxurious and high-quality leather bag for the sophisticated woman. With a timeless design and durable craftsmanship, it's a versatile accessory.",
+  "category": "womens-bags",
+  "brand": "Heshe",
+  "price": 129.99,
+  "stock": 99,
+  "sku": "WOM-HES-HES-173",
+  "weight": 3,
+  "dimensions": {
+   "width": 28.66,
+   "height": 20.56,
+   "depth": 6.62
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-bags/heshe-women's-leather-bag/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/heshe-women's-leather-bag/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/heshe-women's-leather-bag/3.webp"
+  ],
+  "rating": 4.92,
+  "reviewCount": 3,
+  "discountPercentage": 3.87,
+  "warranty": "5 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "90 days return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "bestseller",
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 174,
+  "handle": "prada-women-bag",
+  "title": "Prada Women Bag",
+  "description": "The Prada Women Bag is an iconic designer bag that exudes elegance and luxury. Crafted with precision and featuring the Prada logo, it's a statement piece for fashion enthusiasts.",
+  "category": "womens-bags",
+  "brand": "Prada",
+  "price": 599.99,
+  "stock": 75,
+  "sku": "WOM-PRA-PRA-174",
+  "weight": 4,
+  "dimensions": {
+   "width": 21.84,
+   "height": 22.19,
+   "depth": 13.41
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-bags/prada-women-bag/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/prada-women-bag/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/prada-women-bag/3.webp"
+  ],
+  "rating": 2.71,
+  "reviewCount": 3,
+  "discountPercentage": 14.09,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 175,
+  "handle": "white-faux-leather-backpack",
+  "title": "White Faux Leather Backpack",
+  "description": "The White Faux Leather Backpack is a trendy and practical backpack for the modern woman. With a sleek white design and ample storage space, it's perfect for both casual and on-the-go styles.",
+  "category": "womens-bags",
+  "brand": "Urban Chic",
+  "price": 39.99,
+  "stock": 39,
+  "sku": "WOM-URB-WHI-175",
+  "weight": 7,
+  "dimensions": {
+   "width": 14.31,
+   "height": 23.29,
+   "depth": 28.91
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-bags/white-faux-leather-backpack/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/white-faux-leather-backpack/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/white-faux-leather-backpack/3.webp"
+  ],
+  "rating": 3.36,
+  "reviewCount": 3,
+  "discountPercentage": 15.2,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "90 days return policy",
+  "minimumOrder": 7,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 176,
+  "handle": "women-handbag-black",
+  "title": "Women Handbag Black",
+  "description": "The Women Handbag in Black is a classic and versatile accessory that complements various outfits. With a timeless black color and functional design, it's a must-have in every woman's wardrobe.",
+  "category": "womens-bags",
+  "brand": "Elegance Collection",
+  "price": 59.99,
+  "stock": 11,
+  "sku": "WOM-ELE-WOM-176",
+  "weight": 6,
+  "dimensions": {
+   "width": 29.76,
+   "height": 12.34,
+   "depth": 15.82
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/3.webp"
+  ],
+  "rating": 2.89,
+  "reviewCount": 3,
+  "discountPercentage": 11.63,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 9,
+  "tags": [
+   "new-arrival",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 177,
+  "handle": "black-women-s-gown",
+  "title": "Black Women's Gown",
+  "description": "The Black Women's Gown is an elegant and timeless evening gown. With a sleek black design, it's perfect for formal events and special occasions, exuding sophistication and style.",
+  "category": "womens-dresses",
+  "brand": null,
+  "price": 129.99,
+  "stock": 25,
+  "sku": "WOM-BRD-BLA-177",
+  "weight": 2,
+  "dimensions": {
+   "width": 7.86,
+   "height": 9.02,
+   "depth": 25.82
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/4.webp"
+  ],
+  "rating": 3.64,
+  "reviewCount": 3,
+  "discountPercentage": 10.48,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 178,
+  "handle": "corset-leather-with-skirt",
+  "title": "Corset Leather With Skirt",
+  "description": "The Corset Leather With Skirt is a bold and edgy ensemble that combines a stylish corset with a matching skirt. Ideal for fashion-forward individuals, it makes a statement at any event.",
+  "category": "womens-dresses",
+  "brand": null,
+  "price": 89.99,
+  "stock": 30,
+  "sku": "WOM-BRD-COR-178",
+  "weight": 1,
+  "dimensions": {
+   "width": 6.01,
+   "height": 12.6,
+   "depth": 11.62
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-leather-with-skirt/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-leather-with-skirt/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-leather-with-skirt/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-leather-with-skirt/4.webp"
+  ],
+  "rating": 3.05,
+  "reviewCount": 3,
+  "discountPercentage": 16.26,
+  "warranty": "2 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "30 days return policy",
+  "minimumOrder": 3,
+  "tags": [
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 179,
+  "handle": "corset-with-black-skirt",
+  "title": "Corset With Black Skirt",
+  "description": "The Corset With Black Skirt is a chic and versatile outfit that pairs a fashionable corset with a classic black skirt. It offers a trendy and coordinated look for various occasions.",
+  "category": "womens-dresses",
+  "brand": null,
+  "price": 79.99,
+  "stock": 33,
+  "sku": "WOM-BRD-COR-179",
+  "weight": 7,
+  "dimensions": {
+   "width": 17.56,
+   "height": 28.42,
+   "depth": 23.95
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-with-black-skirt/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-with-black-skirt/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-with-black-skirt/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/corset-with-black-skirt/4.webp"
+  ],
+  "rating": 4.52,
+  "reviewCount": 3,
+  "discountPercentage": 15.06,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "No return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "bestseller",
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 180,
+  "handle": "dress-pea",
+  "title": "Dress Pea",
+  "description": "The Dress Pea is a stylish and comfortable dress with a pea pattern. Perfect for casual outings, it adds a playful and fun element to your wardrobe, making it a great choice for day-to-day wear.",
+  "category": "womens-dresses",
+  "brand": null,
+  "price": 49.99,
+  "stock": 6,
+  "sku": "WOM-BRD-DRE-180",
+  "weight": 1,
+  "dimensions": {
+   "width": 28.51,
+   "height": 20.99,
+   "depth": 12.58
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-dresses/dress-pea/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/dress-pea/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/dress-pea/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/dress-pea/4.webp"
+  ],
+  "rating": 4.88,
+  "reviewCount": 3,
+  "discountPercentage": 17.68,
+  "warranty": "2 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "90 days return policy",
+  "minimumOrder": 6,
+  "tags": [
+   "bestseller",
+   "new-arrival",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 181,
+  "handle": "marni-red-black-suit",
+  "title": "Marni Red & Black Suit",
+  "description": "The Marni Red & Black Suit is a sophisticated and fashion-forward suit ensemble. With a combination of red and black tones, it showcases a modern design for a bold and confident look.",
+  "category": "womens-dresses",
+  "brand": null,
+  "price": 179.99,
+  "stock": 62,
+  "sku": "WOM-BRD-MAR-181",
+  "weight": 3,
+  "dimensions": {
+   "width": 26.02,
+   "height": 9.93,
+   "depth": 25.48
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-dresses/marni-red-&-black-suit/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/marni-red-&-black-suit/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/marni-red-&-black-suit/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-dresses/marni-red-&-black-suit/4.webp"
+  ],
+  "rating": 4.48,
+  "reviewCount": 3,
+  "discountPercentage": 19.02,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "90 days return policy",
+  "minimumOrder": 2,
+  "tags": [
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 182,
+  "handle": "green-crystal-earring",
+  "title": "Green Crystal Earring",
+  "description": "The Green Crystal Earring is a dazzling accessory that features a vibrant green crystal. With a classic design, it adds a touch of elegance to your ensemble, perfect for formal or special occasions.",
+  "category": "womens-jewellery",
+  "brand": null,
+  "price": 29.99,
+  "stock": 54,
+  "sku": "WOM-BRD-GRE-182",
+  "weight": 2,
+  "dimensions": {
+   "width": 14.61,
+   "height": 22.92,
+   "depth": 12.52
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/green-crystal-earring/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/green-crystal-earring/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/green-crystal-earring/3.webp"
+  ],
+  "rating": 3.96,
+  "reviewCount": 3,
+  "discountPercentage": 15.24,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 15,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 183,
+  "handle": "green-oval-earring",
+  "title": "Green Oval Earring",
+  "description": "The Green Oval Earring is a stylish and versatile accessory with a unique oval shape. Whether for casual or dressy occasions, its green hue and contemporary design make it a standout piece.",
+  "category": "womens-jewellery",
+  "brand": null,
+  "price": 24.99,
+  "stock": 73,
+  "sku": "WOM-BRD-GRE-183",
+  "weight": 10,
+  "dimensions": {
+   "width": 8.48,
+   "height": 6.24,
+   "depth": 5.72
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/green-oval-earring/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/green-oval-earring/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/green-oval-earring/3.webp"
+  ],
+  "rating": 3.57,
+  "reviewCount": 3,
+  "discountPercentage": 15.18,
+  "warranty": "3 months warranty",
+  "shipping": "Ships in 3-5 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 19,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 184,
+  "handle": "tropical-earring",
+  "title": "Tropical Earring",
+  "description": "The Tropical Earring is a fun and playful accessory inspired by tropical elements. Featuring vibrant colors and a lively design, it's perfect for adding a touch of summer to your look.",
+  "category": "womens-jewellery",
+  "brand": null,
+  "price": 19.99,
+  "stock": 1,
+  "sku": "WOM-BRD-TRO-184",
+  "weight": 3,
+  "dimensions": {
+   "width": 14.99,
+   "height": 15.76,
+   "depth": 16.09
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/tropical-earring/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/tropical-earring/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-jewellery/tropical-earring/3.webp"
+  ],
+  "rating": 4.4,
+  "reviewCount": 3,
+  "discountPercentage": 0.76,
+  "warranty": "3 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "7 days return policy",
+  "minimumOrder": 31,
+  "tags": [
+   "new-arrival",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 185,
+  "handle": "black-brown-slipper",
+  "title": "Black & Brown Slipper",
+  "description": "The Black & Brown Slipper is a comfortable and stylish choice for casual wear. Featuring a blend of black and brown colors, it adds a touch of sophistication to your relaxation.",
+  "category": "womens-shoes",
+  "brand": "Comfort Trends",
+  "price": 19.99,
+  "stock": 3,
+  "sku": "WOM-COM-BLA-185",
+  "weight": 5,
+  "dimensions": {
+   "width": 21.35,
+   "height": 26.21,
+   "depth": 17
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-shoes/black-&-brown-slipper/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/black-&-brown-slipper/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/black-&-brown-slipper/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/black-&-brown-slipper/4.webp"
+  ],
+  "rating": 2.53,
+  "reviewCount": 3,
+  "discountPercentage": 3.33,
+  "warranty": "Lifetime warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 47,
+  "tags": [
+   "new-arrival",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 186,
+  "handle": "calvin-klein-heel-shoes",
+  "title": "Calvin Klein Heel Shoes",
+  "description": "Calvin Klein Heel Shoes are elegant and sophisticated, designed for formal occasions. With a classic design and high-quality materials, they complement your stylish ensemble.",
+  "category": "womens-shoes",
+  "brand": "Calvin Klein",
+  "price": 79.99,
+  "stock": 93,
+  "sku": "WOM-CAL-CAL-186",
+  "weight": 6,
+  "dimensions": {
+   "width": 29.12,
+   "height": 20.94,
+   "depth": 20.65
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-shoes/calvin-klein-heel-shoes/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/calvin-klein-heel-shoes/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/calvin-klein-heel-shoes/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/calvin-klein-heel-shoes/4.webp"
+  ],
+  "rating": 4.92,
+  "reviewCount": 3,
+  "discountPercentage": 3.19,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "60 days return policy",
+  "minimumOrder": 6,
+  "tags": [
+   "bestseller",
+   "new-arrival"
+  ]
+ },
+ {
+  "id": 187,
+  "handle": "golden-shoes-woman",
+  "title": "Golden Shoes Woman",
+  "description": "The Golden Shoes for Women are a glamorous choice for special occasions. Featuring a golden hue and stylish design, they add a touch of luxury to your outfit.",
+  "category": "womens-shoes",
+  "brand": "Fashion Diva",
+  "price": 49.99,
+  "stock": 88,
+  "sku": "WOM-FAS-GOL-187",
+  "weight": 4,
+  "dimensions": {
+   "width": 16.38,
+   "height": 20.06,
+   "depth": 8.8
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-shoes/golden-shoes-woman/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/golden-shoes-woman/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/golden-shoes-woman/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/golden-shoes-woman/4.webp"
+  ],
+  "rating": 3.26,
+  "reviewCount": 3,
+  "discountPercentage": 13.93,
+  "warranty": "6 months warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "7 days return policy",
+  "minimumOrder": 7,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 188,
+  "handle": "pampi-shoes",
+  "title": "Pampi Shoes",
+  "description": "Pampi Shoes offer a blend of comfort and style for everyday use. With a versatile design, they are suitable for various casual occasions, providing a trendy and relaxed look.",
+  "category": "womens-shoes",
+  "brand": "Pampi",
+  "price": 29.99,
+  "stock": 49,
+  "sku": "WOM-PAM-PAM-188",
+  "weight": 7,
+  "dimensions": {
+   "width": 29.43,
+   "height": 22.65,
+   "depth": 16.12
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-shoes/pampi-shoes/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/pampi-shoes/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/pampi-shoes/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/pampi-shoes/4.webp"
+  ],
+  "rating": 3.05,
+  "reviewCount": 3,
+  "discountPercentage": 14.14,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "60 days return policy",
+  "minimumOrder": 12,
+  "tags": [
+   "new-arrival",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 189,
+  "handle": "red-shoes",
+  "title": "Red Shoes",
+  "description": "The Red Shoes make a bold statement with their vibrant red color. Whether for a party or a casual outing, these shoes add a pop of color and style to your wardrobe.",
+  "category": "womens-shoes",
+  "brand": "Fashion Express",
+  "price": 34.99,
+  "stock": 7,
+  "sku": "WOM-FAS-SHO-189",
+  "weight": 10,
+  "dimensions": {
+   "width": 15.21,
+   "height": 11.62,
+   "depth": 22.63
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-shoes/red-shoes/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/red-shoes/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/red-shoes/3.webp",
+   "https://cdn.dummyjson.com/product-images/womens-shoes/red-shoes/4.webp"
+  ],
+  "rating": 3.25,
+  "reviewCount": 3,
+  "discountPercentage": 17.69,
+  "warranty": "No warranty",
+  "shipping": "Ships in 1 month",
+  "returns": "60 days return policy",
+  "minimumOrder": 8,
+  "tags": [
+   "new-arrival",
+   "limited-stock",
+   "gift-idea"
+  ]
+ },
+ {
+  "id": 190,
+  "handle": "iwc-ingenieur-automatic-steel",
+  "title": "IWC Ingenieur Automatic Steel",
+  "description": "The IWC Ingenieur Automatic Steel watch is a durable and sophisticated timepiece. With a stainless steel case and automatic movement, it combines precision and style for watch enthusiasts.",
+  "category": "womens-watches",
+  "brand": "IWC",
+  "price": 4999.99,
+  "stock": 90,
+  "sku": "WOM-IWC-ING-190",
+  "weight": 3,
+  "dimensions": {
+   "width": 24.77,
+   "height": 24.66,
+   "depth": 6.09
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-watches/iwc-ingenieur-automatic-steel/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/iwc-ingenieur-automatic-steel/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/iwc-ingenieur-automatic-steel/3.webp"
+  ],
+  "rating": 2.93,
+  "reviewCount": 3,
+  "discountPercentage": 9.45,
+  "warranty": "1 year warranty",
+  "shipping": "Ships overnight",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 191,
+  "handle": "rolex-cellini-moonphase-191",
+  "title": "Rolex Cellini Moonphase",
+  "description": "The Rolex Cellini Moonphase watch is a masterpiece of horology. Featuring a moon phase complication, it showcases the craftsmanship and elegance that Rolex is renowned for.",
+  "category": "womens-watches",
+  "brand": "Rolex",
+  "price": 15999.99,
+  "stock": 52,
+  "sku": "WOM-ROL-ROL-191",
+  "weight": 10,
+  "dimensions": {
+   "width": 12.5,
+   "height": 20.63,
+   "depth": 25.04
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-watches/rolex-cellini-moonphase/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/rolex-cellini-moonphase/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/rolex-cellini-moonphase/3.webp"
+  ],
+  "rating": 3.83,
+  "reviewCount": 3,
+  "discountPercentage": 4.11,
+  "warranty": "1 month warranty",
+  "shipping": "Ships in 1 week",
+  "returns": "30 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 192,
+  "handle": "rolex-datejust-women",
+  "title": "Rolex Datejust Women",
+  "description": "The Rolex Datejust Women's watch is an iconic timepiece designed for women. With a timeless design and a date complication, it offers both elegance and functionality.",
+  "category": "womens-watches",
+  "brand": "Rolex",
+  "price": 10999.99,
+  "stock": 4,
+  "sku": "WOM-ROL-ROL-192",
+  "weight": 3,
+  "dimensions": {
+   "width": 23.23,
+   "height": 7.19,
+   "depth": 28.95
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-watches/rolex-datejust-women/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/rolex-datejust-women/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/rolex-datejust-women/3.webp"
+  ],
+  "rating": 2.86,
+  "reviewCount": 3,
+  "discountPercentage": 15.94,
+  "warranty": "5 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "limited-stock",
+   "premium"
+  ]
+ },
+ {
+  "id": 193,
+  "handle": "watch-gold-for-women",
+  "title": "Watch Gold for Women",
+  "description": "The Gold Women's Watch is a stunning accessory that combines luxury and style. Featuring a gold-plated case and a chic design, it adds a touch of glamour to any outfit.",
+  "category": "womens-watches",
+  "brand": "Fashion Gold",
+  "price": 799.99,
+  "stock": 0,
+  "sku": "WOM-FAS-WAT-193",
+  "weight": 1,
+  "dimensions": {
+   "width": 18.85,
+   "height": 28.59,
+   "depth": 7.21
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-watches/watch-gold-for-women/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/watch-gold-for-women/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/watch-gold-for-women/3.webp"
+  ],
+  "rating": 4.24,
+  "reviewCount": 3,
+  "discountPercentage": 18.34,
+  "warranty": "2 year warranty",
+  "shipping": "Ships in 1-2 business days",
+  "returns": "60 days return policy",
+  "minimumOrder": 1,
+  "tags": [
+   "new-arrival",
+   "premium"
+  ]
+ },
+ {
+  "id": 194,
+  "handle": "women-s-wrist-watch",
+  "title": "Women's Wrist Watch",
+  "description": "The Women's Wrist Watch is a versatile and fashionable timepiece for everyday wear. With a comfortable strap and a simple yet elegant design, it complements various styles.",
+  "category": "womens-watches",
+  "brand": "Fashion Co.",
+  "price": 129.99,
+  "stock": 12,
+  "sku": "WOM-FAS-WOM-194",
+  "weight": 1,
+  "dimensions": {
+   "width": 26.1,
+   "height": 22.03,
+   "depth": 21.61
+  },
+  "images": [
+   "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/1.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/2.webp",
+   "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/3.webp"
+  ],
+  "rating": 3.52,
+  "reviewCount": 3,
+  "discountPercentage": 12.6,
+  "warranty": "1 year warranty",
+  "shipping": "Ships in 2 weeks",
+  "returns": "No return policy",
+  "minimumOrder": 5,
+  "tags": [
+   "new-arrival",
+   "limited-stock"
+  ]
+ }
+]

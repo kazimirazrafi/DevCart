@@ -2,7 +2,6 @@
 
 import { indexedCurrency, priceAttribute } from "@lib/search-client"
 import { convertToLocale } from "@lib/util/money"
-import { Text, clx } from "@modules/common/components/ui"
 
 /** The per-currency price fields a hit may carry, e.g. `min_price_eur`. */
 export type HitPricing = Record<string, unknown>
@@ -14,6 +13,11 @@ type HitPriceProps = {
 
 const amount = (value: unknown) => (typeof value === "number" ? value : null)
 
+/**
+ * Prices off the search hit. Variants with different prices make the card show
+ * a range, and a struck-through original price is the only sale marker the
+ * design allows at this size (docs/DESIGN.md §2.1 keeps riso-pink for display type).
+ */
 const HitPrice = ({ hit, currencyCode }: HitPriceProps) => {
   const currency_code = indexedCurrency(currencyCode)
   const min_price = amount(hit[priceAttribute("min_price", currencyCode)])
@@ -34,24 +38,19 @@ const HitPrice = ({ hit, currencyCode }: HitPriceProps) => {
   const isRange = max > min_price
 
   return (
-    <div className="flex items-center gap-x-2" data-testid="product-price">
+    <span
+      className="flex flex-wrap items-baseline gap-x-2"
+      data-testid="product-price"
+    >
       {!isRange && on_sale && original_price !== null && (
-        <Text
-          className="line-through text-ui-fg-muted"
-          data-testid="original-price"
-        >
+        <s className="text-ink/70" data-testid="original-price">
           {format(original_price)}
-        </Text>
+        </s>
       )}
-      <Text
-        className={clx("text-ui-fg-muted", {
-          "text-ui-tag-red-text": on_sale,
-        })}
-        data-testid="price"
-      >
+      <span data-testid="price">
         {isRange ? `${format(min_price)} - ${format(max)}` : format(min_price)}
-      </Text>
-    </div>
+      </span>
+    </span>
   )
 }
 

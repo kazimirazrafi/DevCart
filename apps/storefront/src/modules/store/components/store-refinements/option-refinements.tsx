@@ -50,6 +50,7 @@ function groupItems(
   return Array.from(groups.values())
 }
 
+/** Size, colour and any other option as collapsible chip groups. */
 const OptionRefinements = () => {
   const { items, refine } = useRefinementList({
     attribute: OPTION_VALUES_ATTRIBUTE,
@@ -79,7 +80,7 @@ const OptionRefinements = () => {
             .filter((title) => !openTitles.includes(title))
         )
       }
-      className="flex flex-col gap-y-3 pr-6"
+      className="flex flex-col"
     >
       {groups.map((group) => {
         const isOpen = !closedGroups.includes(group.title)
@@ -91,48 +92,59 @@ const OptionRefinements = () => {
           <Accordion.Item
             key={group.title}
             value={group.title}
-            className="overflow-hidden"
+            className="overflow-hidden border-b border-ink/10"
           >
-            <Accordion.Header>
-              <Accordion.Trigger className="flex w-full items-center justify-between py-3 text-left">
-                <div className="flex items-center gap-2">
-                  <span className="txt-compact-small-plus text-ui-fg-base">
+            {/*
+             * Radix's own header renders an `h3`, which followed the listing's
+             * `h1` with a skipped level. `asChild` lets the group be an `h2`
+             * and keeps the trigger as its button.
+             */}
+            <Accordion.Header asChild>
+              <h2>
+                <Accordion.Trigger className="flex w-full items-center justify-between py-2 text-left">
+                  <span className="flex items-center gap-2 text-small font-semibold text-ink">
                     {group.title}
+                    <span className="font-mono text-micro text-ink/70">
+                      {selectedCount}
+                    </span>
                   </span>
-                  <span className="txt-compact-small-plus text-ui-fg-muted">
-                    ({selectedCount})
+                  <span
+                    aria-hidden="true"
+                    className={clsx(
+                      "flex h-6 w-6 items-center justify-center text-ink/70 transition-transform duration-150 motion-reduce:transition-none",
+                      { "rotate-180": isOpen }
+                    )}
+                  >
+                    <ChevronDownMini />
                   </span>
-                </div>
-                <span
-                  className={clsx(
-                    "flex h-7 w-7 items-center justify-center text-ui-fg-muted transition-transform duration-150",
-                    { "rotate-180": isOpen }
-                  )}
-                >
-                  <ChevronDownMini />
-                </span>
-              </Accordion.Trigger>
+                </Accordion.Trigger>
+              </h2>
             </Accordion.Header>
             <Accordion.Content className="pb-4 pt-1">
               <div className="flex flex-wrap gap-2">
                 {group.values.map((value) => (
                   <button
                     key={value.value}
+                    type="button"
                     onClick={() => refine(value.value)}
                     aria-pressed={value.isRefined}
                     className={clsx(
-                      "border-ui-border-base border text-small-regular h-10 rounded-rounded px-3 flex items-center gap-x-1.5 transition-colors duration-150",
-                      {
-                        "border-ui-border-interactive text-ui-fg-base":
-                          value.isRefined,
-                        "text-ui-fg-muted hover:text-ui-fg-base":
-                          !value.isRefined,
-                      }
+                      "flex min-h-11 items-center gap-1.5 border px-3 text-small transition-colors",
+                      value.isRefined
+                        ? "border-ink bg-ink text-stock"
+                        : "border-ink/40 text-ink hover:border-ink"
                     )}
                     data-testid="option-refinement"
                   >
                     {value.label}
-                    <span className="text-ui-fg-muted">({value.count})</span>
+                    <span
+                      className={clsx(
+                        "font-mono text-micro",
+                        value.isRefined ? "text-stock/80" : "text-ink/70"
+                      )}
+                    >
+                      {value.count}
+                    </span>
                   </button>
                 ))}
               </div>

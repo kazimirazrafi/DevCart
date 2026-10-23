@@ -152,3 +152,15 @@ claude mcp add --transport http medusa https://docs.medusajs.com/mcp # or agent 
 - `.env` / `.env.local` — never commit, print, or copy secret values out of them. Edit `.env.template` instead when documenting a new variable.
 - Existing migrations in `src/modules/*/migrations/` — add a new migration rather than rewriting one that may already have run.
 - Don't run destructive DB commands (drops, `db:migrate --help`-style flags that reset state) against the user's database without explicit confirmation.
+
+
+## Project Plan
+
+The product spec, feature list with acceptance criteria, and phased roadmap live in
+`docs/PROJECT_SPEC.md`. Read it before starting any task and work through its phases in order.
+If this file and the spec disagree about commands, structure, or code style, this file wins.
+The spec decides WHAT to build, this file decides HOW to work in the repo.
+
+## Design
+
+Before any storefront UI work, read `docs/skills/frontend-design/SKILL.md` and `docs/DESIGN.md`.

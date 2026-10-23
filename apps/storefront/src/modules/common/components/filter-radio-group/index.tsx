@@ -1,5 +1,5 @@
-import { EllipseMiniSolid } from "@medusajs/icons"
-import { Label, RadioGroup, Text, clx } from "@modules/common/components/ui"
+import clsx from "clsx"
+
 type FilterRadioGroupProps = {
   title: string
   items: {
@@ -11,6 +11,11 @@ type FilterRadioGroupProps = {
   "data-testid"?: string
 }
 
+/*
+ * A titled set of mutually exclusive choices — the listing's sort order. Native
+ * radios keep keyboard and screen-reader behaviour, and the selected row is
+ * marked with weight as well as colour so it does not rely on either alone.
+ */
 const FilterRadioGroup = ({
   title,
   items,
@@ -19,41 +24,40 @@ const FilterRadioGroup = ({
   "data-testid": dataTestId,
 }: FilterRadioGroupProps) => {
   return (
-    <div className="flex gap-x-3 flex-col gap-y-3">
-      <Text className="txt-compact-small-plus text-ui-fg-muted">{title}</Text>
-      <RadioGroup data-testid={dataTestId}>
-        {items?.map((i) => (
-          <div
-            key={i.value}
-            className={clx("flex items-center", {
-              "ml-[-23px]": i.value === value,
-            })}
+    <fieldset className="flex flex-col gap-2" data-testid={dataTestId}>
+      <legend className="pb-1 text-small font-semibold text-ink">{title}</legend>
+      {items.map((item) => {
+        const isSelected = item.value === value
+        const id = `${title}-${item.value}`.replace(/[^a-zA-Z0-9]+/g, "-")
+
+        return (
+          <label
+            key={item.value}
+            htmlFor={id}
+            data-testid="radio-label"
+            data-active={isSelected}
+            className={clsx(
+              "flex cursor-pointer items-center gap-2 py-1 text-small",
+              isSelected
+                ? "font-semibold text-ink"
+                : "text-ink/70 hover:text-ink"
+            )}
           >
-            {i.value === value && <EllipseMiniSolid className="mr-2" />}
-            <RadioGroup.Item
-              checked={i.value === value}
-              onChange={() => handleChange(i.value)}
-              className="hidden peer"
-              id={i.value}
-              value={i.value}
+            <input
+              id={id}
+              type="radio"
+              name={title}
+              value={item.value}
+              checked={isSelected}
+              onChange={() => handleChange(item.value)}
+              className="h-4 w-4 shrink-0 accent-riso-blue"
+              data-testid="sort-option"
             />
-            <Label
-              htmlFor={i.value}
-              className={clx(
-                "!txt-compact-small !transform-none text-ui-fg-subtle hover:cursor-pointer",
-                {
-                  "text-ui-fg-base": i.value === value,
-                }
-              )}
-              data-testid="radio-label"
-              data-active={i.value === value}
-            >
-              {i.label}
-            </Label>
-          </div>
-        ))}
-      </RadioGroup>
-    </div>
+            {item.label}
+          </label>
+        )
+      })}
+    </fieldset>
   )
 }
 

@@ -1,11 +1,12 @@
 import { Suspense } from "react"
 
+import { HttpTypes } from "@medusajs/types"
+import { OptionValueIds } from "@lib/util/product-option-filters"
+import { Rule } from "@modules/design-system"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
 import RefinementList from "@modules/store/components/refinement-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
-import { HttpTypes } from "@medusajs/types"
-import { OptionValueIds } from "@lib/util/product-option-filters"
 
 export default function CollectionTemplate({
   sortBy,
@@ -24,12 +25,23 @@ export default function CollectionTemplate({
   const sort = sortBy || "created_at"
 
   return (
-    <div className="flex flex-col small:flex-row small:items-start py-6 content-container">
-      <RefinementList sortBy={sort} hideOptionsPicker />
-      <div className="w-full">
-        <div className="mb-8 text-2xl-semi">
-          <h1>{collection.title}</h1>
-        </div>
+    <div className="content-container flex flex-col gap-8 py-10 small:flex-row small:items-start small:gap-0">
+      <RefinementList
+        sortBy={sort}
+        data-testid="sort-by-container"
+        hideOptionsPicker
+      />
+      <div className="w-full min-w-0">
+        <header className="mb-6 flex flex-col gap-4">
+          <h1
+            className="font-display text-display"
+            data-testid="collection-page-title"
+          >
+            {collection.title}
+          </h1>
+          <Rule weight="heavy" />
+        </header>
+
         <Suspense
           fallback={
             <SkeletonProductGrid

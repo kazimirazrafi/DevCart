@@ -1,9 +1,8 @@
-import { Container, Heading, Text } from "@modules/common/components/ui"
-
 import { isStripeLike, paymentInfoMap } from "@lib/constants"
-import Divider from "@modules/common/components/divider"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
+import { Rule } from "@modules/design-system"
+import { paymentSummary } from "@modules/order/lib/payment-summary"
 
 type PaymentDetailsProps = {
   order: HttpTypes.StoreOrder
@@ -12,50 +11,84 @@ type PaymentDetailsProps = {
 const PaymentDetails = ({ order }: PaymentDetailsProps) => {
   const payment = order.payment_collections?.[0].payments?.[0]
 
+  /*
+   * The stripe provider keeps the whole PaymentIntent in `data`, so the card the
+   * customer paid with sits at `payment_method.card`. The starter only looked at
+   * a top-level `card_last4`, which this provider never sets — the lookup missed
+   * and every receipt fell back to the paid-at line below. Both are read, so the
+   * masked card shows whatever shape the payment carries.
+   */
+  const data = payment?.data as
+    | {
+        card_last4?: string
+        payment_method?: { card?: { last4?: string } }
+      }
+    | null
+    | undefined
+  const cardLast4 = data?.card_last4 ?? data?.payment_method?.card?.last4
+
+  /*
+   * The receipt names the outcome, not just the method: "Credit card" does not
+   * tell a customer whether their card was charged, which is the first thing
+   * they check after paying.
+   */
+  const summary = paymentSummary(order)
+  const providerTitle = payment
+    ? (paymentInfoMap[payment.provider_id]?.title ?? payment.provider_id)
+    : ""
+
   return (
     <div>
-      <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
-        Payment
-      </Heading>
+      <h2 className="my-6 font-display text-h3 font-bold">Payment</h2>
       <div>
         {payment && (
-          <div className="flex items-start gap-x-1 w-full">
-            <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
+          <div className="flex w-full items-start gap-x-1">
+            <div className="flex w-1/3 flex-col">
+              <p className="mb-1 text-small font-semibold text-ink">
                 Payment method
-              </Text>
-              <Text
-                className="txt-medium text-ui-fg-subtle"
-                data-testid="payment-method"
-              >
-                {paymentInfoMap[payment.provider_id].title}
-              </Text>
+              </p>
+              <p className="text-small text-ink/80" data-testid="payment-method">
+                {providerTitle}
+              </p>
             </div>
-            <div className="flex flex-col w-2/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
+            <div className="flex w-2/3 flex-col">
+              <p className="mb-1 text-small font-semibold text-ink">
                 Payment details
-              </Text>
-              <div className="flex gap-2 txt-medium text-ui-fg-subtle items-center">
-                <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
-                  {paymentInfoMap[payment.provider_id].icon}
-                </Container>
-                <Text data-testid="payment-amount">
-                  {isStripeLike(payment.provider_id) && payment.data?.card_last4
-                    ? `**** **** **** ${payment.data.card_last4}`
+              </p>
+              <div className="flex items-center gap-2 text-small text-ink/80">
+                <span className="flex h-7 w-fit items-center border border-ink p-2">
+                  {paymentInfoMap[payment.provider_id]?.icon}
+                </span>
+                <p data-testid="payment-amount">
+                  {isStripeLike(payment.provider_id) && cardLast4
+                    ? `**** **** **** ${cardLast4}`
                     : `${convertToLocale({
                         amount: payment.amount,
                         currency_code: order.currency_code,
                       })} paid at ${new Date(
                         payment.created_at ?? ""
                       ).toLocaleString()}`}
-                </Text>
+                </p>
               </div>
             </div>
           </div>
         )}
+
+        {payment && (
+          <div
+            className="mt-4 border-l-2 border-ink pl-3"
+            data-testid="payment-status"
+            data-payment-state={summary.state}
+          >
+            <p className="text-small font-semibold text-ink">
+              {summary.headline}
+            </p>
+            <p className="text-small text-ink/80">{summary.detail}</p>
+          </div>
+        )}
       </div>
 
-      <Divider className="mt-8" />
+      <Rule className="mt-8" />
     </div>
   )
 }

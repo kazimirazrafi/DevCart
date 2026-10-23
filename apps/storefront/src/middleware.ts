@@ -116,6 +116,32 @@ export async function middleware(request: NextRequest) {
   const firstPathSegment = request.nextUrl.pathname.split("/")[1]?.toLowerCase()
   const urlHasCountry = firstPathSegment === country.toLowerCase()
 
+  /*
+   * Everything under `/account` is the customer's own pages, and `/account`
+   * itself is where signing in happens. Without the auth cookie those pages are
+   * sent to sign in carrying the page that was asked for, so signing in returns
+   * the customer there instead of dropping them on the overview.
+   *
+   * The cookie is only checked for presence: middleware runs on the Edge, where
+   * the JWT cannot be verified without handing it the backend's secret. A stale
+   * or forged token still passes this check, and every account page reads the
+   * customer through the Store API, which is what actually refuses it.
+   */
+  const pathWithoutCountry = urlHasCountry
+    ? request.nextUrl.pathname.slice(country.length + 1) || "/"
+    : request.nextUrl.pathname
+  const signedIn = Boolean(request.cookies.get("_medusa_jwt")?.value)
+
+  if (pathWithoutCountry.startsWith("/account/") && !signedIn) {
+    const signIn = new URL(`/${country}/account`, request.nextUrl.origin)
+    signIn.searchParams.set(
+      "redirect",
+      `/${country}${pathWithoutCountry}${request.nextUrl.search}`
+    )
+
+    return NextResponse.redirect(signIn, 307)
+  }
+
   if (urlHasCountry) {
     if (!cacheIdCookie) {
       const response = NextResponse.next()

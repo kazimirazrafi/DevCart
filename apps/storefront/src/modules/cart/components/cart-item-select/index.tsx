@@ -1,69 +1,37 @@
 "use client"
 
-import { IconBadge, clx } from "@modules/common/components/ui"
-import {
-  SelectHTMLAttributes,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react"
+import clsx from "clsx"
+import { SelectHTMLAttributes, forwardRef } from "react"
 
 import ChevronDown from "@modules/common/icons/chevron-down"
 
-type NativeSelectProps = {
-  placeholder?: string
-  errors?: Record<string, unknown>
-  touched?: Record<string, unknown>
-} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "size">
+type NativeSelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "size">
 
+/**
+ * The cart's quantity picker: a native select, so it keeps the platform's
+ * keyboard and screen-reader behaviour. Square and ink-bordered like everything
+ * else, with the chevron drawn on top of the field.
+ */
 const CartItemSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
-  ({ placeholder = "Select...", className, children, ...props }, ref) => {
-    const innerRef = useRef<HTMLSelectElement>(null)
-    const [isPlaceholder, setIsPlaceholder] = useState(false)
-
-    useImperativeHandle<HTMLSelectElement | null, HTMLSelectElement | null>(
-      ref,
-      () => innerRef.current
-    )
-
-    useEffect(() => {
-      if (innerRef.current && innerRef.current.value === "") {
-        setIsPlaceholder(true)
-      } else {
-        setIsPlaceholder(false)
-      }
-    }, [innerRef.current?.value])
-
+  ({ className, children, ...props }, ref) => {
     return (
-      <div>
-        <IconBadge
-          onFocus={() => innerRef.current?.focus()}
-          onBlur={() => innerRef.current?.blur()}
-          className={clx(
-            "relative flex items-center txt-compact-small border text-ui-fg-base group",
-            className,
-            {
-              "text-ui-fg-subtle": isPlaceholder,
-            }
+      <span className="relative inline-flex items-center">
+        <select
+          ref={ref}
+          className={clsx(
+            "h-10 appearance-none rounded-square border border-ink bg-stock pl-3 pr-8 text-body text-ink",
+            "transition-colors hover:border-riso-blue",
+            "disabled:cursor-not-allowed disabled:border-ink/30 disabled:text-ink/40",
+            className
           )}
+          {...props}
         >
-          <select
-            ref={innerRef}
-            {...props}
-            className="appearance-none bg-transparent border-none px-4 transition-colors duration-150 focus:border-gray-700 outline-none w-16 h-16 items-center justify-center"
-          >
-            <option disabled value="">
-              {placeholder}
-            </option>
-            {children}
-          </select>
-          <span className="absolute flex pointer-events-none justify-end w-8 group-hover:animate-pulse">
-            <ChevronDown />
-          </span>
-        </IconBadge>
-      </div>
+          {children}
+        </select>
+        <span className="pointer-events-none absolute right-2 flex text-ink">
+          <ChevronDown />
+        </span>
+      </span>
     )
   }
 )

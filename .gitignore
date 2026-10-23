@@ -43,6 +43,9 @@ yarn-error.log*
 .turbo
 .vscode
 
+# TypeScript incremental build info (regenerated on every typecheck)
+**/tsconfig.tsbuildinfo
+
 # vercel
 .vercel
 
@@ -55,3 +58,8 @@ yarn-error.log*
 ehthumbs.db
 Thumbs.db
 **/.DS_Store
+# Database dumps written by scripts/db-backup.sh (customer data, never committed).
+backups/
+
+# Lighthouse CI reports written by `pnpm run lighthouse`.
+.lighthouseci/

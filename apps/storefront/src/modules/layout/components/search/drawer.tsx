@@ -23,7 +23,7 @@ const SearchDrawer = ({ isOpen, close, children }: SearchDrawerProps) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-ui-bg-overlay backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-ink/60 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
@@ -41,16 +41,16 @@ const SearchDrawer = ({ isOpen, close, children }: SearchDrawerProps) => {
                 className="pointer-events-auto w-screen max-w-md"
                 data-testid="search-drawer"
               >
-                <div className="flex h-full flex-col border-l border-ui-border-base bg-ui-bg-base shadow-elevation-modal">
-                  <div className="flex items-center justify-between border-b border-ui-border-base px-4 py-3">
-                    <Dialog.Title className="text-large-semi text-ui-fg-base">
+                <div className="flex h-full flex-col border-l border-ink/20 bg-stock shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-ink/20 px-4 py-3">
+                    <Dialog.Title className="text-large-semi text-ink">
                       Search
                     </Dialog.Title>
                     <button
                       type="button"
                       onClick={close}
                       aria-label="Close search"
-                      className="text-ui-fg-muted hover:text-ui-fg-base"
+                      className="text-ink/70 hover:text-ink"
                       data-testid="close-search-drawer"
                     >
                       <XMark />

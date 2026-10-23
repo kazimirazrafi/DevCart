@@ -1,157 +1,161 @@
-import { listCategories } from "@lib/data/categories";
-import { listCollections } from "@lib/data/collections";
-import { Text, clx } from "@modules/common/components/ui";
+import { listCategories } from "@lib/data/categories"
+import { listCollections } from "@lib/data/collections"
+import { getStoreName } from "@lib/util/env"
+import { LEGAL_LINKS, SUPPORT_EMAIL } from "@modules/legal/links"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
-import LocalizedClientLink from "@modules/common/components/localized-client-link";
-import MedusaCTA from "@modules/layout/components/medusa-cta";
+/** Departments on the footer: the shop's top level, never the whole tree. */
+const DEPARTMENTS_SHOWN = 6
+const COLLECTIONS_SHOWN = 5
 
+const PAYMENT_MARKS = ["Visa", "Mastercard", "Amex", "Stripe"]
+
+type FooterLink = { label: string; href: string }
+
+const LinkColumn = ({
+  title,
+  links,
+  testId,
+}: {
+  title: string
+  links: FooterLink[]
+  testId?: string
+}) => (
+  <div className="flex min-w-0 flex-col gap-3">
+    <h2 className="text-small font-semibold text-ink">{title}</h2>
+    <ul className="flex flex-col gap-2" data-testid={testId}>
+      {links.map((link) => (
+        <li key={`${title}-${link.href}`}>
+          <LocalizedClientLink
+            href={link.href}
+            className="text-small text-ink/70 hover:text-ink"
+          >
+            {link.label}
+          </LocalizedClientLink>
+        </li>
+      ))}
+    </ul>
+  </div>
+)
+
+/**
+ * The footer is the site's index, not the catalogue's: six departments with a
+ * way to reach all of them, the help links a buyer looks for after a decision,
+ * and the policies a store has to publish. Listing every category here would be
+ * unusable at a few hundred, so the depth lives in `/store` and the department
+ * pages instead.
+ *
+ * It reads the same `LEGAL_LINKS` the policy pages do, which is what keeps a
+ * policy from existing without a link to it.
+ */
 export default async function Footer() {
-  const { collections } = await listCollections({
-    fields: "*products",
-  });
-  const productCategories = await listCategories();
+  const [{ collections }, categories] = await Promise.all([
+    listCollections({ fields: "id,handle,title" }),
+    listCategories({
+      limit: 100,
+      fields: "id,name,handle,parent_category_id",
+    }),
+  ])
+
+  const departments = categories
+    .filter((category) => !category.parent_category_id && category.handle)
+    .slice(0, DEPARTMENTS_SHOWN)
+    .map((category) => ({
+      label: category.name ?? "Department",
+      href: `/categories/${category.handle}`,
+    }))
+
+  const collectionLinks = collections
+    .filter((collection) => Boolean(collection.handle))
+    .slice(0, COLLECTIONS_SHOWN)
+    .map((collection) => ({
+      label: collection.title ?? "Collection",
+      href: `/collections/${collection.handle}`,
+    }))
+
+  const shopLinks: FooterLink[] = [
+    ...departments,
+    { label: "All products", href: "/store" },
+  ]
+
+  const help = LEGAL_LINKS.filter((link) =>
+    ["/contact", "/shipping-and-delivery", "/returns-and-refunds"].includes(
+      link.href
+    )
+  )
+
+  const company = LEGAL_LINKS.filter((link) =>
+    ["/about", "/privacy-policy", "/terms-and-conditions", "/cookie-policy"].includes(
+      link.href
+    )
+  )
 
   return (
-    <footer className="border-t border-ui-border-base w-full">
-      <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-40">
-          <div>
+    <footer className="border-t border-ink/20" data-testid="footer">
+      <div className="content-container">
+        <div className="grid grid-cols-1 gap-10 py-10 small:grid-cols-12 small:gap-8 small:py-14">
+          <div className="flex flex-col gap-4 small:col-span-4">
             <LocalizedClientLink
               href="/"
-              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
+              className="font-display text-h3 font-bold tracking-tight text-ink"
             >
-              Medusa Store
+              {getStoreName()}
             </LocalizedClientLink>
-          </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
-            {productCategories && productCategories?.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Categories
-                </span>
-                <ul
-                  className="grid grid-cols-1 gap-2"
-                  data-testid="footer-categories"
-                >
-                  {productCategories?.slice(0, 6).map((c) => {
-                    if (c.parent_category) {
-                      return;
-                    }
-
-                    const children =
-                      c.category_children?.map((child) => ({
-                        name: child.name,
-                        handle: child.handle,
-                        id: child.id,
-                      })) || null;
-
-                    return (
-                      <li
-                        className="flex flex-col gap-2 text-ui-fg-subtle txt-small"
-                        key={c.id}
-                      >
-                        <LocalizedClientLink
-                          className={clx(
-                            "hover:text-ui-fg-base",
-                            children && "txt-small-plus"
-                          )}
-                          href={`/categories/${c.handle}`}
-                          data-testid="category-link"
-                        >
-                          {c.name}
-                        </LocalizedClientLink>
-                        {children && (
-                          <ul className="grid grid-cols-1 ml-3 gap-2">
-                            {children &&
-                              children.map((child) => (
-                                <li key={child.id}>
-                                  <LocalizedClientLink
-                                    className="hover:text-ui-fg-base"
-                                    href={`/categories/${child.handle}`}
-                                    data-testid="category-link"
-                                  >
-                                    {child.name}
-                                  </LocalizedClientLink>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-            {collections && collections.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Collections
-                </span>
-                <ul
-                  className={clx(
-                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
-                    {
-                      "grid-cols-2": (collections?.length || 0) > 3,
-                    }
-                  )}
-                >
-                  {collections?.slice(0, 6).map((c) => (
-                    <li key={c.id}>
-                      <LocalizedClientLink
-                        className="hover:text-ui-fg-base"
-                        href={`/collections/${c.handle}`}
-                      >
-                        {c.title}
-                      </LocalizedClientLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <div className="flex flex-col gap-y-2">
-              <span className="txt-small-plus txt-ui-fg-base">Medusa</span>
-              <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
-                <li>
-                  <a
-                    href="https://github.com/medusajs"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://docs.medusajs.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/medusajs/dtc-starter"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Source code
-                  </a>
-                </li>
-              </ul>
+            <p className="max-w-[32ch] text-small leading-relaxed text-ink/70">
+              Eight departments, bought in small runs and shipped from one
+              warehouse.
+            </p>
+            <div className="flex flex-col gap-1">
+              <span className="text-small text-ink/70">Questions and returns</span>
+              <a
+                href={`mailto:${SUPPORT_EMAIL}`}
+                className="w-fit break-all text-small text-riso-blue underline underline-offset-4 hover:text-ink"
+              >
+                {SUPPORT_EMAIL}
+              </a>
             </div>
+            <ul
+              aria-label="Accepted payment methods"
+              className="mt-1 flex flex-wrap gap-2"
+            >
+              {PAYMENT_MARKS.map((mark) => (
+                <li
+                  key={mark}
+                  className="border border-ink/30 px-2 py-1 font-mono text-micro text-ink/70"
+                >
+                  {mark}
+                </li>
+              ))}
+            </ul>
           </div>
+
+          <nav
+            aria-label="Footer"
+            className="grid grid-cols-2 gap-8 small:col-span-8 small:grid-cols-4"
+          >
+            <LinkColumn
+              title="Shop"
+              links={shopLinks}
+              testId="footer-categories"
+            />
+            {collectionLinks.length > 0 && (
+              <LinkColumn title="Collections" links={collectionLinks} />
+            )}
+            <LinkColumn title="Help" links={help} />
+            <LinkColumn title="Company" links={company} />
+          </nav>
         </div>
-        <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
-          <Text className="txt-compact-small">
-            © {new Date().getFullYear()} Medusa Store. All rights reserved.
-          </Text>
-          <MedusaCTA />
+
+        <div className="flex flex-col gap-2 border-t border-ink/20 py-6 text-small text-ink/70 small:flex-row small:items-center small:justify-between">
+          <p>
+            © {new Date().getFullYear()} {getStoreName()}. All rights reserved.
+          </p>
+          <p>
+            Prices and shipping are shown in your region&apos;s currency at
+            checkout.
+          </p>
         </div>
       </div>
     </footer>
-  );
+  )
 }

@@ -29,27 +29,39 @@ function CartMismatchBanner(props: {
     }
   }
 
+  /*
+   * A notice about the cart, not part of the page: `aside` gives it a landmark
+   * of its own, so the content is announced and axe's "content outside a
+   * landmark" rule is satisfied. Yellow fill with ink text is the one sanctioned
+   * highlight (12.40:1); the starter's orange-800 on orange-300 was 4.33:1.
+   */
   return (
-    <div className="flex items-center justify-center small:p-4 p-2 text-center bg-orange-300 small:gap-2 gap-1 text-sm mt-2 text-orange-800">
-      <div className="flex flex-col small:flex-row small:gap-2 gap-1 items-center">
-        <span className="flex items-center gap-1">
-          <ExclamationCircleSolid className="inline" />
-          Something went wrong when we tried to transfer your cart
-        </span>
+    <aside
+      aria-label="Cart transfer notice"
+      className="border-b border-ink bg-riso-yellow text-ink"
+      data-testid="cart-mismatch-banner"
+    >
+      <div className="content-container flex items-center justify-center gap-2 p-2 text-center text-small small:p-4">
+        <div className="flex flex-col items-center gap-1 small:flex-row small:gap-2">
+          <span className="flex items-center gap-1">
+            <ExclamationCircleSolid className="inline" aria-hidden="true" />
+            Something went wrong when we tried to transfer your cart
+          </span>
 
-        <span>·</span>
+          <span aria-hidden="true">·</span>
 
-        <Button
-          variant="transparent"
-          className="hover:bg-transparent active:bg-transparent focus:bg-transparent disabled:text-orange-500 text-orange-950 p-0 bg-transparent"
-          size="medium"
-          disabled={isPending}
-          onClick={handleSubmit}
-        >
-          {actionText}
-        </Button>
+          <Button
+            variant="secondary"
+            className="border-ink bg-transparent p-0 text-ink hover:bg-ink hover:text-stock"
+            size="medium"
+            disabled={isPending}
+            onClick={handleSubmit}
+          >
+            {actionText}
+          </Button>
+        </div>
       </div>
-    </div>
+    </aside>
   )
 }
 

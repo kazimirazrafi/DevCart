@@ -1,6 +1,11 @@
-import { Button, Container, Text } from "@modules/common/components/ui"
 import { cookies as nextCookies } from "next/headers"
 
+import { Link } from "@modules/design-system"
+
+/*
+ * Shown only to the person who just ran the template's own onboarding flow
+ * (the `_medusa_onboarding` cookie), so a normal visitor never sees it.
+ */
 async function ProductOnboardingCta() {
   const cookies = await nextCookies()
 
@@ -10,20 +15,26 @@ async function ProductOnboardingCta() {
     return null
   }
 
+  // The admin dashboard is served by the backend, at its /app path.
+  const adminUrl = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || ""
+
   return (
-    <Container className="max-w-4xl h-full bg-ui-bg-subtle w-full p-8">
-      <div className="flex flex-col gap-y-4 center">
-        <Text className="text-ui-fg-base text-xl">
-          Your demo product was successfully created! 🎉
-        </Text>
-        <Text className="text-ui-fg-subtle text-small-regular">
-          You can now continue setting up your store in the admin.
-        </Text>
-        <a href="http://localhost:7001/a/orders?onboarding_step=create_order_nextjs">
-          <Button className="w-full">Continue setup in admin</Button>
-        </a>
-      </div>
-    </Container>
+    <div
+      className="flex flex-col gap-3 border border-ink/30 bg-stock p-4"
+      data-testid="onboarding-cta"
+    >
+      <p className="text-small font-semibold text-ink">
+        Your demo product was created successfully.
+      </p>
+      <p className="text-small text-ink/80">
+        You can continue setting up your store in the admin dashboard.
+      </p>
+      {adminUrl && (
+        <Link href={`${adminUrl}/app`} className="self-start text-small">
+          Open the admin dashboard
+        </Link>
+      )}
+    </div>
   )
 }
 

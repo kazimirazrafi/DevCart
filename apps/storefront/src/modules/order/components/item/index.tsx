@@ -1,5 +1,4 @@
 import { HttpTypes } from "@medusajs/types"
-import { Table, Text } from "@modules/common/components/ui"
 
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
@@ -11,31 +10,35 @@ type ItemProps = {
   currencyCode: string
 }
 
+/*
+ * A table row, because its caller renders it inside a `<tbody>`: anything else
+ * would be hoisted out of the table by the HTML parser.
+ */
 const Item = ({ item, currencyCode }: ItemProps) => {
   return (
-    <Table.Row className="w-full" data-testid="product-row">
-      <Table.Cell className="!pl-0 p-4 w-24">
+    <tr
+      className="w-full border-b border-ink/20"
+      data-testid="product-row"
+    >
+      <td className="w-24 p-4 pl-0 align-top">
         <div className="flex w-16">
           <Thumbnail thumbnail={item.thumbnail} size="square" />
         </div>
-      </Table.Cell>
+      </td>
 
-      <Table.Cell className="text-left">
-        <Text
-          className="txt-medium-plus text-ui-fg-base"
-          data-testid="product-name"
-        >
+      <td className="align-middle text-left">
+        <p className="text-small font-semibold text-ink" data-testid="product-name">
           {item.product_title}
-        </Text>
+        </p>
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
-      </Table.Cell>
+      </td>
 
-      <Table.Cell className="!pr-0">
-        <span className="!pr-0 flex flex-col items-end h-full justify-center">
-          <span className="flex gap-x-1 ">
-            <Text className="text-ui-fg-muted">
+      <td className="align-middle pr-0">
+        <span className="flex flex-col items-end justify-center pr-0">
+          <span className="flex items-baseline gap-x-1">
+            <span className="text-small text-ink/70">
               <span data-testid="product-quantity">{item.quantity}</span>x{" "}
-            </Text>
+            </span>
             <LineItemUnitPrice
               item={item}
               style="tight"
@@ -49,8 +52,8 @@ const Item = ({ item, currencyCode }: ItemProps) => {
             currencyCode={currencyCode}
           />
         </span>
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   )
 }
 

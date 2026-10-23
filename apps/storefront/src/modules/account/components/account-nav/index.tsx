@@ -1,198 +1,91 @@
 "use client"
 
-import { ArrowRightOnRectangle } from "@medusajs/icons"
-import { clx } from "@modules/common/components/ui"
+import { HttpTypes } from "@medusajs/types"
+import clsx from "clsx"
 import { useParams, usePathname } from "next/navigation"
 
 import { signout } from "@lib/data/customer"
-import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import ChevronDown from "@modules/common/icons/chevron-down"
-import MapPin from "@modules/common/icons/map-pin"
-import Package from "@modules/common/icons/package"
-import User from "@modules/common/icons/user"
+import { Button } from "@modules/design-system"
 
-const AccountNav = ({
-  customer,
-}: {
-  customer: HttpTypes.StoreCustomer | null
-}) => {
+type AccountLink = {
+  href: string
+  label: string
+  "data-testid": string
+}
+
+const LINKS: AccountLink[] = [
+  { href: "/account", label: "Overview", "data-testid": "overview-link" },
+  { href: "/account/profile", label: "Profile", "data-testid": "profile-link" },
+  {
+    href: "/account/addresses",
+    label: "Addresses",
+    "data-testid": "addresses-link",
+  },
+  { href: "/account/orders", label: "Orders", "data-testid": "orders-link" },
+  {
+    href: "/account/wishlist",
+    label: "Wishlist",
+    "data-testid": "wishlist-link",
+  },
+]
+
+/**
+ * One nav for every width. It reads across on a phone and becomes the sidebar
+ * from the `small` breakpoint, so the links never exist as two copies of
+ * themselves — the starter kept a second mobile list, which is how the same
+ * control ends up with the same test id twice in the document.
+ */
+const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer }) => {
   const route = usePathname()
   const { countryCode } = useParams() as { countryCode: string }
+  const current = route.split(`/${countryCode}`)[1] ?? ""
 
   const handleLogout = async () => {
     await signout(countryCode)
   }
 
   return (
-    <div>
-      <div className="small:hidden" data-testid="mobile-account-nav">
-        {route !== `/${countryCode}/account` ? (
-          <LocalizedClientLink
-            href="/account"
-            className="flex items-center gap-x-2 text-small-regular py-2"
-            data-testid="account-main-link"
-          >
-            <>
-              <ChevronDown className="transform rotate-90" />
-              <span>Account</span>
-            </>
-          </LocalizedClientLink>
-        ) : (
-          <>
-            <div className="text-xl-semi mb-4 px-8">
-              Hello {customer?.first_name}
-            </div>
-            <div className="text-base-regular">
-              <ul>
-                <li>
-                  <LocalizedClientLink
-                    href="/account/profile"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
-                    data-testid="profile-link"
-                  >
-                    <>
-                      <div className="flex items-center gap-x-2">
-                        <User size={20} />
-                        <span>Profile</span>
-                      </div>
-                      <ChevronDown className="transform -rotate-90" />
-                    </>
-                  </LocalizedClientLink>
-                </li>
-                <li>
-                  <LocalizedClientLink
-                    href="/account/addresses"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
-                    data-testid="addresses-link"
-                  >
-                    <>
-                      <div className="flex items-center gap-x-2">
-                        <MapPin size={20} />
-                        <span>Addresses</span>
-                      </div>
-                      <ChevronDown className="transform -rotate-90" />
-                    </>
-                  </LocalizedClientLink>
-                </li>
-                <li>
-                  <LocalizedClientLink
-                    href="/account/orders"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
-                    data-testid="orders-link"
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <Package size={20} />
-                      <span>Orders</span>
-                    </div>
-                    <ChevronDown className="transform -rotate-90" />
-                  </LocalizedClientLink>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8 w-full"
-                    onClick={handleLogout}
-                    data-testid="logout-button"
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <ArrowRightOnRectangle />
-                      <span>Log out</span>
-                    </div>
-                    <ChevronDown className="transform -rotate-90" />
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </>
-        )}
-      </div>
-      <div className="hidden small:block" data-testid="account-nav">
-        <div>
-          <div className="pb-4">
-            <h3 className="text-base-semi">Account</h3>
-          </div>
-          <div className="text-base-regular">
-            <ul className="flex mb-0 justify-start items-start flex-col gap-y-4">
-              <li>
-                <AccountNavLink
-                  href="/account"
-                  route={route!}
-                  data-testid="overview-link"
-                >
-                  Overview
-                </AccountNavLink>
-              </li>
-              <li>
-                <AccountNavLink
-                  href="/account/profile"
-                  route={route!}
-                  data-testid="profile-link"
-                >
-                  Profile
-                </AccountNavLink>
-              </li>
-              <li>
-                <AccountNavLink
-                  href="/account/addresses"
-                  route={route!}
-                  data-testid="addresses-link"
-                >
-                  Addresses
-                </AccountNavLink>
-              </li>
-              <li>
-                <AccountNavLink
-                  href="/account/orders"
-                  route={route!}
-                  data-testid="orders-link"
-                >
-                  Orders
-                </AccountNavLink>
-              </li>
-              <li className="text-grey-700">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  data-testid="logout-button"
-                >
-                  Log out
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-type AccountNavLinkProps = {
-  href: string
-  route: string
-  children: React.ReactNode
-  "data-testid"?: string
-}
-
-const AccountNavLink = ({
-  href,
-  route,
-  children,
-  "data-testid": dataTestId,
-}: AccountNavLinkProps) => {
-  const { countryCode }: { countryCode: string } = useParams()
-
-  const active = route.split(countryCode)[1] === href
-  return (
-    <LocalizedClientLink
-      href={href}
-      className={clx("text-ui-fg-subtle hover:text-ui-fg-base", {
-        "text-ui-fg-base font-semibold": active,
-      })}
-      data-testid={dataTestId}
+    <nav
+      aria-label="Account"
+      className="flex flex-col gap-4"
+      data-testid="account-nav"
     >
-      {children}
-    </LocalizedClientLink>
+      <h2 className="text-small font-semibold text-ink">
+        Hello {customer.first_name || "there"}
+      </h2>
+
+      <div className="flex flex-row flex-wrap gap-x-5 gap-y-1 small:flex-col small:gap-y-0">
+        {LINKS.map(({ href, label, ...props }) => {
+          const active = current.startsWith(href)
+
+          return (
+            <LocalizedClientLink
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={clsx(
+                "py-1 text-body transition-colors duration-150",
+                active ? "font-semibold text-ink" : "text-ink/70 hover:text-ink"
+              )}
+              {...props}
+            >
+              {label}
+            </LocalizedClientLink>
+          )
+        })}
+      </div>
+
+      <Button
+        variant="secondary"
+        size="small"
+        onClick={handleLogout}
+        className="self-start"
+        data-testid="logout-button"
+      >
+        Log out
+      </Button>
+    </nav>
   )
 }
 

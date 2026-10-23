@@ -45,6 +45,14 @@ export const { searchClient } = createInstantSearchAdapter({
   additionalSearchParameters: {
     search_options: {
       match_strategy: "last",
+      /*
+       * The engine only fuzzy-matches when the query asks for it: the postgres
+       * search provider defaults this option to off, so the index's own
+       * `typo_tolerance` setting was never reached and "hoddie" returned
+       * nothing while "hoodie" found the hoodies. The adapter sends these on the
+       * listing, its facet queries and the navbar search alike.
+       */
+      typo_tolerance: true,
     },
   },
   // Range widgets read `facets_stats`, which the adapter only produces for

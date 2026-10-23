@@ -19,7 +19,14 @@ module.exports = {
         visibility: "visibility",
         padding: "padding-top padding-right padding-bottom padding-left",
       },
+      // DevCart tokens. The CSS variables live in src/styles/globals.css.
       colors: {
+        stock: "rgb(var(--dc-stock) / <alpha-value>)",
+        ink: "rgb(var(--dc-ink) / <alpha-value>)",
+        "riso-blue": "rgb(var(--dc-riso-blue) / <alpha-value>)",
+        "riso-pink": "rgb(var(--dc-riso-pink) / <alpha-value>)",
+        "riso-yellow": "rgb(var(--dc-riso-yellow) / <alpha-value>)",
+        "riso-green": "rgb(var(--dc-riso-green) / <alpha-value>)",
         grey: {
           0: "#FFFFFF",
           5: "#F9FAFB",
@@ -35,6 +42,10 @@ module.exports = {
         },
       },
       borderRadius: {
+        // The DevCart system is square; `square` and the default are both 0 so a
+        // bare `rounded` cannot accidentally soften a plate.
+        square: "var(--dc-radius)",
+        DEFAULT: "var(--dc-radius)",
         none: "0px",
         soft: "2px",
         base: "4px",
@@ -45,6 +56,11 @@ module.exports = {
       maxWidth: {
         "8xl": "100rem",
       },
+      spacing: {
+        gutter: "var(--dc-gutter)",
+        section: "var(--dc-section)",
+        content: "var(--dc-content)",
+      },
       screens: {
         "2xsmall": "320px",
         xsmall: "512px",
@@ -54,20 +70,43 @@ module.exports = {
         xlarge: "1680px",
         "2xlarge": "1920px",
       },
+      /*
+       * DevCart type scale, 1.25 ratio on a 16px base: 12 / 14 / 16 / 20 / 25 /
+       * 31 / 39 / 49 / 61. Named by role rather than by size so a heading cannot
+       * silently become the wrong voice. Tailwind's own numeric scale is left
+       * untouched for the starter's existing pages.
+       */
       fontSize: {
         "3xl": "2rem",
+        micro: ["0.75rem", { lineHeight: "1rem" }],
+        small: ["0.875rem", { lineHeight: "1.25rem" }],
+        body: ["1rem", { lineHeight: "1.5rem" }],
+        lead: ["1.25rem", { lineHeight: "1.75rem" }],
+        h3: ["1.5625rem", { lineHeight: "2rem" }],
+        h2: ["1.9375rem", { lineHeight: "2.25rem" }],
+        h1: ["2.4375rem", { lineHeight: "2.75rem" }],
+        display: ["3.0625rem", { lineHeight: "3.25rem" }],
+        hero: ["3.8125rem", { lineHeight: "4rem" }],
       },
       fontFamily: {
+        // Display: Bricolage Grotesque — headings only.
+        display: [
+          "var(--font-display)",
+          "Georgia",
+          "serif",
+        ],
+        // Body and UI: IBM Plex Sans. Overrides the starter's Inter stack.
         sans: [
-          "Inter",
+          "var(--font-body)",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
-          "Roboto",
           "Helvetica Neue",
-          "Ubuntu",
+          "Arial",
           "sans-serif",
         ],
+        // Machine data only: SKUs, specs, order numbers.
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       keyframes: {
         ring: {
