@@ -11,12 +11,17 @@ export const metadata: Metadata = {
 }
 
 export default async function OverviewTemplate() {
-  const customer = await retrieveCustomer().catch(() => null)
-  const orders = (await listOrders().catch(() => null)) || null
+  const customer = await retrieveCustomer()
 
   if (!customer) {
     notFound()
   }
 
-  return <Overview customer={customer} orders={orders} />
+  // A failed read leaves the recent-orders block empty rather than taking the
+  // whole overview down with it; the orders page reports the failure properly.
+  const result = await listOrders(5)
+
+  return (
+    <Overview customer={customer} orders={result.ok ? result.orders : null} />
+  )
 }

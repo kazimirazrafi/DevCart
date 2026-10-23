@@ -20,10 +20,15 @@ const InteractiveLink = ({
       onClick={onClick}
       {...props}
     >
-      <Text className="text-ui-fg-interactive">{children}</Text>
+      {/*
+       * riso-blue rather than the starter's `--fg-interactive` (blue-500,
+       * 3.01:1 on stock): the arrow inherits the link's own colour so the icon
+       * and the words cannot disagree.
+       */}
+      <Text className="text-riso-blue">{children}</Text>
       <ArrowUpRightMini
-        className="group-hover:rotate-45 ease-in-out duration-150"
-        color="var(--fg-interactive)"
+        className="text-riso-blue group-hover:rotate-45 ease-in-out duration-150 motion-reduce:transition-none"
+        color="currentColor"
       />
     </LocalizedClientLink>
   )

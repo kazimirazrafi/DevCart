@@ -1,7 +1,16 @@
 "use server"
 
 import { sdk } from "@lib/config"
-import medusaError from "@lib/util/medusa-error"
+import {
+  type CheckoutStepState,
+  isValidEmail,
+} from "@lib/util/checkout-validation"
+import medusaErrorMessage, { medusaError } from "@lib/util/medusa-error"
+import { orderConfirmationPath } from "@lib/util/order-access"
+import {
+  describePlaceOrderFailure,
+  type PaymentFailure,
+} from "@lib/util/payment-status"
 import { HttpTypes } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
@@ -15,6 +24,12 @@ import {
 } from "./cookies"
 import { getRegion } from "./regions"
 import { getLocale } from "./locale-actions"
+import {
+  emailVerificationHeaders,
+  forgetVerificationFor,
+  isEmailVerified,
+  requestVerificationCode,
+} from "./email-verification"
 
 /**
  * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
@@ -34,10 +49,15 @@ export async function retrieveCart(cartId?: string, fields?: string) {
     ...(await getAuthHeaders()),
   }
 
-  const next = {
-    ...(await getCacheOptions("carts")),
-  }
-
+  /*
+   * Read the cart uncached. It is per-customer data that changes on every
+   * mutation, and the storefront re-renders it from inside the server action
+   * that just wrote it: with a cached read, that re-render can be served the
+   * entry from before the change and repaint the previous totals (measured as
+   * a stale subtotal in roughly one quantity change in ten). The routes that
+   * read a cart are dynamic anyway, so the cache saved one round trip and cost
+   * correctness.
+   */
   return await sdk.client
     .fetch<HttpTypes.StoreCartResponse>(`/store/carts/${id}`, {
       method: "GET",
@@ -45,8 +65,7 @@ export async function retrieveCart(cartId?: string, fields?: string) {
         fields,
       },
       headers,
-      next,
-      cache: "force-cache",
+      cache: "no-store",
     })
     .then(({ cart }: { cart: HttpTypes.StoreCart }) => cart)
     .catch(() => null)
@@ -114,6 +133,14 @@ export async function updateCart(data: HttpTypes.StoreUpdateCart) {
     .catch(medusaError)
 }
 
+/*
+ * What a cart mutation reports back to its caller. Failures are *returned*, not
+ * thrown: a production build replaces a thrown server-action error with generic
+ * copy, so a thrown message never reaches the customer (see
+ * `lib/util/medusa-error.ts`).
+ */
+export type CartMutationResult = { ok: true } | { ok: false; message: string }
+
 export async function addToCart({
   variantId,
   quantity,
@@ -122,23 +149,26 @@ export async function addToCart({
   variantId: string
   quantity: number
   countryCode: string
-}) {
+}): Promise<CartMutationResult> {
   if (!variantId) {
-    throw new Error("Missing variant ID when adding to cart")
+    return { ok: false, message: "Could not add this to the cart. Try again." }
   }
 
-  const cart = await getOrSetCart(countryCode)
+  try {
+    const cart = await getOrSetCart(countryCode)
 
-  if (!cart) {
-    throw new Error("Error retrieving or creating cart")
-  }
+    if (!cart) {
+      return {
+        ok: false,
+        message: "Could not add this to the cart. Try again.",
+      }
+    }
 
-  const headers = {
-    ...(await getAuthHeaders()),
-  }
+    const headers = {
+      ...(await getAuthHeaders()),
+    }
 
-  await sdk.store.cart
-    .createLineItem(
+    await sdk.store.cart.createLineItem(
       cart.id,
       {
         variant_id: variantId,
@@ -147,14 +177,17 @@ export async function addToCart({
       {},
       headers
     )
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  const fulfillmentCacheTag = await getCacheTag("fulfillment")
+  revalidateTag(fulfillmentCacheTag)
+
+  return { ok: true }
 }
 
 export async function updateLineItem({
@@ -163,58 +196,60 @@ export async function updateLineItem({
 }: {
   lineId: string
   quantity: number
-}) {
-  if (!lineId) {
-    throw new Error("Missing lineItem ID when updating line item")
-  }
-
+}): Promise<CartMutationResult> {
   const cartId = await getCartId()
 
-  if (!cartId) {
-    throw new Error("Missing cart ID when updating line item")
+  if (!lineId || !cartId) {
+    console.error("Missing cart or line item id when updating a line item")
+    return { ok: false, message: "Could not update the quantity. Try again." }
   }
 
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  await sdk.store.cart
-    .updateLineItem(cartId, lineId, { quantity }, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  try {
+    await sdk.store.cart.updateLineItem(cartId, lineId, { quantity }, {}, headers)
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  const fulfillmentCacheTag = await getCacheTag("fulfillment")
+  revalidateTag(fulfillmentCacheTag)
+
+  return { ok: true }
 }
 
-export async function deleteLineItem(lineId: string) {
-  if (!lineId) {
-    throw new Error("Missing lineItem ID when deleting line item")
-  }
-
+export async function deleteLineItem(
+  lineId: string
+): Promise<CartMutationResult> {
   const cartId = await getCartId()
 
-  if (!cartId) {
-    throw new Error("Missing cart ID when deleting line item")
+  if (!lineId || !cartId) {
+    console.error("Missing cart or line item id when deleting a line item")
+    return { ok: false, message: "Could not remove this item. Try again." }
   }
 
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  await sdk.store.cart
-    .deleteLineItem(cartId, lineId, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  try {
+    await sdk.store.cart.deleteLineItem(cartId, lineId, {}, headers)
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  const fulfillmentCacheTag = await getCacheTag("fulfillment")
+  revalidateTag(fulfillmentCacheTag)
+
+  return { ok: true }
 }
 
 export async function setShippingMethod({
@@ -223,193 +258,403 @@ export async function setShippingMethod({
 }: {
   cartId: string
   shippingMethodId: string
-}) {
+}): Promise<CartMutationResult> {
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.cart
-    .addShippingMethod(cartId, { option_id: shippingMethodId }, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-    })
-    .catch(medusaError)
+  try {
+    await sdk.store.cart.addShippingMethod(
+      cartId,
+      { option_id: shippingMethodId },
+      {},
+      headers
+    )
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  return { ok: true }
 }
 
 export async function initiatePaymentSession(
   cart: HttpTypes.StoreCart,
   data: HttpTypes.StoreInitializePaymentSession
-) {
+): Promise<CartMutationResult> {
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.payment
-    .initiatePaymentSession(cart, data, {}, headers)
-    .then(async (resp) => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-      return resp
-    })
-    .catch(medusaError)
+  try {
+    await sdk.store.payment.initiatePaymentSession(cart, data, {}, headers)
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  return { ok: true }
 }
 
-export async function applyPromotions(codes: string[]) {
+/*
+ * What a promotion change reports back. Like the other cart mutations the
+ * failure is returned rather than thrown: a production build replaces a thrown
+ * server-action message with generic copy.
+ */
+export type PromotionResult =
+  | { ok: true; codes: string[] }
+  | { ok: false; message: string }
+
+const CART_EXPIRED = "Your cart has expired. Add something to it and try again."
+
+/** The codes the customer applied, in the order the cart holds them. */
+const appliedCodes = (cart: HttpTypes.StoreCart) =>
+  (cart.promotions ?? [])
+    .filter((promotion) => !promotion.is_automatic)
+    .map((promotion) => promotion.code ?? "")
+    .filter(Boolean)
+
+/**
+ * Writes the whole list of codes at once, which is what the cart API takes.
+ *
+ * Medusa does not reject the request when a code cannot be applied — it drops
+ * the promotion from the cart and answers `200` — so the only way to tell the
+ * customer their code was refused is to read the applied promotions back. A
+ * refused code is then removed from the cart, so it does not ride along on
+ * every later change and start working once the cart happens to qualify.
+ */
+async function writePromotionCodes(codes: string[]): Promise<PromotionResult> {
   const cartId = await getCartId()
 
   if (!cartId) {
-    throw new Error("No existing cart found")
+    return { ok: false, message: CART_EXPIRED }
   }
 
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.cart
-    .update(cartId, { promo_codes: codes }, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
-}
-
-export async function applyGiftCard(code: string) {
-  //   const cartId = getCartId()
-  //   if (!cartId) return "No cartId cookie found"
-  //   try {
-  //     await updateCart(cartId, { gift_cards: [{ code }] }).then(() => {
-  //       revalidateTag("cart")
-  //     })
-  //   } catch (error: any) {
-  //     throw error
-  //   }
-}
-
-export async function removeDiscount(code: string) {
-  // const cartId = getCartId()
-  // if (!cartId) return "No cartId cookie found"
-  // try {
-  //   await deleteDiscount(cartId, code)
-  //   revalidateTag("cart")
-  // } catch (error: any) {
-  //   throw error
-  // }
-}
-
-export async function removeGiftCard(
-  codeToRemove: string,
-  giftCards: any[]
-  // giftCards: GiftCard[]
-) {
-  //   const cartId = getCartId()
-  //   if (!cartId) return "No cartId cookie found"
-  //   try {
-  //     await updateCart(cartId, {
-  //       gift_cards: [...giftCards]
-  //         .filter((gc) => gc.code !== codeToRemove)
-  //         .map((gc) => ({ code: gc.code })),
-  //     }).then(() => {
-  //       revalidateTag("cart")
-  //     })
-  //   } catch (error: any) {
-  //     throw error
-  //   }
-}
-
-export async function submitPromotionForm(
-  currentState: unknown,
-  formData: FormData
-) {
-  const code = formData.get("code") as string
-  try {
-    await applyPromotions([code])
-  } catch (e: any) {
-    return e.message
-  }
-}
-
-// TODO: Pass a POJO instead of a form entity here
-export async function setAddresses(currentState: unknown, formData: FormData) {
-  try {
-    if (!formData) {
-      throw new Error("No form data found when setting addresses")
-    }
-    const cartId = getCartId()
-    if (!cartId) {
-      throw new Error("No existing cart found when setting addresses")
-    }
-
-    const data = {
-      shipping_address: {
-        first_name: formData.get("shipping_address.first_name"),
-        last_name: formData.get("shipping_address.last_name"),
-        address_1: formData.get("shipping_address.address_1"),
-        address_2: "",
-        company: formData.get("shipping_address.company"),
-        postal_code: formData.get("shipping_address.postal_code"),
-        city: formData.get("shipping_address.city"),
-        country_code: formData.get("shipping_address.country_code"),
-        province: formData.get("shipping_address.province"),
-        phone: formData.get("shipping_address.phone"),
-      },
-      email: formData.get("email"),
-    } as any
-
-    const sameAsBilling = formData.get("same_as_billing")
-    if (sameAsBilling === "on") data.billing_address = data.shipping_address
-
-    if (sameAsBilling !== "on")
-      data.billing_address = {
-        first_name: formData.get("billing_address.first_name"),
-        last_name: formData.get("billing_address.last_name"),
-        address_1: formData.get("billing_address.address_1"),
-        address_2: "",
-        company: formData.get("billing_address.company"),
-        postal_code: formData.get("billing_address.postal_code"),
-        city: formData.get("billing_address.city"),
-        country_code: formData.get("billing_address.country_code"),
-        province: formData.get("billing_address.province"),
-        phone: formData.get("billing_address.phone"),
-      }
-    await updateCart(data)
-  } catch (e: any) {
-    return e.message
-  }
-
-  redirect(
-    `/${formData.get("shipping_address.country_code")}/checkout?step=delivery`
+  const requested = Array.from(
+    new Set(codes.map((code) => code.trim()).filter(Boolean))
   )
+
+  let applied: string[]
+
+  try {
+    const { cart } = await sdk.store.cart.update(
+      cartId,
+      { promo_codes: requested },
+      { fields: "*promotions" },
+      headers
+    )
+    applied = appliedCodes(cart)
+  } catch (error) {
+    return { ok: false, message: medusaErrorMessage(error) }
+  }
+
+  const refused = requested.filter(
+    (code) =>
+      !applied.some(
+        (appliedCode) => appliedCode.toUpperCase() === code.toUpperCase()
+      )
+  )
+
+  if (refused.length) {
+    try {
+      await sdk.store.cart.update(
+        cartId,
+        { promo_codes: applied },
+        {},
+        headers
+      )
+    } catch (error) {
+      console.error("Could not drop a refused promotion code", error)
+    }
+  }
+
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
+
+  const fulfillmentCacheTag = await getCacheTag("fulfillment")
+  revalidateTag(fulfillmentCacheTag)
+
+  if (refused.length) {
+    return {
+      ok: false,
+      message:
+        refused.length === 1
+          ? "That promotion code cannot be used for this cart."
+          : "Some promotion codes cannot be used for this cart.",
+    }
+  }
+
+  return { ok: true, codes: applied }
 }
+
+export async function applyPromotionCode(code: string): Promise<PromotionResult> {
+  const trimmed = code.trim()
+
+  if (!trimmed) {
+    return { ok: false, message: "Enter a promotion code." }
+  }
+
+  const cart = await retrieveCart(undefined, "id,*promotions")
+
+  if (!cart) {
+    return { ok: false, message: CART_EXPIRED }
+  }
+
+  return writePromotionCodes([...appliedCodes(cart), trimmed])
+}
+
+export async function removePromotionCode(
+  code: string
+): Promise<PromotionResult> {
+  const cart = await retrieveCart(undefined, "id,*promotions")
+
+  if (!cart) {
+    return { ok: false, message: CART_EXPIRED }
+  }
+
+  const remaining = appliedCodes(cart).filter(
+    (appliedCode) => appliedCode.toUpperCase() !== code.trim().toUpperCase()
+  )
+
+  return writePromotionCodes(remaining)
+}
+
+/*
+ * The fields an address is not usable without, and what to say about each.
+ * The message is written to be read next to the field it belongs to.
+ */
+const REQUIRED_ADDRESS_FIELDS: [string, string][] = [
+  ["first_name", "Enter a first name."],
+  ["last_name", "Enter a last name."],
+  ["address_1", "Enter a street address."],
+  ["city", "Enter a city."],
+  ["postal_code", "Enter a postal code."],
+  ["country_code", "Choose a country."],
+]
+
+const addressFromForm = (
+  text: (name: string) => string,
+  prefix: "shipping_address" | "billing_address"
+) => ({
+  first_name: text(`${prefix}.first_name`),
+  last_name: text(`${prefix}.last_name`),
+  address_1: text(`${prefix}.address_1`),
+  address_2: "",
+  company: text(`${prefix}.company`),
+  postal_code: text(`${prefix}.postal_code`),
+  city: text(`${prefix}.city`),
+  country_code: text(`${prefix}.country_code`),
+  province: text(`${prefix}.province`),
+  phone: text(`${prefix}.phone`),
+})
+
+function addressFieldErrors(
+  prefix: "shipping_address" | "billing_address",
+  address: Record<string, string>
+) {
+  const errors: Record<string, string> = {}
+
+  for (const [field, message] of REQUIRED_ADDRESS_FIELDS) {
+    if (!address[field]) {
+      errors[`${prefix}.${field}`] = message
+    }
+  }
+
+  return errors
+}
+
+/**
+ * Step 1. The email is collected on its own so a guest is identified before
+ * anything else is asked of them, and so the cart has somewhere to send the
+ * confirmation from before the address is entered.
+ */
+export async function setCartEmail(
+  _currentState: CheckoutStepState,
+  formData: FormData
+): Promise<CheckoutStepState> {
+  const email = String(formData.get("email") ?? "").trim()
+  const countryCode = String(formData.get("country_code") ?? "")
+
+  if (!email) {
+    return { fields: { email: "Enter your email address." } }
+  }
+
+  if (!isValidEmail(email)) {
+    return { fields: { email: "Enter an email address like name@example.com." } }
+  }
+
+  const cartId = await getCartId()
+
+  if (!cartId) {
+    return {
+      message: "Your cart has expired. Add something to it and try again.",
+    }
+  }
+
+  try {
+    await updateCart({ email })
+  } catch (error) {
+    return { message: medusaErrorMessage(error) }
+  }
+
+  /*
+   * A previous confirmation proved a different address, which says nothing
+   * about this one.
+   */
+  await forgetVerificationFor(email)
+
+  /*
+   * A signed-in customer's address came from their account, and the order is
+   * tied to that account whatever they type, so there is nothing left to prove
+   * — the backend's completion gate exempts them for the same reason.
+   */
+  const signedIn = Boolean((await getAuthHeaders()).authorization)
+
+  if (signedIn || (await isEmailVerified(email))) {
+    redirect(`/${countryCode}/checkout?step=address`)
+  }
+
+  /*
+   * A guest proves the address before anything else is asked of them: an
+   * order is only reachable through the inbox it is confirmed to, so asking for
+   * an address and a delivery slot first would be work done on trust.
+   */
+  const verification = await requestVerificationCode(email)
+
+  if (verification.ok) {
+    redirect(`/${countryCode}/checkout?step=contact&verification=sent`)
+  }
+
+  /*
+   * The backend's limits are the authority; a code that was mailed a moment ago
+   * is still in the inbox, so the step is shown with the wait named. Anything
+   * else (the mail provider refused the message, the store is unreachable) is
+   * worth staying on the form for, so it can be retried.
+   */
+  if (
+    verification.code === "resend_cooldown" ||
+    verification.code === "too_many_codes" ||
+    verification.code === "too_many_requests"
+  ) {
+    redirect(`/${countryCode}/checkout?step=contact&verification=wait`)
+  }
+
+  return { message: verification.message }
+}
+
+/** Step 2. Validates the address on the server before the cart is written. */
+export async function setAddresses(
+  _currentState: CheckoutStepState,
+  formData: FormData
+): Promise<CheckoutStepState> {
+  // FormData values are `string | File | null`; the cart API takes text only.
+  const text = (name: string) => String(formData.get(name) ?? "").trim()
+
+  const shipping = addressFromForm(text, "shipping_address")
+  const sameAsBilling = formData.get("same_as_billing") === "on"
+  const billing = sameAsBilling
+    ? shipping
+    : addressFromForm(text, "billing_address")
+
+  const fields = {
+    ...addressFieldErrors("shipping_address", shipping),
+    ...(sameAsBilling
+      ? {}
+      : addressFieldErrors("billing_address", billing)),
+  }
+
+  if (Object.keys(fields).length) {
+    return { message: "Check the fields below and try again.", fields }
+  }
+
+  const cart = await retrieveCart(undefined, "id,email")
+
+  if (!cart) {
+    return {
+      message: "Your cart has expired. Add something to it and try again.",
+    }
+  }
+
+  if (!cart.email) {
+    return { message: "Add your email address before the shipping address." }
+  }
+
+  try {
+    await updateCart({
+      shipping_address: shipping,
+      billing_address: billing,
+    })
+  } catch (error) {
+    return { message: medusaErrorMessage(error) }
+  }
+
+  redirect(`/${shipping.country_code}/checkout?step=delivery`)
+}
+
+/*
+ * Completing a cart returns the order, not the payment: the Store API answers
+ * `{ type: "order" }` only after its own server-side authorization with Stripe
+ * succeeded. A failure carries a reason we can classify (`payment_failed`,
+ * `payment_pending` or `cart_problem`), so the checkout can tell the customer
+ * what happened instead of asking them to pay again blindly.
+ */
+export type PlaceOrderResult = { ok: true } | ({ ok: false } & PaymentFailure)
 
 /**
  * Places an order for a cart. If no cart ID is provided, it will use the cart ID from the cookies.
  * @param cartId - optional - The ID of the cart to place an order for.
- * @returns The cart object if the order was successful, or null if not.
  */
-export async function placeOrder(cartId?: string) {
+export async function placeOrder(
+  cartId?: string
+): Promise<PlaceOrderResult> {
   const id = cartId || (await getCartId())
 
   if (!id) {
-    throw new Error("No existing cart found when placing an order")
+    return {
+      ok: false,
+      kind: "cart_problem",
+      message: "Your cart has expired. Start a new one.",
+    }
   }
 
+  /*
+   * Completing a guest's cart is also where the address is proved: the token
+   * from the contact step travels with the request, and the backend refuses the
+   * completion without it. A signed-in customer sends it too when they have
+   * one; the backend ignores it for them.
+   */
   const headers = {
     ...(await getAuthHeaders()),
+    ...(await emailVerificationHeaders()),
   }
 
-  const cartRes = await sdk.store.cart
-    .complete(id, {}, headers)
-    .then(async (cartRes) => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-      return cartRes
+  let cartRes: Awaited<ReturnType<typeof sdk.store.cart.complete>>
+
+  try {
+    cartRes = await sdk.store.cart.complete(id, {}, headers)
+  } catch (error) {
+    /*
+     * The route throws for anything that is not a payment outcome: a cart that
+     * has already been completed, a cart another request is completing, stock
+     * that disappeared. The message goes in the log; the customer gets the
+     * classification below.
+     */
+    return await explainFailedCompletion(id, {
+      errorType: (error as { type?: string })?.type,
+      errorMessage: medusaErrorMessage(error),
     })
-    .catch(medusaError)
+  }
+
+  const cartCacheTag = await getCacheTag("carts")
+  revalidateTag(cartCacheTag)
 
   if (cartRes?.type === "order") {
     const countryCode =
@@ -419,10 +664,69 @@ export async function placeOrder(cartId?: string) {
     revalidateTag(orderCacheTag)
 
     removeCartId()
-    redirect(`/${countryCode}/order/${cartRes?.order.id}/confirmed`)
+
+    /*
+     * The confirmation page reads the order back through the Store API, which
+     * only answers the order's owner or a request holding this token. The cart
+     * that just completed is proof enough that this browser may see it, so the
+     * token is minted here and expires on its own.
+     */
+    redirect(
+      `/${countryCode}${orderConfirmationPath(cartRes.order.id)}`
+    )
   }
 
-  return cartRes.cart
+  /*
+   * The cart came back uncompleted. The route only answers this way for a
+   * payment result (`payment_authorization_error`, `payment_requires_more`),
+   * and it puts the reason in the body — which used to be dropped here in
+   * favour of one generic sentence.
+   */
+  return await explainFailedCompletion(id, {
+    errorType: cartRes?.error?.type,
+    errorMessage: cartRes?.error?.message,
+  })
+}
+
+/**
+ * Turns a failed completion into something the customer can act on.
+ *
+ * The error alone is not always enough — a 400 from the Store API says "session
+ * was not authorized" for both a declined card and a payment the bank is still
+ * clearing. The payment session is written from Stripe's own answer on the
+ * server, so its status is what separates those two cases.
+ */
+async function explainFailedCompletion(
+  cartId: string,
+  {
+    errorType,
+    errorMessage,
+  }: { errorType?: string | null; errorMessage?: string | null }
+): Promise<PlaceOrderResult> {
+  let sessionStatus: string | undefined
+
+  if (!errorType || errorType === "not_allowed") {
+    const cart = await retrieveCart(
+      cartId,
+      "id,*payment_collection.payment_sessions"
+    )
+
+    sessionStatus = cart?.payment_collection?.payment_sessions?.find(
+      (session) => session.status !== "canceled"
+    )?.status
+  }
+
+  console.error(
+    `Could not complete cart ${cartId}: ${errorMessage ?? errorType ?? "no reason given"}`
+  )
+
+  const failure = describePlaceOrderFailure({
+    errorType,
+    errorMessage,
+    sessionStatus,
+  })
+
+  return { ok: false, ...failure }
 }
 
 /**

@@ -1,0 +1,75 @@
+# Local infrastructure for DevCart.
+#
+#   docker compose up -d                      # Postgres + Redis
+#   docker compose --profile meilisearch up -d  # also start Meilisearch
+#
+# Host ports are overridable, so this file still works when something local
+# already owns 5432 or 6379:
+#
+#   POSTGRES_PORT=55432 REDIS_PORT=56379 docker compose up -d
+#
+# Then point the backend at it, e.g.
+#   DATABASE_URL=postgres://postgres:postgres@localhost:5432/medusa-dtc-starter
+#   REDIS_URL=redis://localhost:6379
+#
+# Meilisearch is behind a profile on purpose: the project uses Medusa's built-in
+# search API, so nothing connects to it yet. See ROADMAP.md "Standing notes".
+
+name: devcart
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-medusa-dtc-starter}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      # Medusa migrations fail against a Postgres that is still initialising, so
+      # wait for a real query rather than just an open port.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-medusa-dtc-starter}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.11
+    profiles: ["meilisearch"]
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY:-dev-master-key}
+      MEILI_ENV: development
+      MEILI_NO_ANALYTICS: "true"
+    ports:
+      - "${MEILISEARCH_PORT:-7700}:7700"
+    volumes:
+      - meilisearch-data:/meili_data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:7700/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  postgres-data:
+  redis-data:
+  meilisearch-data:

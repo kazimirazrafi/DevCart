@@ -1,10 +1,9 @@
 import repeat from "@lib/util/repeat"
 import { HttpTypes } from "@medusajs/types"
-import { Table } from "@modules/common/components/ui"
 
-import Divider from "@modules/common/components/divider"
 import Item from "@modules/order/components/item"
 import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item"
+import { Rule } from "@modules/design-system"
 
 type ItemsProps = {
   order: HttpTypes.StoreOrder
@@ -15,9 +14,9 @@ const Items = ({ order }: ItemsProps) => {
 
   return (
     <div className="flex flex-col">
-      <Divider className="!mb-0" />
-      <Table>
-        <Table.Body data-testid="products-table">
+      <Rule className="mb-0" />
+      <table className="w-full caption-bottom text-small">
+        <tbody data-testid="products-table">
           {items?.length
             ? items
                 .sort((a, b) => {
@@ -35,8 +34,8 @@ const Items = ({ order }: ItemsProps) => {
             : repeat(5).map((i) => {
                 return <SkeletonLineItem key={i} />
               })}
-        </Table.Body>
-      </Table>
+        </tbody>
+      </table>
     </div>
   )
 }

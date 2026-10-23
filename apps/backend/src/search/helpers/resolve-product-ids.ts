@@ -94,7 +94,7 @@ export async function resolveProductIds(
         "product_variant",
         ["product_id"],
         ids,
-        (row) => [row.product_id],
+        (row) => [row?.product_id],
         deleted,
       );
     case "product-option":
@@ -103,7 +103,7 @@ export async function resolveProductIds(
         "product_option",
         ["product_id"],
         ids,
-        (row) => [row.product_id],
+        (row) => [row?.product_id],
         deleted,
       );
     case "product-option-value":
@@ -112,7 +112,7 @@ export async function resolveProductIds(
         "product_option_value",
         ["option.product_id"],
         ids,
-        (row) => [row.option?.product_id],
+        (row) => [row?.option?.product_id],
         deleted,
       );
     case "product-tag":

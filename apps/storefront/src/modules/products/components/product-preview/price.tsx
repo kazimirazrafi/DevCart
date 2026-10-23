@@ -1,29 +1,23 @@
-import { Text, clx } from "@modules/common/components/ui"
 import { VariantPrice } from "types/global"
 
-export default async function PreviewPrice({ price }: { price: VariantPrice }) {
+/*
+ * A priced variant. The struck-through original is the only sale marker: a
+ * second ink (riso-pink) would fail contrast at this size, and the design only
+ * spends pink on large display type (docs/DESIGN.md §2.1).
+ */
+export default function PreviewPrice({ price }: { price: VariantPrice }) {
   if (!price) {
     return null
   }
 
   return (
-    <>
+    <span className="flex flex-wrap items-baseline gap-x-2">
       {price.price_type === "sale" && (
-        <Text
-          className="line-through text-ui-fg-muted"
-          data-testid="original-price"
-        >
+        <s className="text-ink/70" data-testid="original-price">
           {price.original_price}
-        </Text>
+        </s>
       )}
-      <Text
-        className={clx("text-ui-fg-muted", {
-          "text-ui-fg-interactive": price.price_type === "sale",
-        })}
-        data-testid="price"
-      >
-        {price.calculated_price}
-      </Text>
-    </>
+      <span data-testid="price">{price.calculated_price}</span>
+    </span>
   )
 }

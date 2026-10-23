@@ -1,6 +1,7 @@
 "use client"
 
 import { convertToLocale } from "@lib/util/money"
+import { Rule } from "@modules/design-system"
 import React from "react"
 
 type CartTotalsProps = {
@@ -11,10 +12,15 @@ type CartTotalsProps = {
     currency_code: string
     item_subtotal?: number | null
     shipping_subtotal?: number | null
-    discount_subtotal?: number | null
+    discount_total?: number | null
   }
 }
 
+/**
+ * The money breakdown, shared by the cart, checkout and order pages. Amounts are
+ * mono so the columns line up down the page — this is machine data, which is
+ * exactly what docs/DESIGN.md reserves the mono face for.
+ */
 const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
   const {
     currency_code,
@@ -22,59 +28,61 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
     tax_total,
     item_subtotal,
     shipping_subtotal,
-    discount_subtotal,
+    discount_total,
   } = totals
 
+  const amount = (value?: number | null) =>
+    convertToLocale({ amount: value ?? 0, currency_code })
+
   return (
-    <div>
-      <div className="flex flex-col gap-y-2 txt-medium text-ui-fg-subtle ">
-        <div className="flex items-center justify-between">
-          <span>Subtotal (excl. shipping and taxes)</span>
-          <span data-testid="cart-subtotal" data-value={item_subtotal || 0}>
-            {convertToLocale({ amount: item_subtotal ?? 0, currency_code })}
-          </span>
+    <div data-testid="cart-totals">
+      <dl className="flex flex-col gap-2 text-small text-ink">
+        <div className="flex items-center justify-between gap-4">
+          <dt>Subtotal (excl. shipping and taxes)</dt>
+          <dd className="font-mono" data-testid="cart-subtotal" data-value={item_subtotal || 0}>
+            {amount(item_subtotal)}
+          </dd>
         </div>
-        <div className="flex items-center justify-between">
-          <span>Shipping</span>
-          <span data-testid="cart-shipping" data-value={shipping_subtotal || 0}>
-            {convertToLocale({ amount: shipping_subtotal ?? 0, currency_code })}
-          </span>
+        <div className="flex items-center justify-between gap-4">
+          <dt>Shipping</dt>
+          <dd className="font-mono" data-testid="cart-shipping" data-value={shipping_subtotal || 0}>
+            {amount(shipping_subtotal)}
+          </dd>
         </div>
-        {!!discount_subtotal && (
-          <div className="flex items-center justify-between">
-            <span>Discount</span>
-            <span
-              className="text-ui-fg-interactive"
+        {discount_total ? (
+          <div className="flex items-center justify-between gap-4">
+            <dt>Discount</dt>
+            <dd
+              className="font-mono text-riso-green"
               data-testid="cart-discount"
-              data-value={discount_subtotal || 0}
+              data-value={discount_total || 0}
             >
-              -{" "}
-              {convertToLocale({
-                amount: discount_subtotal ?? 0,
-                currency_code,
-              })}
-            </span>
+              -{amount(Math.abs(discount_total))}
+            </dd>
           </div>
-        )}
-        <div className="flex justify-between">
-          <span className="flex gap-x-1 items-center ">Taxes</span>
-          <span data-testid="cart-taxes" data-value={tax_total || 0}>
-            {convertToLocale({ amount: tax_total ?? 0, currency_code })}
-          </span>
+        ) : null}
+        <div className="flex items-center justify-between gap-4">
+          <dt>Taxes</dt>
+          <dd className="font-mono" data-testid="cart-taxes" data-value={tax_total || 0}>
+            {amount(tax_total)}
+          </dd>
         </div>
-      </div>
-      <div className="h-px w-full border-b border-gray-200 my-4" />
-      <div className="flex items-center justify-between text-ui-fg-base mb-2 txt-medium ">
-        <span>Total</span>
+      </dl>
+
+      <Rule className="my-4" weight="heavy" />
+
+      <div className="flex items-baseline justify-between gap-4">
+        <span className="text-body font-semibold">Total</span>
         <span
-          className="txt-xlarge-plus"
+          className="font-mono text-lead"
           data-testid="cart-total"
           data-value={total || 0}
         >
-          {convertToLocale({ amount: total ?? 0, currency_code })}
+          {amount(total)}
         </span>
       </div>
-      <div className="h-px w-full border-b border-gray-200 mt-4" />
+
+      <Rule className="mt-4" />
     </div>
   )
 }

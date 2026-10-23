@@ -6,16 +6,39 @@ import {
   PopoverPanel,
   Transition,
 } from "@headlessui/react"
+import { ShoppingBag } from "@medusajs/icons"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@modules/common/components/ui"
 import DeleteButton from "@modules/common/components/delete-button"
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import Thumbnail from "@modules/products/components/thumbnail"
+import { Rule, buttonClass } from "@modules/design-system"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
+
+/**
+ * The link is an icon, so its name has to be written: "Cart, 2 items" is what a
+ * screen reader reads, and it is also the string that tells the difference
+ * between an empty cart and a full one when nothing is visible but a bag.
+ */
+const cartLabel = (count: number) =>
+  `Cart, ${count} item${count === 1 ? "" : "s"}`
+
+/**
+ * The number beside the bag. Mono, because it is a count rather than a word,
+ * and kept on screen at zero so the control does not jump as the cart fills.
+ */
+const CartCount = ({ count }: { count: number }) => (
+  <span
+    className="font-mono text-small text-ink/70"
+    data-testid="nav-cart-count"
+    data-value={count}
+  >
+    {count}
+  </span>
+)
 
 const CartDropdown = ({
   cart: cartState,
@@ -73,157 +96,199 @@ const CartDropdown = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalItems, itemRef.current])
 
+  const items = cartState?.items
+    ?.slice()
+    .sort((a, b) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
+
   return (
-    <div
-      className="h-full z-50"
-      onMouseEnter={openAndCancel}
-      onMouseLeave={close}
-    >
-      <Popover className="relative h-full">
-        <PopoverButton className="h-full">
-          <LocalizedClientLink
-            className="hover:text-ui-fg-base"
+    <>
+      {/**
+       * The popover's panel is desktop-only, so on a phone the button that
+       * opened it did nothing a customer could see: the click toggled a panel
+       * that is `hidden` below `small`, and the link it was wrapped around never
+       * navigated. The phone gets its own plain link — the same count, the same
+       * destination — and the desktop keeps the hover preview.
+       */}
+      <LocalizedClientLink
+        href="/cart"
+        className="flex h-full items-center gap-x-1.5 px-1 hover:text-ink small:hidden"
+        aria-label={cartLabel(totalItems)}
+        data-testid="nav-cart-link"
+      >
+        <ShoppingBag aria-hidden="true" className="h-5 w-5" />
+        <CartCount count={totalItems} />
+      </LocalizedClientLink>
+
+      <div
+        className="hidden h-full z-50 small:block"
+        onMouseEnter={openAndCancel}
+        onMouseLeave={close}
+      >
+        <Popover className="relative h-full">
+          {/*
+           * The trigger is the link itself. Wrapping an `<a>` in a button put a
+           * link inside a button, which is invalid markup and swallows the link's
+           * own keyboard behaviour.
+           */}
+          <PopoverButton
+            as={LocalizedClientLink}
             href="/cart"
-            data-testid="nav-cart-link"
-          >{`Cart (${totalItems})`}</LocalizedClientLink>
-        </PopoverButton>
-        <Transition
-          show={cartDropdownOpen}
-          as={Fragment}
-          enter="transition ease-out duration-200"
-          enterFrom="opacity-0 translate-y-1"
-          enterTo="opacity-100 translate-y-0"
-          leave="transition ease-in duration-150"
-          leaveFrom="opacity-100 translate-y-0"
-          leaveTo="opacity-0 translate-y-1"
-        >
-          <PopoverPanel
-            static
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
-            data-testid="nav-cart-dropdown"
+            className="flex h-full items-center gap-x-1.5 px-1 hover:text-ink"
+            aria-label={cartLabel(totalItems)}
+            data-testid="nav-cart-link-desktop"
           >
-            <div className="p-4 flex items-center justify-center">
-              <h3 className="text-large-semi">Cart</h3>
-            </div>
-            {cartState && cartState.items?.length ? (
-              <>
-                <div className="overflow-y-scroll max-h-[402px] px-4 grid grid-cols-1 gap-y-8 no-scrollbar p-px">
-                  {cartState.items
-                    .sort((a, b) => {
-                      return (a.created_at ?? "") > (b.created_at ?? "")
-                        ? -1
-                        : 1
-                    })
-                    .map((item) => (
-                      <div
-                        className="grid grid-cols-[122px_1fr] gap-x-4"
+            <ShoppingBag aria-hidden="true" className="h-5 w-5" />
+            <CartCount count={totalItems} />
+          </PopoverButton>
+
+          <Transition
+            show={cartDropdownOpen}
+            as={Fragment}
+            enter="transition ease-out duration-200"
+            enterFrom="opacity-0 translate-y-1"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 translate-y-1"
+          >
+            <PopoverPanel
+              static
+              className="absolute right-0 top-[calc(100%+1px)] hidden w-[420px] border border-ink bg-stock small:block"
+              data-testid="nav-cart-dropdown"
+            >
+              <div className="flex items-center justify-between px-4 py-3">
+                <h3 className="font-display text-lead font-semibold text-ink">
+                  Cart
+                </h3>
+                <span className="font-mono text-small text-ink/70">
+                  {totalItems} {totalItems === 1 ? "item" : "items"}
+                </span>
+              </div>
+
+              <Rule />
+
+              {items?.length ? (
+                <>
+                  <ul className="no-scrollbar grid max-h-[402px] grid-cols-1 gap-4 overflow-y-auto p-4">
+                    {items.map((item) => (
+                      <li
+                        className="grid grid-cols-[88px_1fr] gap-x-4"
                         key={item.id}
                         data-testid="cart-item"
                       >
                         <LocalizedClientLink
                           href={`/products/${item.product_handle}`}
-                          className="w-24"
+                          tabIndex={-1}
+                          aria-hidden="true"
                         >
-                          <Thumbnail
-                            thumbnail={item.thumbnail}
-                            images={item.variant?.product?.images}
-                            size="square"
-                          />
+                          <span className="relative block aspect-square w-full overflow-hidden border border-ink bg-ink/5">
+                            {item.thumbnail ? (
+                              <Image
+                                src={item.thumbnail}
+                                alt=""
+                                fill
+                                sizes="88px"
+                                className="object-cover object-center"
+                              />
+                            ) : null}
+                          </span>
                         </LocalizedClientLink>
-                        <div className="flex flex-col justify-between flex-1">
-                          <div className="flex flex-col flex-1">
-                            <div className="flex items-start justify-between">
-                              <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[180px]">
-                                <h3 className="text-base-regular overflow-hidden text-ellipsis">
-                                  <LocalizedClientLink
-                                    href={`/products/${item.product_handle}`}
-                                    data-testid="product-link"
-                                  >
-                                    {item.title}
-                                  </LocalizedClientLink>
-                                </h3>
-                                <LineItemOptions
-                                  variant={item.variant}
-                                  data-testid="cart-item-variant"
-                                  data-value={item.variant}
-                                />
-                                <span
-                                  data-testid="cart-item-quantity"
-                                  data-value={item.quantity}
-                                >
-                                  Quantity: {item.quantity}
-                                </span>
-                              </div>
-                              <div className="flex justify-end">
-                                <LineItemPrice
-                                  item={item}
-                                  style="tight"
-                                  currencyCode={cartState.currency_code}
-                                />
-                              </div>
+
+                        <div className="flex min-w-0 flex-col justify-between gap-2">
+                          <div className="flex min-w-0 items-start justify-between gap-3">
+                            <div className="flex min-w-0 flex-col">
+                              <LocalizedClientLink
+                                href={`/products/${item.product_handle}`}
+                                className="truncate font-semibold text-ink hover:text-riso-blue"
+                                data-testid="product-link"
+                              >
+                                {item.product_title}
+                              </LocalizedClientLink>
+                              <LineItemOptions
+                                variant={item.variant}
+                                data-testid="cart-item-variant"
+                                data-value={item.variant}
+                              />
+                              <span
+                                className="font-mono text-small text-ink/70"
+                                data-testid="cart-item-quantity"
+                                data-value={item.quantity}
+                              >
+                                {item.quantity} x
+                              </span>
                             </div>
+                            <LineItemPrice
+                              item={item}
+                              style="tight"
+                              currencyCode={cartState?.currency_code ?? ""}
+                            />
                           </div>
+
                           <DeleteButton
                             id={item.id}
-                            className="mt-1"
+                            className="text-small"
                             data-testid="cart-item-remove-button"
                           >
                             Remove
                           </DeleteButton>
                         </div>
-                      </div>
+                      </li>
                     ))}
-                </div>
-                <div className="p-4 flex flex-col gap-y-4 text-small-regular">
-                  <div className="flex items-center justify-between">
-                    <span className="text-ui-fg-base font-semibold">
-                      Subtotal{" "}
-                      <span className="font-normal">(excl. taxes)</span>
-                    </span>
-                    <span
-                      className="text-large-semi"
-                      data-testid="cart-subtotal"
-                      data-value={subtotal}
-                    >
-                      {convertToLocale({
-                        amount: subtotal,
-                        currency_code: cartState.currency_code,
+                  </ul>
+
+                  <Rule />
+
+                  <div className="flex flex-col gap-4 p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-small font-semibold text-ink">
+                        Subtotal
+                        <span className="font-normal text-ink/70">
+                          {" "}
+                          (excl. taxes)
+                        </span>
+                      </span>
+                      <span
+                        className="font-mono text-body text-ink"
+                        data-testid="cart-subtotal"
+                        data-value={subtotal}
+                      >
+                        {convertToLocale({
+                          amount: subtotal,
+                          currency_code: cartState?.currency_code ?? "",
+                        })}
+                      </span>
+                    </div>
+
+                    <LocalizedClientLink
+                      href="/cart"
+                      className={buttonClass({
+                        size: "large",
+                        className: "w-full",
                       })}
-                    </span>
-                  </div>
-                  <LocalizedClientLink href="/cart" passHref>
-                    <Button
-                      className="w-full"
-                      size="large"
                       data-testid="go-to-cart-button"
+                      onClick={close}
                     >
                       Go to cart
-                    </Button>
-                  </LocalizedClientLink>
-                </div>
-              </>
-            ) : (
-              <div>
-                <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
-                  <div className="bg-gray-900 text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
-                    <span>0</span>
-                  </div>
-                  <span>Your shopping bag is empty.</span>
-                  <div>
-                    <LocalizedClientLink href="/store">
-                      <>
-                        <span className="sr-only">Go to all products page</span>
-                        <Button onClick={close}>Explore products</Button>
-                      </>
                     </LocalizedClientLink>
                   </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-4 px-4 py-16">
+                  <p className="text-body text-ink">Your cart is empty.</p>
+                  <LocalizedClientLink
+                    href="/store"
+                    className={buttonClass({ size: "medium" })}
+                    onClick={close}
+                  >
+                    Browse products
+                  </LocalizedClientLink>
                 </div>
-              </div>
-            )}
-          </PopoverPanel>
-        </Transition>
-      </Popover>
-    </div>
+              )}
+            </PopoverPanel>
+          </Transition>
+        </Popover>
+      </div>
+    </>
   )
 }
 

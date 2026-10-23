@@ -1,11 +1,17 @@
 "use client"
 
 import { acceptTransferRequest, declineTransferRequest } from "@lib/data/orders"
-import { Button, Text } from "@modules/common/components/ui"
+import ErrorMessage from "@modules/checkout/components/error-message"
+import { Button } from "@modules/design-system"
 import { useState } from "react"
 
 type TransferStatus = "pending" | "success" | "error"
 
+/**
+ * The two answers to a transfer request. Both stay on screen while the request
+ * is in flight and while the result is not a failure, so a second click cannot
+ * race the first; a success replaces them with the outcome.
+ */
 const TransferActions = ({ id, token }: { id: string; token: string }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [status, setStatus] = useState<{
@@ -36,27 +42,42 @@ const TransferActions = ({ id, token }: { id: string; token: string }) => {
     setStatus({ accept: null, decline: success ? "success" : "error" })
   }
 
+  /*
+   * Only a success takes the buttons away. A failed attempt leaves them, so the
+   * customer can try again without reloading the page they arrived on.
+   */
+  const resolved = status?.accept === "success" || status?.decline === "success"
+
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-4">
       {status?.accept === "success" && (
-        <Text className="text-emerald-500">
-          Order transferred successfully!
-        </Text>
+        <p
+          className="border-l-2 border-riso-green pl-3 text-body text-ink"
+          data-testid="transfer-status"
+          data-state="accepted"
+        >
+          Transfer accepted. The order now belongs to the other account.
+        </p>
       )}
+
       {status?.decline === "success" && (
-        <Text className="text-emerald-500">
-          Order transfer declined successfully!
-        </Text>
+        <p
+          className="border-l-2 border-riso-green pl-3 text-body text-ink"
+          data-testid="transfer-status"
+          data-state="declined"
+        >
+          Transfer declined. The order stays with you.
+        </p>
       )}
-      {status?.accept !== "success" && status?.decline !== "success" && (
-        <div className="flex gap-x-4">
+
+      {!resolved && (
+        <div className="flex flex-wrap gap-3">
           <Button
             size="large"
             onClick={acceptTransfer}
-            isLoading={status?.accept === "pending"}
-            disabled={
-              status?.accept === "pending" || status?.decline === "pending"
-            }
+            loading={status?.accept === "pending"}
+            disabled={status?.accept === "pending" || status?.decline === "pending"}
+            data-testid="accept-transfer-button"
           >
             Accept transfer
           </Button>
@@ -64,16 +85,18 @@ const TransferActions = ({ id, token }: { id: string; token: string }) => {
             size="large"
             variant="secondary"
             onClick={declineTransfer}
-            isLoading={status?.decline === "pending"}
-            disabled={
-              status?.accept === "pending" || status?.decline === "pending"
-            }
+            loading={status?.decline === "pending"}
+            disabled={status?.accept === "pending" || status?.decline === "pending"}
+            data-testid="decline-transfer-button"
           >
             Decline transfer
           </Button>
         </div>
       )}
-      {errorMessage && <Text className="text-red-500">{errorMessage}</Text>}
+
+      {errorMessage && (
+        <ErrorMessage error={errorMessage} data-testid="transfer-actions-error" />
+      )}
     </div>
   )
 }

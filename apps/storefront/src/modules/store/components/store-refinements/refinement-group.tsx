@@ -8,6 +8,10 @@ type RefinementGroupProps = {
   title: string
 }
 
+/**
+ * A facet as a checkbox list, most common value first. Native checkboxes, so
+ * the state is announced and the control is keyboard-operable for free.
+ */
 const RefinementGroup = ({ attribute, title }: RefinementGroupProps) => {
   const { items, refine } = useRefinementList({
     attribute,
@@ -20,37 +24,37 @@ const RefinementGroup = ({ attribute, title }: RefinementGroupProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-y-3">
-      <span className="txt-compact-small-plus text-ui-fg-subtle">
+    <fieldset className="flex flex-col gap-2">
+      <legend className="pb-1 text-small font-semibold text-ink">
         {title}
-      </span>
-      <ul className="flex flex-col gap-y-2 pr-6">
+      </legend>
+      <ul className="flex flex-col">
         {items.map((item) => (
-          <li key={item.value}>
-            <label className="flex cursor-pointer items-start gap-x-2">
+          <li key={item.value} className="border-b border-ink/10">
+            <label className="flex cursor-pointer items-center gap-2 py-2 text-small">
               <input
                 type="checkbox"
                 checked={item.isRefined}
                 onChange={() => refine(item.value)}
-                className="mt-1 shrink-0 accent-ui-fg-interactive"
+                className="h-4 w-4 shrink-0 accent-riso-blue"
                 data-testid={`refinement-${attribute}`}
               />
               <span
-                className={clsx("text-small-regular min-w-0 break-words", {
-                  "text-ui-fg-base": item.isRefined,
-                  "text-ui-fg-subtle": !item.isRefined,
-                })}
+                className={clsx(
+                  "min-w-0 flex-1 break-words",
+                  item.isRefined ? "font-semibold text-ink" : "text-ink/80"
+                )}
               >
                 {item.label}
               </span>
-              <span className="text-small-regular shrink-0 text-ui-fg-muted">
-                ({item.count})
+              <span className="shrink-0 font-mono text-micro text-ink/70">
+                {item.count}
               </span>
             </label>
           </li>
         ))}
       </ul>
-    </div>
+    </fieldset>
   )
 }
 

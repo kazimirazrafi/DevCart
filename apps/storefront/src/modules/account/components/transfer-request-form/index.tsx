@@ -1,81 +1,85 @@
 "use client"
+
 import { createTransferRequest } from "@lib/data/orders"
-import { CheckCircleMiniSolid, XCircleSolid } from "@medusajs/icons"
-import { Heading, IconButton, Input, Text } from "@modules/common/components/ui"
-import { useActionState } from "react"
-// TODO: Re-add Toaster component when needed
+import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
-import { useEffect, useState } from "react"
+import { Input } from "@modules/design-system"
+import { useActionState, useState } from "react"
 
+/*
+ * An order placed as a guest belongs to no account. Pasting its id here asks
+ * Medusa to email the address on that order a link that moves it over, which is
+ * the only way to attach it without an admin.
+ */
 export default function TransferRequestForm() {
-  const [showSuccess, setShowSuccess] = useState(false)
-
   const [state, formAction] = useActionState(createTransferRequest, {
     success: false,
     error: null,
     order: null,
   })
 
-  useEffect(() => {
-    if (state.success && state.order) {
-      setShowSuccess(true)
-    }
-  }, [state.success, state.order])
+  /*
+   * Controlled: a rejected id has to stay in the field the customer must
+   * correct. React resets an uncontrolled input once a form action returns
+   * (measured in K2), which would empty the very field the message points at.
+   */
+  const [orderId, setOrderId] = useState("")
 
   return (
-    <div className="flex flex-col gap-y-4 w-full">
-      <div className="grid sm:grid-cols-2 items-center gap-x-8 gap-y-4 w-full">
-        <div className="flex flex-col gap-y-1">
-          <Heading level="h3" className="!text-sm font-semibold text-neutral-950">
-            Order transfers
-          </Heading>
-          <p className="text-small-regular text-neutral-500">
-            Can&apos;t find the order you are looking for?
-            <br /> Connect an order to your account.
-          </p>
-        </div>
-        <form
-          action={formAction}
-          className="flex flex-col gap-y-1 sm:items-end"
+    <section
+      aria-labelledby="order-transfer-heading"
+      className="flex w-full flex-col gap-6"
+      data-testid="transfer-request-form"
+    >
+      <div className="flex flex-col gap-1">
+        <h2
+          id="order-transfer-heading"
+          className="font-display text-h3 font-bold text-ink"
         >
-          <div className="flex flex-col gap-y-2 w-full">
-            <Input className="w-full" name="order_id" placeholder="Order ID" />
-            <SubmitButton
-              variant="secondary"
-              size="small"
-              className="w-fit whitespace-nowrap self-end"
-            >
-              Request transfer
-            </SubmitButton>
-          </div>
-        </form>
+          Order transfers
+        </h2>
+        <p className="max-w-prose text-small text-ink/80">
+          Placed an order before you had an account? Connect it here and it will
+          appear in this history.
+        </p>
       </div>
-      {!state.success && state.error && (
-        <Text className="text-base-regular text-rose-500 text-right">
-          {state.error}
-        </Text>
+
+      <form action={formAction} className="flex w-full max-w-sm flex-col gap-4">
+        <Input
+          id="order-id"
+          name="order_id"
+          label="Order ID"
+          placeholder="order_01H8XYZ"
+          hint="The id in the link of the order's confirmation email."
+          value={orderId}
+          onChange={(event) => setOrderId(event.target.value)}
+          data-testid="order-id-input"
+        />
+
+        <SubmitButton
+          variant="secondary"
+          size="small"
+          className="self-start"
+          data-testid="request-transfer-button"
+        >
+          Request transfer
+        </SubmitButton>
+      </form>
+
+      {state.error && (
+        <ErrorMessage error={state.error} data-testid="transfer-error" />
       )}
-      {showSuccess && (
-        <div className="flex justify-between p-4 bg-neutral-50 shadow-borders-base w-full self-stretch items-center">
-          <div className="flex gap-x-2 items-center">
-            <CheckCircleMiniSolid className="w-4 h-4 text-emerald-500" />
-            <div className="flex flex-col gap-y-1">
-              <Text className="text-medim-pl text-neutral-950">
-                Transfer for order {state.order?.id} requested
-              </Text>
-              <Text className="text-base-regular text-neutral-600">
-                Transfer request email sent to {state.order?.email}
-              </Text>
-            </div>
-          </div>
-          <IconButton
-            className="h-fit"
-            onClick={() => setShowSuccess(false)}
-          >
-            <XCircleSolid className="w-4 h-4 text-neutral-500" />
-          </IconButton>
-        </div>
+
+      {state.success && state.order && (
+        <p
+          role="status"
+          className="border-l-2 border-riso-green pl-3 text-small text-ink"
+          data-testid="transfer-success"
+        >
+          Transfer requested. We emailed {state.order.email} a link to confirm
+          it.
+        </p>
       )}
-    </div>
+    </section>
   )
 }

@@ -1,9 +1,13 @@
 "use client"
 
+import clsx from "clsx"
 import { usePagination } from "react-instantsearch"
 
-import { clx } from "@modules/common/components/ui"
-
+/*
+ * Page controls for the search-driven listing. `usePagination` writes the page
+ * into the InstantSearch URL state, so a page is linkable and the back button
+ * works. Buttons rather than links because InstantSearch owns the navigation.
+ */
 const SearchPagination = () => {
   const { pages, currentRefinement, nbPages, refine } = usePagination({
     padding: 2,
@@ -13,33 +17,48 @@ const SearchPagination = () => {
     return null
   }
 
-  const renderPage = (page: number) => (
-    <button
-      key={page}
-      className={clx("txt-xlarge-plus text-ui-fg-muted", {
-        "text-ui-fg-base hover:text-ui-fg-subtle": page === currentRefinement,
-      })}
-      disabled={page === currentRefinement}
-      onClick={() => refine(page)}
-    >
-      {page + 1}
-    </button>
-  )
+  const renderPage = (page: number) => {
+    const isCurrent = page === currentRefinement
+
+    return (
+      <li key={page}>
+        <button
+          type="button"
+          aria-label={`Page ${page + 1}`}
+          aria-current={isCurrent ? "page" : undefined}
+          disabled={isCurrent}
+          onClick={() => refine(page)}
+          className={clsx(
+            "min-h-11 min-w-11 border border-transparent px-2 font-display text-lead",
+            isCurrent
+              ? "border-ink bg-ink text-stock"
+              : "text-ink hover:border-ink"
+          )}
+        >
+          {page + 1}
+        </button>
+      </li>
+    )
+  }
 
   const renderEllipsis = (key: string) => (
-    <span
+    <li
       key={key}
-      className="txt-xlarge-plus text-ui-fg-muted items-center cursor-default"
+      aria-hidden="true"
+      className="flex min-h-11 items-center px-1 text-ink/70"
     >
-      ...
-    </span>
+      …
+    </li>
   )
 
   const lastPage = nbPages - 1
 
   return (
-    <div className="flex justify-center w-full mt-12">
-      <div className="flex gap-3 items-end" data-testid="product-pagination">
+    <nav aria-label="Pagination" className="mt-12 w-full">
+      <ul
+        className="flex flex-wrap items-center justify-center gap-2"
+        data-testid="product-pagination"
+      >
         {!pages.includes(0) && renderPage(0)}
         {!pages.includes(0) && !pages.includes(1) && renderEllipsis("start")}
         {pages.map(renderPage)}
@@ -47,8 +66,8 @@ const SearchPagination = () => {
           !pages.includes(lastPage - 1) &&
           renderEllipsis("end")}
         {!pages.includes(lastPage) && renderPage(lastPage)}
-      </div>
-    </div>
+      </ul>
+    </nav>
   )
 }
 

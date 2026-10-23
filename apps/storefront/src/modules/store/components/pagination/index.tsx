@@ -1,16 +1,21 @@
 "use client"
 
-import { clx } from "@modules/common/components/ui"
+import clsx from "clsx"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
+/*
+ * Paging for the listing pages that read a plain `page` query parameter
+ * (categories and collections). The search-driven `/store` grid keeps its own
+ * control, because InstantSearch owns that page's URL state.
+ */
 export function Pagination({
   page,
   totalPages,
-  'data-testid': dataTestid
+  "data-testid": dataTestid,
 }: {
   page: number
   totalPages: number
-  'data-testid'?: string
+  "data-testid"?: string
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -33,26 +38,34 @@ export function Pagination({
     label: string | number,
     isCurrent: boolean
   ) => (
-    <button
-      key={p}
-      className={clx("txt-xlarge-plus text-ui-fg-muted", {
-        "text-ui-fg-base hover:text-ui-fg-subtle": isCurrent,
-      })}
-      disabled={isCurrent}
-      onClick={() => handlePageChange(p)}
-    >
-      {label}
-    </button>
+    <li key={p}>
+      <button
+        type="button"
+        aria-label={`Page ${p}`}
+        aria-current={isCurrent ? "page" : undefined}
+        disabled={isCurrent}
+        onClick={() => handlePageChange(p)}
+        className={clsx(
+          "min-h-11 min-w-11 border border-transparent px-2 font-display text-lead",
+          isCurrent
+            ? "border-ink bg-ink text-stock"
+            : "text-ink hover:border-ink"
+        )}
+      >
+        {label}
+      </button>
+    </li>
   )
 
   // Function to render ellipsis
   const renderEllipsis = (key: string) => (
-    <span
+    <li
       key={key}
-      className="txt-xlarge-plus text-ui-fg-muted items-center cursor-default"
+      aria-hidden="true"
+      className="flex min-h-11 items-center px-1 text-ink/70"
     >
-      ...
-    </span>
+      …
+    </li>
   )
 
   // Function to render page buttons based on the current page and total pages
@@ -107,8 +120,13 @@ export function Pagination({
 
   // Render the component
   return (
-    <div className="flex justify-center w-full mt-12">
-      <div className="flex gap-3 items-end" data-testid={dataTestid}>{renderPageButtons()}</div>
-    </div>
+    <nav aria-label="Pagination" className="mt-12 w-full">
+      <ul
+        className="flex flex-wrap items-center justify-center gap-2"
+        data-testid={dataTestid}
+      >
+        {renderPageButtons()}
+      </ul>
+    </nav>
   )
 }

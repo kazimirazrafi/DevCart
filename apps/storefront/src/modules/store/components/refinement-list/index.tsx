@@ -17,6 +17,12 @@ type RefinementListProps = {
   "data-testid"?: string
 }
 
+/*
+ * Sort and option filters for a category or collection page. These pages read
+ * plain query parameters (`sortBy`, `optionValueIds`, `page`) rather than the
+ * search listing's InstantSearch state, because their products come from the
+ * Store API directly.
+ */
 const RefinementList = ({
   sortBy,
   hideOptionsPicker = false,
@@ -64,19 +70,24 @@ const RefinementList = ({
     })
 
   return (
-    <div className="flex flex-col gap-12 py-4 mb-8 small:px-0 pl-6 small:min-w-[250px] small:ml-[1.675rem]">
+    <aside
+      aria-label="Sort and filter"
+      className="flex flex-col gap-6 divide-y divide-ink/20 small:w-[260px] small:shrink-0"
+    >
       <SortProducts
         sortBy={sortBy}
         setQueryParams={setQueryParams}
         data-testid={dataTestId}
       />
       {!hideOptionsPicker && (
-        <OptionsPicker
-          selectedValueIds={selectedOptionValueIds}
-          setOptionValueIds={setOptionValueIds}
-        />
+        <div className="pt-6">
+          <OptionsPicker
+            selectedValueIds={selectedOptionValueIds}
+            setOptionValueIds={setOptionValueIds}
+          />
+        </div>
       )}
-    </div>
+    </aside>
   )
 }
 

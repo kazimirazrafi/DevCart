@@ -1,6 +1,8 @@
 import { listProductsWithSort } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import { OptionValueIds } from "@lib/util/product-option-filters"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { linkClass } from "@modules/design-system"
 import ProductPreview from "@modules/products/components/product-preview"
 import { Pagination } from "@modules/store/components/pagination"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
@@ -70,10 +72,29 @@ export default async function PaginatedProducts({
 
   const totalPages = Math.ceil(count / PRODUCT_LIMIT)
 
+  if (!products.length) {
+    return (
+      <div
+        className="flex flex-col items-start gap-3 border-y border-ink/20 py-16"
+        data-testid="no-products"
+      >
+        <p className="text-ink">Nothing in this listing yet.</p>
+        <LocalizedClientLink href="/store" className={linkClass}>
+          Browse all products
+        </LocalizedClientLink>
+      </div>
+    )
+  }
+
   return (
     <>
+      {/*
+       * A card's title is an `h3` (the plate's own level). Without this
+       * section heading the page went `h1` → `h3` on a category or collection.
+       */}
+      <h2 className="sr-only">Products</h2>
       <ul
-        className="grid grid-cols-2 w-full small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8"
+        className="grid w-full grid-cols-2 gap-x-4 gap-y-8 small:grid-cols-3 small:gap-x-6"
         data-testid="products-list"
       >
         {products.map((p) => {

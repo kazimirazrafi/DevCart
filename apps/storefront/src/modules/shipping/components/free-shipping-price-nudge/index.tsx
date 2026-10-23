@@ -9,7 +9,7 @@ import {
   StorePrice,
 } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { Button, clx } from "@modules/common/components/ui"
+import { clx } from "@modules/common/components/ui"
 import { useState } from "react"
 import { StoreFreeShippingPrice } from "types/global"
 
@@ -142,14 +142,13 @@ function FreeShippingInline({
   }
 }) {
   return (
-    <div className="bg-neutral-100 p-2 rounded-lg border">
-      <div className="space-y-1.5">
-        <div className="flex justify-between text-xs text-neutral-600">
+    <div className="border border-ink/20 bg-ink/5 p-3">
+      <div className="space-y-2">
+        <div className="flex justify-between gap-3 text-small text-ink">
           <div>
             {price.target_reached ? (
               <div className="flex items-center gap-1.5">
-                {" "}
-                <CheckCircleSolid className="text-green-500 inline-block" />{" "}
+                <CheckCircleSolid aria-hidden="true" className="inline-block text-riso-green" />{" "}
                 Free Shipping unlocked!
               </div>
             ) : (
@@ -163,7 +162,7 @@ function FreeShippingInline({
             })}
           >
             Only{" "}
-            <span className="text-neutral-950">
+            <span className="font-semibold">
               {convertToLocale({
                 amount: price.target_remaining,
                 currency_code: cart.currency_code,
@@ -175,14 +174,12 @@ function FreeShippingInline({
         <div className="flex justify-between gap-1">
           <div
             className={clx(
-              "bg-gradient-to-r from-zinc-400 to-zinc-500 h-1 rounded-full max-w-full duration-500 ease-in-out",
-              {
-                "from-green-400 to-green-500": price.target_reached,
-              }
+              "h-1 max-w-full transition-all duration-500 ease-in-out motion-reduce:transition-none",
+              price.target_reached ? "bg-riso-green" : "bg-riso-blue"
             )}
             style={{ width: `${price.remaining_percentage}%` }}
           ></div>
-          <div className="bg-neutral-300 h-1 rounded-full w-fit flex-grow"></div>
+          <div className="h-1 w-fit flex-grow bg-ink/15"></div>
         </div>
       </div>
     </div>
@@ -198,10 +195,15 @@ function FreeShippingPopup({
 }) {
   const [isClosed, setIsClosed] = useState(false)
 
+  /*
+   * The popup floats over the page, so it needs a landmark of its own to belong
+   * to; and its only control is an icon, so that button needs a name.
+   */
   return (
-    <div
+    <aside
+      aria-label="Free shipping notice"
       className={clx(
-        "fixed bottom-5 right-5 flex flex-col items-end gap-2 transition-all duration-500 ease-in-out z-10",
+        "fixed bottom-5 right-5 flex flex-col items-end gap-2 transition-all duration-500 ease-in-out z-10 motion-reduce:transition-none",
         {
           "opacity-0 invisible delay-1000": price.target_reached,
           "opacity-0 invisible": isClosed,
@@ -209,23 +211,30 @@ function FreeShippingPopup({
         }
       )}
     >
+      {/*
+       * The card is ink-on-stock flipped: `bg-ink` with `text-stock` reads as a
+       * dark panel in light mode and a light one in dark mode, which is the
+       * point — it is the loudest surface on the page either way.
+       */}
       <div>
-        <Button
-          className="rounded-full bg-neutral-900 shadow-none outline-none border-none text-[15px] p-2"
+        <button
+          type="button"
           onClick={() => setIsClosed(true)}
+          aria-label="Dismiss free shipping notice"
+          className="border border-ink bg-ink p-2 text-stock transition-colors hover:bg-stock hover:text-ink"
         >
-          <XMark />
-        </Button>
+          <XMark aria-hidden="true" />
+        </button>
       </div>
 
-      <div className="w-[400px] bg-black text-white p-6 rounded-lg ">
+      <div className="w-[400px] max-w-[calc(100vw-2.5rem)] bg-ink p-6 text-stock">
         <div className="pb-4">
           <div className="space-y-3">
-            <div className="flex justify-between text-[15px] text-neutral-400">
+            <div className="flex justify-between gap-3 text-small text-stock/70">
               <div>
                 {price.target_reached ? (
                   <div className="flex items-center gap-1.5">
-                    <CheckCircleSolid className="text-green-500 inline-block" />{" "}
+                    <CheckCircleSolid aria-hidden="true" className="inline-block text-riso-green" />{" "}
                     Free Shipping unlocked!
                   </div>
                 ) : (
@@ -239,7 +248,7 @@ function FreeShippingPopup({
                 })}
               >
                 Only{" "}
-                <span className="text-white">
+                <span className="font-semibold text-stock">
                   {convertToLocale({
                     amount: price.target_remaining,
                     currency_code: cart.currency_code,
@@ -251,34 +260,32 @@ function FreeShippingPopup({
             <div className="flex justify-between gap-1">
               <div
                 className={clx(
-                  "bg-gradient-to-r from-zinc-400 to-zinc-500 h-1.5 rounded-full max-w-full duration-500 ease-in-out",
-                  {
-                    "from-green-400 to-green-500": price.target_reached,
-                  }
+                  "h-1.5 max-w-full transition-all duration-500 ease-in-out motion-reduce:transition-none",
+                  price.target_reached ? "bg-riso-green" : "bg-riso-blue"
                 )}
                 style={{ width: `${price.remaining_percentage}%` }}
               ></div>
-              <div className="bg-zinc-600 h-1.5 rounded-full w-fit flex-grow"></div>
+              <div className="h-1.5 w-fit flex-grow bg-stock/20"></div>
             </div>
           </div>
         </div>
 
         <div className="flex gap-3">
           <LocalizedClientLink
-            className="rounded-2xl bg-transparent shadow-none outline-none border-[1px] border-white text-[15px] py-2.5 px-4"
+            className="border border-stock px-4 py-2.5 text-small font-semibold text-stock transition-colors hover:bg-stock hover:text-ink"
             href="/cart"
           >
             View cart
           </LocalizedClientLink>
 
           <LocalizedClientLink
-            className="flex-grow rounded-2xl bg-white text-neutral-950 shadow-none outline-none border-[1px] border-white text-[15px] py-2.5 px-4 text-center"
+            className="flex-grow border border-stock bg-stock px-4 py-2.5 text-center text-small font-semibold text-ink transition-colors hover:bg-transparent hover:text-stock"
             href="/store"
           >
             View products
           </LocalizedClientLink>
         </div>
       </div>
-    </div>
+    </aside>
   )
 }

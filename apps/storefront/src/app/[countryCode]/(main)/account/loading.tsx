@@ -1,9 +1,23 @@
-import Spinner from "@modules/common/icons/spinner"
+import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
+import { Rule } from "@modules/design-system"
 
-export default function Loading() {
+/**
+ * The account area while it resolves who is asking. It is reached signed in and
+ * signed out, so it is the one shape both have: a heading, a rule and a small
+ * form's worth of fields.
+ */
+export default function AccountLoading() {
   return (
-    <div className="flex items-center justify-center w-full h-full text-ui-fg-base">
-      <Spinner size={36} />
+    <div className="flex w-full flex-col gap-6" data-testid="account-loader">
+      <SkeletonBar className="h-10 w-48" />
+      <Rule weight="heavy" />
+      <div className="flex max-w-sm flex-col gap-4">
+        <SkeletonBar className="h-4 w-24" />
+        <SkeletonBar className="h-11 w-full" />
+        <SkeletonBar className="h-4 w-24" />
+        <SkeletonBar className="h-11 w-full" />
+        <SkeletonBar className="h-11 w-40" />
+      </div>
     </div>
   )
 }

@@ -38,7 +38,13 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
           shippingOptions={shippingOptions}
         />
       )}
-      {props.children}
+      {/*
+       * `tabIndex={-1}` so the nav's "Skip to content" link moves focus here
+       * rather than only scrolling: without it the next Tab returns to the nav.
+       */}
+      <main id="main" tabIndex={-1} className="relative">
+        {props.children}
+      </main>
       <Footer />
     </>
   )

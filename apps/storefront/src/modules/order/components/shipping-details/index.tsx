@@ -1,8 +1,6 @@
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
-import { Heading, Text } from "@modules/common/components/ui"
-
-import Divider from "@modules/common/components/divider"
+import { Rule } from "@modules/design-system"
 
 type ShippingDetailsProps = {
   order: HttpTypes.StoreOrder
@@ -11,61 +9,76 @@ type ShippingDetailsProps = {
 const ShippingDetails = ({ order }: ShippingDetailsProps) => {
   return (
     <div>
-      <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
-        Delivery
-      </Heading>
-      <div className="flex items-start gap-x-8">
+      <h2 className="my-6 font-display text-h3 font-bold">Delivery</h2>
+      {/*
+       * Stacked on a phone, three columns from `small` up. Each column is a
+       * `min-w-0` flex child so a long value (an address line, an email, a
+       * courier's method name) wraps inside its own column instead of widening
+       * it and running into the next one — which is what put a long email over
+       * the shipping method on a narrow screen.
+       */}
+      <div className="flex flex-col gap-6 small:flex-row small:items-start small:gap-x-8">
         <div
-          className="flex flex-col w-1/3"
+          className="flex w-full min-w-0 flex-col small:w-1/3"
           data-testid="shipping-address-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">
+          <p className="mb-1 text-small font-semibold text-ink">
             Shipping Address
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
+          </p>
+          <p className="break-words text-small text-ink/80 [overflow-wrap:anywhere]">
             {order.shipping_address?.first_name}{" "}
             {order.shipping_address?.last_name}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
+          </p>
+          <p className="break-words text-small text-ink/80 [overflow-wrap:anywhere]">
             {order.shipping_address?.address_1}{" "}
             {order.shipping_address?.address_2}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
+          </p>
+          <p className="break-words text-small text-ink/80 [overflow-wrap:anywhere]">
             {order.shipping_address?.postal_code},{" "}
             {order.shipping_address?.city}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
+          </p>
+          <p className="break-words text-small text-ink/80 [overflow-wrap:anywhere]">
             {order.shipping_address?.country_code?.toUpperCase()}
-          </Text>
+          </p>
         </div>
 
         <div
-          className="flex flex-col w-1/3 "
+          className="flex w-full min-w-0 flex-col small:w-1/3"
           data-testid="shipping-contact-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">Contact</Text>
-          <Text className="txt-medium text-ui-fg-subtle">
+          <p className="mb-1 text-small font-semibold text-ink">Contact</p>
+          <p className="break-words text-small text-ink/80">
             {order.shipping_address?.phone}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">{order.email}</Text>
+          </p>
+          {/*
+           * `break-words` alone leaves a single long token (an address with no
+           * spaces, a plus-tagged email) unbroken; `overflow-wrap: anywhere`
+           * lets it break mid-word and keeps it inside the column.
+           */}
+          <p
+            className="break-words text-small text-ink/80 [overflow-wrap:anywhere]"
+            data-testid="shipping-contact-email"
+          >
+            {order.email}
+          </p>
         </div>
 
         <div
-          className="flex flex-col w-1/3"
+          className="flex w-full min-w-0 flex-col small:w-1/3"
           data-testid="shipping-method-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">Method</Text>
-          <Text className="txt-medium text-ui-fg-subtle">
+          <p className="mb-1 text-small font-semibold text-ink">Method</p>
+          <p className="break-words text-small text-ink/80 [overflow-wrap:anywhere]">
             {(order.shipping_methods?.[0] as { name?: string })?.name} (
             {convertToLocale({
               amount: order.shipping_methods?.[0]?.total ?? 0,
               currency_code: order.currency_code,
             })}
             )
-          </Text>
+          </p>
         </div>
       </div>
-      <Divider className="mt-8" />
+      <Rule className="mt-8" />
     </div>
   )
 }

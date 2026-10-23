@@ -1,0 +1,139 @@
+name: Lighthouse budgets
+
+# The numbers in ROADMAP.md are only worth recording if they cannot drift
+# silently. This job rebuilds the shop on a seeded database and runs
+# lighthouserc.cjs against the three pages the spec names.
+#
+# It is nightly rather than per-push because it needs the whole stack: Postgres,
+# a migrated and seeded catalogue, the backend, a production storefront build.
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  budgets:
+    name: home, listing and product
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: medusa-dtc-starter
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/medusa-dtc-starter
+      DB_HOST: localhost
+      DB_PORT: "5432"
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: lighthouse-ci-secret
+      COOKIE_SECRET: lighthouse-ci-secret
+      STORE_CORS: http://localhost:8000
+      ADMIN_CORS: http://localhost:9000
+      AUTH_CORS: http://localhost:8000,http://localhost:9000
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: http://localhost:9000
+      NEXT_PUBLIC_BASE_URL: http://localhost:8000
+      NEXT_PUBLIC_DEFAULT_REGION: dk
+      NEXT_PUBLIC_STORE_NAME: DevCart
+      LHCI_COUNTRY: dk
+      LHCI_PRODUCT_HANDLE: hello-world-tee
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare environment files
+        run: |
+          cp apps/backend/.env.template apps/backend/.env
+          cp apps/storefront/.env.template apps/storefront/.env.local
+
+      # The storefront refuses to build without a publishable key, and a page
+      # whose catalogue reads fail scores nothing worth gating. The key the seed
+      # just created is the one the storefront has to be built with, because
+      # NEXT_PUBLIC_* is inlined at build time.
+      - name: Migrate and seed
+        run: |
+          pnpm --filter @dtc/backend exec medusa db:migrate
+          pnpm --filter @dtc/backend run seed
+
+      - name: Point the storefront at the seeded key
+        run: |
+          key="$(psql "$DATABASE_URL" -At -c "select token from api_key where type = 'publishable' order by created_at limit 1")"
+          echo "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=$key" >> "$GITHUB_ENV"
+
+      - name: Build both apps
+        run: |
+          pnpm --filter @dtc/backend run build
+          pnpm --filter @dtc/storefront run build
+
+      # One step, because a server backgrounded in one step is not reliably
+      # still running in the next one on a hosted runner.
+      - name: Serve and measure
+        run: |
+          set -euo pipefail
+
+          pnpm --filter @dtc/backend start &
+          backend=$!
+          pnpm --filter @dtc/storefront start &
+          storefront=$!
+
+          cleanup() {
+            kill "$backend" "$storefront" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          for _ in $(seq 1 90); do
+            if curl -fsS http://localhost:9000/health >/dev/null 2>&1 \
+              && curl -fsS "http://localhost:8000/$LHCI_COUNTRY" >/dev/null 2>&1; then
+              break
+            fi
+            sleep 2
+          done
+
+          # The image optimiser resizes on first request and caches afterwards,
+          # so the first audit of a cold machine measures the encode rather than
+          # the page. One warm pass per URL is what makes the numbers comparable
+          # with the ones in ROADMAP.md.
+          curl -fsS "http://localhost:8000/$LHCI_COUNTRY" >/dev/null
+          curl -fsS "http://localhost:8000/$LHCI_COUNTRY/store" >/dev/null
+          curl -fsS "http://localhost:8000/$LHCI_COUNTRY/products/$LHCI_PRODUCT_HANDLE" >/dev/null
+
+          pnpm run lighthouse
+
+      - name: Keep the reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          retention-days: 14

@@ -1,37 +1,47 @@
-import { Heading, Text } from "@modules/common/components/ui"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { Rule, linkClass } from "@modules/design-system"
 import TransferActions from "@modules/order/components/transfer-actions"
-import TransferImage from "@modules/order/components/transfer-image"
 
-export default async function TransferPage({
-  params,
-}: {
-  params: { id: string; token: string }
-}) {
-  const { id, token } = params
+type Props = {
+  params: Promise<{ id: string; token: string }>
+}
+
+/**
+ * What the person who received a transfer request sees. Plain type on stock,
+ * one measure of it, and the two answers — no illustration and a fifth of the
+ * page wide, which is what this page used to be on a phone.
+ */
+export default async function TransferPage({ params }: Props) {
+  const { id, token } = await params
 
   return (
-    <div className="flex flex-col gap-y-4 items-start w-2/5 mx-auto mt-10 mb-20">
-      <TransferImage />
-      <div className="flex flex-col gap-y-6">
-        <Heading level="h1" className="text-xl text-zinc-900">
-          Transfer request for order {id}
-        </Heading>
-        <Text className="text-zinc-600">
-          You&#39;ve received a request to transfer ownership of your order ({id}).
-          If you agree to this request, you can approve the transfer by clicking
-          the button below.
-        </Text>
-        <div className="w-full h-px bg-zinc-200" />
-        <Text className="text-zinc-600">
-          If you accept, the new owner will take over all responsibilities and
-          permissions associated with this order.
-        </Text>
-        <Text className="text-zinc-600">
-          If you do not recognize this request or wish to retain ownership, no
-          further action is required.
-        </Text>
-        <div className="w-full h-px bg-zinc-200" />
+    <div className="content-container py-12 small:py-16">
+      <div
+        className="flex w-full max-w-xl flex-col gap-5"
+        data-testid="transfer-request"
+      >
+        <h1 className="font-display text-h1 font-bold text-ink">
+          Transfer request
+        </h1>
+
+        <Rule weight="heavy" />
+
+        <p className="max-w-prose text-body text-ink/80">
+          Someone has asked to take over order{" "}
+          <span className="font-mono text-ink">{id}</span>.
+        </p>
+
+        <p className="max-w-prose text-body text-ink/80">
+          If you accept, they take over the order and everything that comes with
+          it. If you do not recognise this request, do nothing — the order stays
+          with you.
+        </p>
+
         <TransferActions id={id} token={token} />
+
+        <LocalizedClientLink href="/account/orders" className={linkClass}>
+          Back to your orders
+        </LocalizedClientLink>
       </div>
     </div>
   )

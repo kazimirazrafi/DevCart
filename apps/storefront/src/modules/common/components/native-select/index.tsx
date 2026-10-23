@@ -1,5 +1,5 @@
 import { ChevronUpDown } from "@medusajs/icons"
-import { clx } from "@modules/common/components/ui"
+import clsx from "clsx"
 import {
   SelectHTMLAttributes,
   forwardRef,
@@ -41,26 +41,28 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
         <div
           onFocus={() => innerRef.current?.focus()}
           onBlur={() => innerRef.current?.blur()}
-          className={clx(
-            "relative flex items-center text-base-regular border border-ui-border-base bg-ui-bg-subtle rounded-md hover:bg-ui-bg-field-hover",
-            className,
-            {
-              "text-ui-fg-muted": isPlaceholder,
-            }
+          className={clsx(
+            "relative flex items-center border border-ink bg-stock text-body",
+            className
           )}
         >
           <select
             ref={innerRef}
             defaultValue={defaultValue}
             {...props}
-            className="appearance-none flex-1 bg-transparent border-none px-4 py-2.5 transition-colors duration-150 outline-none "
+            className={clsx(
+              "flex-1 appearance-none border-none bg-transparent px-3 py-2.5 pr-9 text-body transition-colors duration-150 outline-none",
+              // The placeholder is a disabled option, so the empty value is
+              // what tells us to mute the closed select.
+              isPlaceholder ? "text-ink/70" : "text-ink"
+            )}
           >
             <option disabled value="">
               {placeholder}
             </option>
             {children}
           </select>
-          <span className="absolute right-4 inset-y-0 flex items-center pointer-events-none ">
+          <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-ink">
             <ChevronUpDown />
           </span>
         </div>

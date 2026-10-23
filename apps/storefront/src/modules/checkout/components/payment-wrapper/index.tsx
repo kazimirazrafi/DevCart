@@ -24,9 +24,18 @@ const stripePromise = stripeKey
   : null
 
 const PaymentWrapper: React.FC<PaymentWrapperProps> = ({ cart, children }) => {
-  const paymentSession = cart.payment_collection?.payment_sessions?.find(
-    (s) => s.status === "pending"
-  )
+  /*
+   * A cart can hold a pending session per provider, and only a Stripe-like one
+   * carries the client secret the payment element mounts with. Preferring the
+   * Stripe session is what keeps a manual session, created earlier in the same
+   * checkout, from being the one this wrapper reads.
+   */
+  const pendingSessions = (
+    cart.payment_collection?.payment_sessions ?? []
+  ).filter((session) => session.status === "pending")
+  const paymentSession =
+    pendingSessions.find((session) => isStripeLike(session.provider_id)) ??
+    pendingSessions[0]
 
   if (
     isStripeLike(paymentSession?.provider_id) &&

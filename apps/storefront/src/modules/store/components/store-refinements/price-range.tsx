@@ -7,22 +7,25 @@ import { useRange } from "react-instantsearch"
 import { indexedCurrency, priceAttribute } from "@lib/search-client"
 
 function formatAmount(amount: number, currency: string) {
-    try {
-      return new Intl.NumberFormat(undefined, {
-        style: "currency",
-        currency: currency.toUpperCase(),
-        maximumFractionDigits: 0,
-      }).format(amount)
-    } catch {
-      // An unrecognised currency code shouldn't take the sidebar down.
-      return `${Math.round(amount)} ${currency.toUpperCase()}`
-    }
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: currency.toUpperCase(),
+      maximumFractionDigits: 0,
+    }).format(amount)
+  } catch {
+    // An unrecognised currency code shouldn't take the sidebar down.
+    return `${Math.round(amount)} ${currency.toUpperCase()}`
+  }
 }
 
 /**
  * Price filter over the region currency's `min_price_*` field, which is
  * declared `facetable({ types: ["stats"] })` — the stats facet is what
  * supplies the slider's bounds. Refines on release rather than per pixel.
+ *
+ * Hides itself when every remaining product costs the same (or there are no
+ * stats yet), because there is nothing to slide between.
  */
 const PriceRange = ({ currencyCode }: { currencyCode: string }) => {
   const { start, range, canRefine, refine } = useRange({
@@ -46,16 +49,15 @@ const PriceRange = ({ currencyCode }: { currencyCode: string }) => {
     setValue([from, to])
   }, [from, to])
 
-  // No stats yet, or every product costs the same: nothing to slide between.
   if (!canRefine || min >= max) {
     return null
   }
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <span className="txt-compact-small-plus text-ui-fg-subtle">Price</span>
+    <div className="flex flex-col gap-2">
+      <span className="text-small font-semibold text-ink">Price</span>
 
-      <div className="flex flex-col gap-y-3 pr-6">
+      <div className="flex flex-col gap-3 pt-2">
         <Slider.Root
           className="relative flex h-5 w-full touch-none select-none items-center"
           value={value}
@@ -70,25 +72,21 @@ const PriceRange = ({ currencyCode }: { currencyCode: string }) => {
           aria-label="Price range"
           data-testid="price-range"
         >
-          <Slider.Track className="relative h-0.5 w-full grow rounded-full bg-ui-border-base">
-            <Slider.Range className="absolute h-full rounded-full bg-ui-fg-interactive" />
+          <Slider.Track className="relative h-0.5 w-full grow bg-ink/20">
+            <Slider.Range className="absolute h-full bg-riso-blue" />
           </Slider.Track>
           {value.map((_, index) => (
             <Slider.Thumb
               key={index}
-              className="block h-4 w-4 rounded-full border border-ui-border-interactive bg-ui-bg-base shadow-elevation-card-rest outline-none focus-visible:ring-2 focus-visible:ring-ui-fg-interactive"
+              className="block h-4 w-4 border border-ink bg-stock outline-none"
               aria-label={index === 0 ? "Minimum price" : "Maximum price"}
             />
           ))}
         </Slider.Root>
 
-        <div className="flex items-center justify-between">
-          <span className="text-small-regular text-ui-fg-subtle">
-            {format(value[0])}
-          </span>
-          <span className="text-small-regular text-ui-fg-subtle">
-            {format(value[1])}
-          </span>
+        <div className="flex items-center justify-between font-mono text-micro text-ink/70">
+          <span>{format(value[0])}</span>
+          <span>{format(value[1])}</span>
         </div>
       </div>
     </div>

@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push to the same branch makes the previous run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: lint, typecheck, build
+    runs-on: ubuntu-latest
+
+    env:
+      # The storefront refuses to build without a publishable key. No backend is
+      # running in CI, so a placeholder value is enough to get past the env check;
+      # pages that fetch data fail soft.
+      NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_ci_placeholder
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Only a critical advisory fails the build. This toolchain carries a long
+      # list of high findings inside Medusa's own transitive dependencies, which
+      # Dependabot raises but this repository cannot patch; a critical one in a
+      # production dependency must not ship. Measured 23 October 2026, after the
+      # Next.js and proxy-addr updates: 18 high, 0 critical.
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=critical
+
+      # The apps read configuration from .env files, which are not committed.
+      # Copy the templates so a clean checkout has the structure it expects.
+      - name: Prepare environment files
+        run: |
+          cp apps/backend/.env.template apps/backend/.env
+          cp apps/storefront/.env.template apps/storefront/.env.local
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      # The storefront's unit tests run on Node's built-in runner and need no
+      # database or running backend. The backend's suites boot a real app
+      # against Postgres, so they run in their own job below.
+      - name: Test
+        run: pnpm --filter @dtc/storefront run test
+
+      - name: Build
+        run: pnpm run build
+
+  backend-tests:
+    name: backend tests
+    runs-on: ubuntu-latest
+
+    # The suites create and drop their own databases through Medusa's test
+    # runner, so the service needs only a user with the right to create a
+    # database. The runner's credentials come from the four DB_* variables
+    # below, which is the same shape `apps/backend/.env.test` has locally.
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      DB_HOST: localhost
+      DB_PORT: "5432"
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The app reads its configuration from .env files, which are not
+      # committed. Copy the templates so a test run has the structure it
+      # expects; the database itself comes from the service above.
+      - name: Prepare environment files
+        run: cp apps/backend/.env.template apps/backend/.env
+
+      # `test` is unit, module-integration and HTTP-integration, in that order,
+      # because a broken unit test should stop the expensive suites.
+      - name: Unit, module and HTTP suites
+        run: pnpm --filter @dtc/backend run test

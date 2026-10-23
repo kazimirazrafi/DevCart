@@ -1,13 +1,11 @@
-import { Radio as RadioGroupOption } from "@headlessui/react"
-import { Text, clx } from "@modules/common/components/ui"
+import { Radio } from "@headlessui/react"
+import { isManual } from "@lib/constants"
+import clsx from "clsx"
+import { PaymentElement } from "@stripe/react-stripe-js"
 import React, { useContext, type JSX } from "react"
 
-import Radio from "@modules/common/components/radio"
-
-import { isManual } from "@lib/constants"
 import SkeletonCardDetails from "@modules/skeletons/components/skeleton-card-details"
-import { PaymentElement } from "@stripe/react-stripe-js"
-import PaymentTest from "../payment-test"
+
 import { StripeContext } from "../payment-wrapper/stripe-wrapper"
 
 type PaymentContainerProps = {
@@ -25,40 +23,50 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   disabled = false,
   children,
 }) => {
-  const isDevelopment = process.env.NODE_ENV === "development"
+  const selected = selectedPaymentOptionId === paymentProviderId
 
   return (
-    <RadioGroupOption
+    <Radio
       key={paymentProviderId}
       value={paymentProviderId}
       disabled={disabled}
-      className={clx(
-        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
-        {
-          "border-ui-border-interactive":
-            selectedPaymentOptionId === paymentProviderId,
-        }
+      data-testid="payment-option-radio"
+      className={clsx(
+        "flex w-full flex-col gap-3 border px-5 py-4 text-small",
+        selected ? "border-ink" : "border-ink/30",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:border-ink"
       )}
     >
-      <div className="flex items-center justify-between ">
-        <div className="flex items-center gap-x-4">
-          <Radio checked={selectedPaymentOptionId === paymentProviderId} />
-          <Text className="text-base-regular">
-            {paymentInfoMap[paymentProviderId]?.title || paymentProviderId}
-          </Text>
-          {isManual(paymentProviderId) && isDevelopment && (
-            <PaymentTest className="hidden small:block" />
-          )}
-        </div>
-        <span className="justify-self-end text-ui-fg-base">
-          {paymentInfoMap[paymentProviderId]?.icon}
+      <span className="flex items-center justify-between gap-4">
+        <span className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className={clsx(
+              "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
+              selected ? "border-ink" : "border-ink/40"
+            )}
+          >
+            {selected && (
+              <span className="h-2.5 w-2.5 rounded-full bg-riso-blue" />
+            )}
+          </span>
+          {paymentInfoMap[paymentProviderId]?.title || paymentProviderId}
         </span>
-      </div>
-      {isManual(paymentProviderId) && isDevelopment && (
-        <PaymentTest className="small:hidden text-[10px]" />
+        <span>{paymentInfoMap[paymentProviderId]?.icon}</span>
+      </span>
+
+      {/*
+       * Cash on delivery collects nothing online, and the customer needs to
+       * know that before choosing it — not after the order is placed.
+       */}
+      {isManual(paymentProviderId) && (
+        <span className="text-small text-ink/80">
+          Pay the courier when your order arrives. Nothing is charged now.
+        </span>
       )}
+
       {children}
-    </RadioGroupOption>
+    </Radio>
   )
 }
 
@@ -86,10 +94,10 @@ export const StripePaymentContainer = ({
     >
       {selectedPaymentOptionId === paymentProviderId &&
         (stripeReady ? (
-          <div className="my-4 transition-all duration-150 ease-in-out">
-            <Text className="txt-medium-plus text-ui-fg-base mb-1">
-              Enter your payment details:
-            </Text>
+          <div className="flex flex-col gap-2 py-2">
+            <span className="font-semibold text-ink">
+              Enter your payment details
+            </span>
             <PaymentElement
               options={{ layout: "accordion" }}
               onChange={(e) => {

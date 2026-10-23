@@ -1,7 +1,7 @@
 {
   "name": "@dtc/backend",
   "version": "0.0.1",
-  "description": "A starter for Medusa projects.",
+  "description": "DevCart backend — Medusa commerce API.",
   "author": "Medusa (https://medusajs.com)",
   "license": "MIT",
   "keywords": [
@@ -17,9 +17,15 @@
     "start": "medusa start",
     "dev": "medusa develop",
     "lint": "medusa lint",
-    "test:integration:http": "TEST_TYPE=integration:http NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
-    "test:integration:modules": "TEST_TYPE=integration:modules NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
-    "test:unit": "TEST_TYPE=unit NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit"
+    "seed": "medusa exec ./src/scripts/seed.ts",
+    "seed-catalogue": "medusa exec ./src/scripts/seed-catalogue.ts",
+    "reset-catalog": "medusa exec ./src/scripts/reset-catalog.ts",
+    "refresh-catalogue": "medusa exec ./src/scripts/refresh-catalogue.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "pnpm run test:unit && pnpm run test:integration:modules && pnpm run test:integration:http",
+    "test:integration:http": "REDIS_URL= TEST_TYPE=integration:http NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
+    "test:integration:modules": "REDIS_URL= TEST_TYPE=integration:modules NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
+    "test:unit": "REDIS_URL= TEST_TYPE=unit NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit"
   },
   "dependencies": {
     "@medusajs/admin-sdk": "2.21.2",
@@ -29,11 +35,15 @@
     "@medusajs/dashboard": "2.21.2",
     "@medusajs/draft-order": "2.21.2",
     "@medusajs/framework": "2.21.2",
+    "@medusajs/icons": "2.21.2",
+    "@medusajs/js-sdk": "2.21.2",
     "@medusajs/medusa": "2.21.2",
     "@medusajs/ui": "4.2.6",
     "@tanstack/react-query": "5.64.2",
+    "ioredis": "^5.11.1",
     "react-i18next": "13.5.0",
     "react-router-dom": "7.18.2",
+    "recharts": "^3.10.1",
     "zod": "4.2.0"
   },
   "devDependencies": {

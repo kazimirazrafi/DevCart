@@ -1,5 +1,6 @@
-const SkeletonButton = () => {
-  return <div className="w-full min-h-[50px] px-5 py-[10px] bg-gray-100"></div>
-}
+import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
+
+/** A full-width button (the checkout's), at the height the real one has. */
+const SkeletonButton = () => <SkeletonBar className="h-14 w-full" />
 
 export default SkeletonButton

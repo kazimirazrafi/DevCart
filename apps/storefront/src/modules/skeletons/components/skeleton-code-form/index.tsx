@@ -1,10 +1,13 @@
+import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
+
+/** The discount field and its button, before either has rendered. */
 const SkeletonCodeForm = () => {
   return (
-    <div className="w-full flex flex-col">
-      <div className="bg-gray-100 h-7 w-24 mb-4"></div>
-      <div className="grid grid-cols-[1fr_80px] gap-x-2">
-        <div className="bg-gray-100 h-12"></div>
-        <div className="bg-gray-100 h-12"></div>
+    <div className="flex w-full flex-col gap-3">
+      <SkeletonBar className="h-4 w-28" />
+      <div className="grid grid-cols-[1fr_96px] gap-2">
+        <SkeletonBar className="h-11" />
+        <SkeletonBar className="h-11" />
       </div>
     </div>
   )

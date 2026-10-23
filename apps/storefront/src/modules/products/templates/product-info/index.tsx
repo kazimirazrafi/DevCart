@@ -1,6 +1,7 @@
 import { HttpTypes } from "@medusajs/types"
-import { Heading, Text } from "@modules/common/components/ui"
+
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { linkClass } from "@modules/design-system"
 
 type ProductInfoProps = {
   product: HttpTypes.StoreProduct
@@ -8,31 +9,28 @@ type ProductInfoProps = {
 
 const ProductInfo = ({ product }: ProductInfoProps) => {
   return (
-    <div id="product-info">
-      <div className="flex flex-col gap-y-4 lg:max-w-[500px] mx-auto">
-        {product.collection && (
-          <LocalizedClientLink
-            href={`/collections/${product.collection.handle}`}
-            className="text-medium text-ui-fg-muted hover:text-ui-fg-subtle"
-          >
-            {product.collection.title}
-          </LocalizedClientLink>
-        )}
-        <Heading
-          level="h2"
-          className="text-3xl leading-10 text-ui-fg-base"
-          data-testid="product-title"
+    <div id="product-info" className="flex flex-col gap-3">
+      {product.collection && (
+        <LocalizedClientLink
+          href={`/collections/${product.collection.handle}`}
+          className={`${linkClass} self-start text-small`}
         >
-          {product.title}
-        </Heading>
+          {product.collection.title}
+        </LocalizedClientLink>
+      )}
 
-        <Text
-          className="text-medium text-ui-fg-subtle whitespace-pre-line"
+      <h1 className="font-display text-h1" data-testid="product-title">
+        {product.title}
+      </h1>
+
+      {product.description && (
+        <p
+          className="max-w-[72ch] whitespace-pre-line text-body text-ink/80"
           data-testid="product-description"
         >
           {product.description}
-        </Text>
-      </div>
+        </p>
+      )}
     </div>
   )
 }

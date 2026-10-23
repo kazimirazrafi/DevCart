@@ -1,9 +1,16 @@
 import { sdk } from "@lib/config"
 import { placeOrder } from "@lib/data/cart"
 import { getAuthHeaders, setCartId } from "@lib/data/cookies"
+import type { PaymentFailureKind } from "@lib/util/payment-status"
 import { HttpTypes } from "@medusajs/types"
-import { unstable_rethrow } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
+
+/** The codes `describePaymentReturn` turns back into a sentence. */
+const RETURN_CODE: Record<PaymentFailureKind, string> = {
+  payment_failed: "declined",
+  payment_pending: "pending",
+  cart_problem: "order",
+}
 
 export async function GET(req: NextRequest) {
   const { origin, searchParams } = req.nextUrl
@@ -21,6 +28,21 @@ export async function GET(req: NextRequest) {
   const prefix = countryCode ? `/${countryCode}` : ""
   const rejected = () =>
     NextResponse.redirect(`${origin}${prefix}/cart?error=payment_failed`)
+
+  /*
+   * Every outcome comes back to the payment step with a code, because the
+   * customer left before Stripe could tell the browser anything. The step is
+   * where a card can be retried, and the notice there says why they are back.
+   */
+  const backToPayment = (code: string, extra?: Record<string, string>) => {
+    const params = new URLSearchParams({
+      step: "payment",
+      payment_error: code,
+      ...extra,
+    })
+
+    return NextResponse.redirect(`${origin}${prefix}/checkout?${params}`)
+  }
 
   if (!cartId || !paymentIntent || !paymentIntentClientSecret) {
     return rejected()
@@ -53,33 +75,22 @@ export async function GET(req: NextRequest) {
   // back into `requires_payment_method`, so the Payment Element can mount
   // against it again — return to the payment step and let them retry.
   if (redirectStatus === "failed") {
-    const params = new URLSearchParams({ step: "payment" })
-
-    // Forward Stripe's own return parameters so the checkout step can tell how
-    // the off-site authorization ended.
-    for (const key of [
-      "payment_intent",
-      "payment_intent_client_secret",
-      "redirect_status",
-    ]) {
-      const value = searchParams.get(key)
-
-      if (value) {
-        params.set(key, value)
-      }
-    }
-
-    return NextResponse.redirect(`${origin}${prefix}/checkout?${params}`)
+    return backToPayment("declined")
   }
 
-  try {
-    await placeOrder(cartId)
-  } catch (error) {
-    unstable_rethrow(error)
+  /*
+   * Stripe says the off-site authorization finished, which is not the same as
+   * the order existing: `placeOrder` completes the cart on the server, where
+   * Medusa confirms the payment with Stripe before it builds the order, and
+   * only a real order redirects to its confirmation page.
+   */
+  const placed = await placeOrder(cartId)
 
-    return NextResponse.redirect(`${origin}${prefix}/cart?error=order_failed`)
+  if (!placed.ok) {
+    return backToPayment(RETURN_CODE[placed.kind])
   }
 
-  // Only reached when the cart did not convert into an order.
-  return NextResponse.redirect(`${origin}${prefix}/cart?error=order_failed`)
+  // Only reached when the cart did not convert into an order; a placed order
+  // redirects out of `placeOrder`.
+  return backToPayment(RETURN_CODE.cart_problem)
 }

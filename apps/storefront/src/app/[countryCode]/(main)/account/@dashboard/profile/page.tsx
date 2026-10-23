@@ -4,13 +4,15 @@ import ProfilePhone from "@modules/account//components/profile-phone"
 import ProfileBillingAddress from "@modules/account/components/profile-billing-address"
 import ProfileEmail from "@modules/account/components/profile-email"
 import ProfileName from "@modules/account/components/profile-name"
+import ProfilePassword from "@modules/account/components/profile-password"
 import { notFound } from "next/navigation"
 import { listRegions } from "@lib/data/regions"
 import { retrieveCustomer } from "@lib/data/customer"
+import { Rule } from "@modules/design-system"
 
 export const metadata: Metadata = {
   title: "Profile",
-  description: "View and edit your Medusa Store profile.",
+  description: "View and edit your profile.",
 }
 
 export default async function Profile() {
@@ -23,29 +25,28 @@ export default async function Profile() {
 
   return (
     <div className="w-full" data-testid="profile-page-wrapper">
-      <div className="mb-8 flex flex-col gap-y-4">
-        <h1 className="text-2xl-semi">Profile</h1>
-        <p className="text-base-regular">
-          View and update your profile information, including your name, email,
-          and phone number. You can also update your billing address, or change
-          your password.
+      <div className="flex flex-col gap-2">
+        <h1 className="font-display text-h1 font-bold text-ink">Profile</h1>
+        <p className="max-w-prose text-body text-ink/80">
+          Update the name and phone number on your account, send yourself a
+          password reset link, or change the billing address your receipts use.
+          The email you sign in with is shown here but can&apos;t be changed.
         </p>
       </div>
-      <div className="flex flex-col gap-y-8 w-full">
+
+      <Rule weight="heavy" className="mt-4" />
+
+      <div className="mt-6 flex w-full flex-col gap-8">
         <ProfileName customer={customer} />
-        <Divider />
+        <Rule />
         <ProfileEmail customer={customer} />
-        <Divider />
+        <Rule />
         <ProfilePhone customer={customer} />
-        <Divider />
-        {/* <ProfilePassword customer={customer} />
-        <Divider /> */}
+        <Rule />
+        <ProfilePassword customer={customer} />
+        <Rule />
         <ProfileBillingAddress customer={customer} regions={regions} />
       </div>
     </div>
   )
-}
-
-const Divider = () => {
-  return <div className="w-full h-px bg-gray-200" />
 }

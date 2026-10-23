@@ -55,17 +55,13 @@ const OptionsPicker = ({
   }
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex items-center justify-between px-1">
-        <span className="txt-compact-small-plus text-ui-fg-subtle">
-          Options
-        </span>
-      </div>
+    <div className="flex flex-col gap-2">
+      <span className="text-small font-semibold text-ink">Options</span>
       <Accordion.Root
         type="multiple"
         value={openItems}
         onValueChange={(values) => setOpenItems(values as string[])}
-        className="flex flex-col gap-y-3 pr-6"
+        className="flex flex-col"
       >
         {options.map((option) => {
           const values =
@@ -101,21 +97,20 @@ const OptionsPicker = ({
             <Accordion.Item
               key={option.id}
               value={option.id}
-              className="overflow-hidden"
+              className="overflow-hidden border-b border-ink/10"
             >
               <Accordion.Header>
-                <Accordion.Trigger className="flex w-full items-center justify-between py-3 text-left">
-                  <div className="flex items-center gap-2">
-                    <span className="txt-compact-small-plus text-ui-fg-base">
-                      {option.title || "Option"}
+                <Accordion.Trigger className="flex w-full items-center justify-between py-2 text-left">
+                  <span className="flex items-center gap-2 text-small font-semibold text-ink">
+                    {option.title || "Option"}
+                    <span className="font-mono text-micro text-ink/70">
+                      {selectedCount}
                     </span>
-                    <span className="txt-compact-small-plus text-ui-fg-muted">
-                      ({selectedCount})
-                    </span>
-                  </div>
+                  </span>
                   <span
+                    aria-hidden="true"
                     className={clsx(
-                      "flex h-7 w-7 items-center justify-center text-ui-fg-muted transition-transform duration-150",
+                      "flex h-6 w-6 items-center justify-center text-ink/70 transition-transform duration-150",
                       {
                         "rotate-180": isOpen,
                       }
@@ -133,15 +128,13 @@ const OptionsPicker = ({
                     return (
                       <button
                         key={value.id}
+                        type="button"
                         onClick={() => toggleValue(value.id)}
                         className={clsx(
-                          "border-ui-border-base border text-small-regular h-10 rounded-rounded px-3 flex items-center transition-colors duration-150",
-                          {
-                            "border-ui-border-interactive text-ui-fg-base":
-                              isSelected,
-                            "text-ui-fg-muted hover:text-ui-fg-base":
-                              !isSelected,
-                          }
+                          "flex min-h-11 items-center border px-3 text-small transition-colors",
+                          isSelected
+                            ? "border-ink bg-ink text-stock"
+                            : "border-ink/40 text-ink hover:border-ink"
                         )}
                         aria-pressed={isSelected}
                       >

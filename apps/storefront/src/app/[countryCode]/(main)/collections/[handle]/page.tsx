@@ -1,12 +1,11 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { getCollectionByHandle, listCollections } from "@lib/data/collections"
-import { listRegions } from "@lib/data/regions"
-import { StoreCollection, StoreRegion } from "@medusajs/types"
+import { getCollectionByHandle } from "@lib/data/collections"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { parseOptionValueIds } from "@lib/util/product-option-filters"
+import { notFoundMetadata, pageMetadata } from "@lib/util/seo"
 
 type Props = {
   params: Promise<{ handle: string; countryCode: string }>
@@ -21,53 +20,35 @@ type Props = {
 
 export const PRODUCT_LIMIT = 12
 
-export async function generateStaticParams() {
-  const { collections } = await listCollections({
-    fields: "*products",
-  })
-
-  if (!collections) {
-    return []
-  }
-
-  const countryCodes = await listRegions().then(
-    (regions: StoreRegion[]) =>
-      regions
-        ?.map((r) => r.countries?.map((c) => c.iso_2))
-        .flat()
-        .filter(Boolean) as string[]
-  )
-
-  const collectionHandles = collections.map(
-    (collection: StoreCollection) => collection.handle
-  )
-
-  const staticParams = countryCodes
-    ?.map((countryCode: string) =>
-      collectionHandles.map((handle: string | undefined) => ({
-        countryCode,
-        handle,
-      }))
-    )
-    .flat()
-
-  return staticParams
-}
+/*
+ * Rendered per request rather than baked at build time: the page reads the
+ * `sortBy`/`page` search params and the customer's cache id (through the
+ * product reads), and a collection created after a build has to work.
+ * Prerendering this route made every such page a 500 (DYNAMIC_SERVER_USAGE),
+ * the same failure the product page had.
+ */
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   const collection = await getCollectionByHandle(params.handle)
 
+  /*
+   * An unknown handle must not call `notFound()` here: a `notFound()` thrown
+   * while metadata resolves renders the root `app/not-found.tsx` instead of
+   * this route group's not-found page. Returning plain metadata lets the page
+   * below raise it, which keeps the 404 inside the storefront layout.
+   */
   if (!collection) {
-    notFound()
+    return notFoundMetadata()
   }
 
-  const metadata = {
-    title: `${collection.title} | Medusa Store`,
-    description: `${collection.title} collection`,
-  } as Metadata
-
-  return metadata
+  return pageMetadata({
+    countryCode: params.countryCode,
+    path: `/collections/${params.handle}`,
+    title: collection.title,
+    description: `The ${collection.title} collection from DevCart.`,
+  })
 }
 
 export default async function CollectionPage(props: Props) {

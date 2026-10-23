@@ -1,40 +1,54 @@
 import { declineTransferRequest } from "@lib/data/orders"
-import { Heading, Text } from "@modules/common/components/ui"
-import TransferImage from "@modules/order/components/transfer-image"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import ErrorMessage from "@modules/checkout/components/error-message"
+import { Rule, linkClass } from "@modules/design-system"
 
-export default async function TransferPage({
-  params,
-}: {
-  params: { id: string; token: string }
-}) {
-  const { id, token } = params
+type Props = {
+  params: Promise<{ id: string; token: string }>
+}
+
+/**
+ * The other link in the transfer email. A declined request changes nothing, so
+ * the page says so rather than congratulating anyone.
+ */
+export default async function TransferDeclinedPage({ params }: Props) {
+  const { id, token } = await params
 
   const { success, error } = await declineTransferRequest(id, token)
 
   return (
-    <div className="flex flex-col gap-y-4 items-start w-2/5 mx-auto mt-10 mb-20">
-      <TransferImage />
-      <div className="flex flex-col gap-y-6">
-        {success && (
+    <div className="content-container py-12 small:py-16">
+      <div
+        className="flex w-full max-w-xl flex-col gap-5"
+        data-testid="transfer-declined"
+        data-state={success ? "declined" : "failed"}
+      >
+        <h1 className="font-display text-h1 font-bold text-ink">
+          {success ? "Transfer declined" : "That transfer could not be declined"}
+        </h1>
+
+        <Rule weight="heavy" />
+
+        {success ? (
+          <p className="max-w-prose text-body text-ink/80">
+            Order <span className="font-mono text-ink">{id}</span> stays with
+            you. Nothing about it has changed.
+          </p>
+        ) : (
           <>
-            <Heading level="h1" className="text-xl text-zinc-900">
-              Order transfer declined!
-            </Heading>
-            <Text className="text-zinc-600">
-              Transfer of order {id} has been successfully declined.
-            </Text>
-          </>
-        )}
-        {!success && (
-          <>
-            <Text className="text-zinc-600">
-              There was an error declining the transfer. Please try again.
-            </Text>
+            <p className="max-w-prose text-body text-ink/80">
+              Nothing changed: the order still belongs to whoever it belonged to
+              before. The link may have expired, or already been used.
+            </p>
             {error && (
-              <Text className="text-red-500">Error message: {error}</Text>
+              <ErrorMessage error={error} data-testid="transfer-decline-error" />
             )}
           </>
         )}
+
+        <LocalizedClientLink href="/account/orders" className={linkClass}>
+          Back to your orders
+        </LocalizedClientLink>
       </div>
     </div>
   )

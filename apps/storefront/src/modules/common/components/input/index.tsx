@@ -44,23 +44,25 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             name={name}
             placeholder=" "
             required={required}
-            className="pt-4 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover"
+            /* The focus ring is the global `:focus-visible` one in globals.css;
+               a `focus:outline-none` here would win the cascade and remove it. */
+            className="pt-4 pb-1 block w-full h-11 px-4 mt-0 bg-stock border rounded-md appearance-none border-ink/20 hover:bg-ink/5 focus:border-ink"
             {...props}
             ref={inputRef}
           />
           <label
             htmlFor={name}
             onClick={() => inputRef.current?.focus()}
-            className="flex items-center justify-center mx-3 px-1 transition-all absolute duration-300 top-3 -z-1 origin-0 text-ui-fg-subtle"
+            className="flex items-center justify-center mx-3 px-1 transition-all absolute duration-300 top-3 -z-1 origin-0 text-ink/70"
           >
             {label}
-            {required && <span className="text-rose-500">*</span>}
+            {required && <span className="text-riso-pink">*</span>}
           </label>
           {type === "password" && (
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-ui-fg-subtle px-4 focus:outline-none transition-all duration-150 outline-none focus:text-ui-fg-base absolute right-0 top-3"
+              className="text-ink/70 px-4 focus:outline-none transition-all duration-150 outline-none focus:text-ink absolute right-0 top-3"
             >
               {showPassword ? <Eye /> : <EyeOff />}
             </button>

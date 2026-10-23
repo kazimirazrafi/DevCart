@@ -1,12 +1,13 @@
 "use server"
 
-import { sdk } from "@lib/config"
+import { CATALOGUE_REVALIDATE_SECONDS, sdk } from "@lib/config"
 import { HttpTypes } from "@medusajs/types"
 import { getCacheOptions } from "./cookies"
 
 export const retrieveCollection = async (id: string) => {
   const next = {
     ...(await getCacheOptions("collections")),
+    revalidate: CATALOGUE_REVALIDATE_SECONDS,
   }
 
   return await sdk.client
@@ -25,6 +26,7 @@ export const listCollections = async (
 ): Promise<{ collections: HttpTypes.StoreCollection[]; count: number }> => {
   const next = {
     ...(await getCacheOptions("collections")),
+    revalidate: CATALOGUE_REVALIDATE_SECONDS,
   }
 
   queryParams.limit = queryParams.limit || "100"
@@ -47,6 +49,7 @@ export const getCollectionByHandle = async (
 ): Promise<HttpTypes.StoreCollection | null> => {
   const next = {
     ...(await getCacheOptions("collections")),
+    revalidate: CATALOGUE_REVALIDATE_SECONDS,
   }
 
   return await sdk.client
