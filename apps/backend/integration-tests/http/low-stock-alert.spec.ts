@@ -5,42 +5,32 @@ import { Modules } from "@medusajs/framework/utils"
 
 import lowStockAlertJob, { config } from "../../src/jobs/low-stock-alert"
 import { STOCK_ALERT_MODULE } from "../../src/modules/stock-alert"
+import StockAlertModuleService from "../../src/modules/stock-alert/service"
 
 jest.setTimeout(180 * 1000)
 
-/*
- * The project's notification provider in this environment is Resend with a real
- * key and an unverified domain, which refuses any recipient but its owner. The
- * job deliberately records nothing when the mail fails, so the success path —
- * and with it the dedupe — can only be tested against a provider that accepts.
- * The provider already takes its base URL from the environment (it was built
- * that way so a stub could stand in), so this file points it at a local server
- * and keeps what it was sent: the inventory, the template and the provider are
- * then all exercised through their real code path.
- *
- * The values are restored afterwards so later suites see the real provider.
- */
+/* The job records nothing when mail fails, so this file points the Resend
+ * provider at a local stub that accepts and records. Values are restored
+ * afterwards. */
 const STUB_PORT = 9099
 const STUB_BASE_URL = `http://127.0.0.1:${STUB_PORT}`
 const previousBaseUrl = process.env.RESEND_BASE_URL
+const previousApiKey = process.env.RESEND_API_KEY
+const previousFrom = process.env.RESEND_FROM
 process.env.RESEND_BASE_URL = STUB_BASE_URL
+
+/* The provider only registers when both are set; a placeholder is enough as
+ * every request goes to the stub. Set here so a clean checkout passes. */
+process.env.RESEND_API_KEY = "re_test_low_stock_stub"
+process.env.RESEND_FROM = "DevCart <stock@test.dev>"
 
 const sent: { subject: string; html: string; text: string; to: string[] }[] = []
 let stub: Server | null = null
 
 /**
- * The low-stock job, run the way the scheduler runs it.
- *
- * The suite lives in `integration-tests/http/` because that is the only
- * app-level Jest runner this project has; the job itself is not an HTTP route.
- * It boots a real Medusa app, writes inventory through the inventory module,
- * runs the job function against that container, and reads the notification
- * module back as the independent source — so the selection, the email and the
- * dedupe are all exercised together.
- *
- * Every assertion is a **delta** from the counts at the start of the test: the
- * runner keeps one database for the whole file, so a test that asserted "one
- * notification exists" would be reading the previous test's mail as well.
+ * The low-stock job on a booted app. It lives under http/ because that is the
+ * only app-level Jest runner here. Assertions are deltas: one database is shared
+ * for the whole file.
  */
 medusaIntegrationTestRunner({
   testSuite: ({ getContainer }) => {
@@ -89,7 +79,10 @@ medusaIntegrationTestRunner({
     }
 
     const alertsFor = async (inventoryItemId: string) => {
-      const alertService = container.resolve(STOCK_ALERT_MODULE)
+      /* Typed explicitly: resolve returns unknown until .medusa/types exist,
+       * which a clean checkout does not have. */
+      const alertService: StockAlertModuleService =
+        container.resolve(STOCK_ALERT_MODULE)
       const [rows, count] = await alertService.listAndCountStockAlerts({
         inventory_item_id: inventoryItemId,
       })
@@ -136,11 +129,17 @@ medusaIntegrationTestRunner({
         stub = null
       }
 
-      if (previousBaseUrl === undefined) {
-        delete process.env.RESEND_BASE_URL
-      } else {
-        process.env.RESEND_BASE_URL = previousBaseUrl
+      const restore = (key: string, value: string | undefined) => {
+        if (value === undefined) {
+          delete process.env[key]
+        } else {
+          process.env[key] = value
+        }
       }
+
+      restore("RESEND_BASE_URL", previousBaseUrl)
+      restore("RESEND_API_KEY", previousApiKey)
+      restore("RESEND_FROM", previousFrom)
     })
 
     beforeEach(async () => {
@@ -233,7 +232,8 @@ medusaIntegrationTestRunner({
 
       await lowStockAlertJob(container)
 
-      const alertService = container.resolve(STOCK_ALERT_MODULE)
+      const alertService: StockAlertModuleService =
+        container.resolve(STOCK_ALERT_MODULE)
       const { rows } = await alertsFor(lowItemId)
 
       // A day and a minute ago, written the way the job writes it.

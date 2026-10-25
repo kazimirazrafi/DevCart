@@ -1,1 +1,0 @@
-{"create":[{"title":"UI Import 1","is_giftcard":false,"discountable":true,"handle":"ui-import-1","status":"published","options":[{"title":"Size","values":["S"]}],"variants":[{"title":"S","sku":"ui-import-1-s","allow_backorder":false,"manage_inventory":false,"prices":[{"currency_code":"usd","amount":1500}],"options":{"Size":"S"}}]}],"update":[]}

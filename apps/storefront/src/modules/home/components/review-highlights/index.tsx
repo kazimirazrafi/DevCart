@@ -5,7 +5,6 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import ProductCard from "@modules/products/components/product-card"
 import PreviewPrice from "@modules/products/components/product-preview/price"
 
-/** Five blocks, filled to the nearest whole star. No icon font, no emoji. */
 const RatingMeter = ({
   rating,
   label,
@@ -38,17 +37,10 @@ const RatingMeter = ({
 
 export type RatedProductHighlight = {
   product: HttpTypes.StoreProduct
-  /** The average of this product's published reviews, to one decimal. */
   rating: number
   reviewCount: number
 }
 
-/**
- * The best-reviewed products in the catalogue, with the average and count of
- * their published reviews. Every number here comes from the review module, via
- * `getCatalogueReviewSummary`; nothing is typed into the copy or read from
- * product metadata.
- */
 export default function ReviewHighlights({
   items,
   averageRating,

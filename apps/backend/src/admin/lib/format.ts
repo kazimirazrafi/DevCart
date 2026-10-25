@@ -1,17 +1,6 @@
-/**
- * Display helpers shared by the admin's own pages and widgets.
- *
- * Kept in one place so the dashboard and the Orders page's sales summary can
- * never disagree about how a figure is written.
- */
+/* Display helpers shared by the dashboard and the Orders summary. */
 
-/**
- * Money as the admin's locale writes it.
- *
- * An unknown currency code makes `Intl.NumberFormat` throw, and a figure that
- * cannot be formatted is still better shown than swallowed — hence the plain
- * fallback.
- */
+/** Money in the admin's locale; Intl throws on an unknown currency. */
 export const formatMoney = (amount: number, currency: string) => {
   try {
     return new Intl.NumberFormat(undefined, {
@@ -23,13 +12,7 @@ export const formatMoney = (amount: number, currency: string) => {
   }
 }
 
-/**
- * Money for an axis label, where the space a full figure takes is the problem:
- * "EUR 12.4K" rather than "EUR 12,400.00".
- *
- * Same fallback rule as `formatMoney` — a currency the browser does not know is
- * still printed, not thrown away.
- */
+/** Compact money for axis labels: "EUR 12.4K". */
 export const compactMoney = (amount: number, currency: string) => {
   try {
     return new Intl.NumberFormat(undefined, {

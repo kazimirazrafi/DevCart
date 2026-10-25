@@ -36,16 +36,8 @@ const rangeFor = (days: number) => {
   }
 }
 
-/**
- * Revenue, order count and best sellers for a window, on the Orders page where
- * the numbers are about to be looked at.
- *
- * The figures come from `GET /admin/sales-summary`, which reads the same orders
- * the table below lists — so the two can be reconciled by hand, which is the
- * property that makes a dashboard worth trusting. Revenue is shown per
- * currency rather than summed: the catalogue is priced in more than one, and a
- * single mixed total would be quietly wrong.
- */
+/** Revenue and best sellers for a window, read from the same orders the
+ * Orders page lists. Totals are per currency, never summed across them. */
 const SalesSummaryWidget = () => {
   const [days, setDays] = useState(30)
   const range = useMemo(() => rangeFor(days), [days])

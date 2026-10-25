@@ -12,10 +12,6 @@ type OptionSelectProps = {
   "data-testid"?: string
 }
 
-/*
- * A group of options (Size, Colour) as square chips. `aria-pressed` carries the
- * selection so it is not communicated by border colour alone.
- */
 const OptionSelect: React.FC<OptionSelectProps> = ({
   option,
   current,

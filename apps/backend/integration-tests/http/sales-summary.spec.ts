@@ -3,16 +3,8 @@ import { Modules } from "@medusajs/framework/utils"
 
 jest.setTimeout(180 * 1000)
 
-/**
- * The admin sales summary over HTTP: who may read it, what it refuses, and what
- * an empty window looks like.
- *
- * The arithmetic itself is unit-tested against the aggregation function, and
- * the numbers are reconciled against the database and the dashboard in the
- * verification run — this suite is about the route's contract, which is where a
- * dashboard genuinely breaks (a 401 nobody notices, a range that silently
- * becomes the wrong window).
- */
+/** The admin sales summary route: access, refusals and an empty window. The
+ * arithmetic is unit-tested separately. */
 medusaIntegrationTestRunner({
   testSuite: ({ api, getContainer }) => {
     let adminHeaders: Record<string, string>

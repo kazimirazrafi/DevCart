@@ -6,16 +6,11 @@ import { SubmitButton } from "@modules/checkout/components/submit-button"
 import { useSearchParams } from "next/navigation"
 import { useActionState } from "react"
 
-/** See the note in the sign-in form: only a path on this site is followed. */
+/* Only a path on this site is followed after sign-in. */
 const samePath = (value: string | null) =>
   value && value.startsWith("/") && !value.startsWith("//") ? value : null
 
-/**
- * Google's four-colour mark. It is the one logo on the site that keeps its own
- * colours instead of the theme's — it identifies the provider, and a monochrome
- * version would be less recognisable. `aria-hidden` because the button's text
- * already names Google.
- */
+/* Google's own colours, not the theme's: the mark identifies the provider. */
 const GoogleMark = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 shrink-0">
     <path
@@ -37,15 +32,9 @@ const GoogleMark = () => (
   </svg>
 )
 
-/**
- * The way in that is not a password. Rendered by both the sign-in and the
- * create-account view, because Google answers both questions at once: the
- * backend creates the customer the first time and recognises them after that. A
- * second form rather than a field of the password one, so a failed Google
- * attempt cannot carry a half-typed password with it.
- *
- * The action navigates the browser to Google, so this component only ever sees
- * two states: about to leave, or back with something to report.
+/*
+ * Rendered by both the sign-in and the create-account view: the backend
+ * creates the customer on first use and matches them afterwards.
  */
 const GoogleButton = () => {
   const [message, formAction] = useActionState(signInWithGoogle, null)
@@ -54,7 +43,6 @@ const GoogleButton = () => {
   return (
     <div className="flex flex-col gap-3">
       <form action={formAction}>
-        {/* The action needs it to return the customer to the page they came from. */}
         <input type="hidden" name="redirect" value={redirectTo ?? ""} />
 
         <SubmitButton

@@ -19,13 +19,9 @@ function formatAmount(amount: number, currency: string) {
   }
 }
 
-/**
- * Price filter over the region currency's `min_price_*` field, which is
- * declared `facetable({ types: ["stats"] })` — the stats facet is what
- * supplies the slider's bounds. Refines on release rather than per pixel.
- *
- * Hides itself when every remaining product costs the same (or there are no
- * stats yet), because there is nothing to slide between.
+/*
+ * Bounds come from the facet's stats. Refines on release, and hides itself when
+ * there is nothing to slide between.
  */
 const PriceRange = ({ currencyCode }: { currencyCode: string }) => {
   const { start, range, canRefine, refine } = useRange({
@@ -43,8 +39,7 @@ const PriceRange = ({ currencyCode }: { currencyCode: string }) => {
 
   const [value, setValue] = useState<number[]>([from, to])
 
-  // Follow the refinement when it changes elsewhere — clearing all filters, or
-  // a bound arriving from the URL on load.
+  // Follow the refinement when it changes elsewhere, e.g. Clear all or the URL.
   useEffect(() => {
     setValue([from, to])
   }, [from, to])
@@ -66,8 +61,7 @@ const PriceRange = ({ currencyCode }: { currencyCode: string }) => {
           step={1}
           minStepsBetweenThumbs={0}
           onValueChange={setValue}
-          // Only refine when the thumb is released, so dragging doesn't fire a
-          // search per pixel.
+          // Refine on release, not on every pixel dragged.
           onValueCommit={(committed) => refine([committed[0], committed[1]])}
           aria-label="Price range"
           data-testid="price-range"

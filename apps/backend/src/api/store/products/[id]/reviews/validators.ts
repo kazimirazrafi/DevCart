@@ -1,9 +1,8 @@
 import { z } from "@medusajs/framework/zod"
 
 /**
- * The body a customer may write. Nothing here can set `status` or
- * `customer_id`: moderation and authorship are the server's, so a customer
- * cannot approve their own review or write one in someone else's name.
+ * Nothing here sets `status` or `customer_id`: authorship and moderation are
+ * the server's.
  */
 export const StoreCreateReviewSchema = z.object({
   rating: z.coerce

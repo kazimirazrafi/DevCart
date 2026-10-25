@@ -1,12 +1,7 @@
-/**
- * The low-stock rules, as functions with no database in them.
- *
- * They are separate from the job so the two things that can go wrong — the
- * wrong rows being called low, and the same row being mailed twice — can be
- * tested without an inventory module, an inbox or a clock.
- */
+/** Low-stock rules as pure functions, so they can be tested without a
+ * database, an inbox or a clock. */
 
-/** Warn at or below this many buyable units. Overridable per deployment. */
+/** Warn at or below this many buyable units. */
 export const DEFAULT_LOW_STOCK_THRESHOLD = 5
 
 /** How long one level's alert counts as "already sent". */
@@ -23,20 +18,13 @@ export type InventoryLevel = {
 export type LowStockLine = {
   inventory_item_id: string
   location_id: string
-  /** Units a customer could still buy: stocked minus reserved. */
+  /** Units a customer can still buy. */
   available: number
   sku: string | null
   title: string | null
 }
 
-/**
- * Units that can still be sold at one location.
- *
- * Reserved units are spoken for by an order that has not left yet, so counting
- * them as available would let a level read healthy while every unit is already
- * promised. A negative result is reported as zero — a level can be oversold,
- * and "-2 available" is not a number to put in an email.
- */
+/** Units a customer can still buy: stocked minus reserved, never negative. */
 export const availableUnits = (level: InventoryLevel): number => {
   const stocked = Number(level.stocked_quantity ?? 0)
   const reserved = Number(level.reserved_quantity ?? 0)
@@ -48,13 +36,8 @@ export const availableUnits = (level: InventoryLevel): number => {
   return Math.max(0, stocked - reserved)
 }
 
-/**
- * Reads a threshold from the environment, falling back to the default.
- *
- * A negative threshold is refused rather than honoured: it would mean "alert
- * when stock is below minus one", i.e. never, which is indistinguishable from
- * a broken job.
- */
+/** Threshold from the environment. A negative value is refused: it would
+ * mean alerts never fire. */
 export const readThreshold = (raw: string | undefined): number => {
   const parsed = Number.parseInt(String(raw ?? "").trim(), 10)
 
@@ -65,7 +48,7 @@ export const readThreshold = (raw: string | undefined): number => {
   return parsed
 }
 
-/** The cooldown in hours, with the same "refuse nonsense" rule as the threshold. */
+/** Cooldown in hours; invalid values fall back to the default. */
 export const readCooldownHours = (raw: string | undefined): number => {
   const parsed = Number.parseInt(String(raw ?? "").trim(), 10)
 
@@ -76,13 +59,8 @@ export const readCooldownHours = (raw: string | undefined): number => {
   return parsed
 }
 
-/**
- * The levels of one item that are at or below the threshold.
- *
- * The threshold is inclusive on purpose: a threshold of 5 with 5 units left is
- * exactly the situation the email is for, and an exclusive rule would stay
- * silent at the number an admin typed in.
- */
+/** The levels at or below the threshold. Inclusive: 5 left at a threshold of
+ * 5 is exactly the case the email is for. */
 export const lowStockLevels = (
   item: {
     id: string
@@ -105,14 +83,8 @@ export const lowStockLevels = (
     }))
     .filter((line) => line.available <= threshold)
 
-/**
- * Whether a level's last alert is old enough to mail again.
- *
- * No previous alert (a level that has never been low, or one whose row was
- * cleaned up) is always due. A clock that moved backwards — a restored backup,
- * a changed timezone — reads as due as well, because the alternative is an
- * alert that can never fire again.
- */
+/** Whether the last alert is old enough to send again. No row, or a clock
+ * that moved backwards, counts as due. */
 export const isAlertDue = (
   lastAlertedAt: string | Date | null | undefined,
   now: Date,
@@ -131,13 +103,7 @@ export const isAlertDue = (
   return now.getTime() - last.getTime() >= cooldownHours * HOUR_MS
 }
 
-/**
- * A name an admin recognises, from whatever the store has on the item.
- *
- * The variant's product title is what the storefront shows, so it is what the
- * admin will search for; the inventory item's own title is the last resort, and
- * an untitled row is better left unnamed than shown as "undefined".
- */
+/** Product title first, then the inventory item's own title, then nothing. */
 export const inventoryItemTitle = (item: {
   title?: string | null
   variants?:
@@ -158,9 +124,7 @@ export const inventoryItemTitle = (item: {
   return productTitle || variantTitle || item.title?.trim() || null
 }
 
-/**
- * Groups the due lines by inventory item, for the one email that lists them.
- */
+/** Groups the due lines by inventory item for the single email. */
 export const groupByItem = (lines: LowStockLine[]): LowStockLine[][] => {
   const byItem = new Map<string, LowStockLine[]>()
 

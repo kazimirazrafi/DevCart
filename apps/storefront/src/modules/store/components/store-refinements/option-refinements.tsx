@@ -94,11 +94,7 @@ const OptionRefinements = () => {
             value={group.title}
             className="overflow-hidden border-b border-ink/10"
           >
-            {/*
-             * Radix's own header renders an `h3`, which followed the listing's
-             * `h1` with a skipped level. `asChild` lets the group be an `h2`
-             * and keeps the trigger as its button.
-             */}
+            {/* Radix renders an h3 by default; the page needs an h2 here. */}
             <Accordion.Header asChild>
               <h2>
                 <Accordion.Trigger className="flex w-full items-center justify-between py-2 text-left">

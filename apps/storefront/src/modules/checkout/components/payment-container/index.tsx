@@ -55,10 +55,6 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
         <span>{paymentInfoMap[paymentProviderId]?.icon}</span>
       </span>
 
-      {/*
-       * Cash on delivery collects nothing online, and the customer needs to
-       * know that before choosing it — not after the order is placed.
-       */}
       {isManual(paymentProviderId) && (
         <span className="text-small text-ink/80">
           Pay the courier when your order arrives. Nothing is charged now.
@@ -104,10 +100,8 @@ export const StripePaymentContainer = ({
                 setError(null)
                 setPaymentComplete(e.complete)
               }}
-              // Without a handler Stripe.js reports a failed mount as an
-              // unhandled "payment Element loaderror" and the option renders
-              // blank with no explanation. Surface it in the checkout's own
-              // error slot instead.
+              // Without this handler Stripe.js reports a failed mount as an
+              // unhandled load error and the option renders blank.
               onLoadError={(e) => {
                 setPaymentComplete(false)
                 setError(

@@ -6,38 +6,19 @@ import {
 } from "@medusajs/framework/utils"
 import { linkProductsToSalesChannelWorkflow } from "@medusajs/medusa/core-flows"
 
-/** Products read per query page. */
+/** Products read per page. */
 const PAGE_SIZE = 100
-/** Products per link workflow run, so one call never carries the whole catalogue. */
+/** Products per link run. */
 const LINK_CHUNK_SIZE = 50
-/** The channel the seed creates and the storefront's publishable key belongs to. */
+/** Channel the seed creates and the publishable key belongs to. */
 const STORE_CHANNEL_NAME = "Default Sales Channel"
 
 /**
- * Makes the storefront listing match the admin's catalogue.
+ * Points the storefront listing at the admin's catalogue: imported products
+ * with no sales channel are linked to the store's, then the search index is
+ * rebuilt so deleted products stop showing.
  *
- * A bulk import leaves the shop disagreeing with what the admin shows, in two
- * independent ways, and the listing (`/store/search`) is what suffers:
- *
- * 1. A CSV whose `Product Sales Channel 1` column is empty creates products in
- *    no sales channel. `/store/search` narrows its hits to the publishable
- *    key's channel, so those products are published, priced and visible in the
- *    admin, and still never appear in the storefront. This attaches every such
- *    product to the store's channel.
- * 2. The index keeps whatever it was last given. Products removed by anything
- *    that did not emit `product.deleted` (a reset run against a stale process,
- *    a restored database) stay in it, so deleted products keep showing in the
- *    listing. The reindex rebuilds the index from the current catalogue, which
- *    drops them.
- *
- * Run it from `apps/backend` after an import:
- *
- * ```bash
- * pnpm run refresh-catalogue
- * ```
- *
- * Safe to re-run: products already in the channel are skipped, and a reindex
- * only replaces the index's contents with the same catalogue.
+ * Run from apps/backend: pnpm run refresh-catalogue
  */
 export default async function refreshCatalogue({ container }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
@@ -84,13 +65,8 @@ export default async function refreshCatalogue({ container }: ExecArgs) {
   )
 }
 
-/**
- * The channel the storefront sells in. The publishable key decides it at
- * request time, but that key is a storefront setting, so the channel is found
- * by the name the seed gives it — and a store with a single channel needs no
- * guessing at all. Anything else is ambiguous and should be answered by hand
- * rather than by silently picking one.
- */
+/** The storefront's channel, by the name the seed gives it. A store with one
+ * channel needs no guessing; more than one is an error. */
 async function resolveStoreChannel(container: ExecArgs["container"]) {
   const salesChannelService = container.resolve(Modules.SALES_CHANNEL)
   const channels: { id: string; name: string }[] =

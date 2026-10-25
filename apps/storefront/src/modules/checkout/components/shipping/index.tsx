@@ -58,7 +58,6 @@ function formatAddress(address?: HttpTypes.StoreCartAddress) {
   return ret
 }
 
-/** The radio marker. A circle, because a radio is a radio. */
 const RadioMark = ({ checked }: { checked: boolean }) => (
   <span
     aria-hidden="true"
@@ -78,11 +77,6 @@ const optionClass = (selected: boolean, disabled?: boolean) =>
     disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:border-ink"
   )
 
-/**
- * Step 3: how it gets there. The chosen method is written to the cart as soon as
- * it is picked, so leaving the step and coming back shows the same selection,
- * and the price shown is the one the store would charge.
- */
 const Shipping = ({ cart, availableShippingMethods, isOpen }: ShippingProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingPrices, setIsLoadingPrices] = useState(true)
@@ -114,7 +108,6 @@ const Shipping = ({ cart, availableShippingMethods, isOpen }: ShippingProps) => 
 
   const hasPickupOptions = !!_pickupMethods?.length
 
-  // Calculated options have no price until the store quotes them for this cart.
   useEffect(() => {
     setIsLoadingPrices(true)
 
@@ -153,7 +146,6 @@ const Shipping = ({ cart, availableShippingMethods, isOpen }: ShippingProps) => 
     }
   }, [_shippingMethods, cart.id])
 
-  // A cart that already has a pickup method selected opens on that choice.
   useEffect(() => {
     if (_pickupMethods?.find((m) => m.id === shippingMethodId)) {
       setShowPickupOptions(PICKUP_OPTION_ON)
@@ -182,8 +174,6 @@ const Shipping = ({ cart, availableShippingMethods, isOpen }: ShippingProps) => 
       shippingMethodId: id,
     })
 
-    // Put the selection back where it was if the store rejected it, so what the
-    // form shows is what the cart holds.
     if (!result.ok) {
       setShippingMethodId(previousId)
       setError(result.message)

@@ -25,11 +25,8 @@ type RemovedWishlistItem = {
 }
 
 /**
- * Reads the row the customer asked to remove, filtered by its owner.
- *
- * The `customer_id` in the filter is the authorization: an id that belongs to
- * somebody else finds nothing and is answered as "not found" rather than
- * deleted, so one customer cannot empty another's wishlist by guessing ids.
+ * Reads the row filtered by owner, which is the authorisation: a foreign id is a
+ * 404, not a delete.
  */
 const resolveWishlistItemStep = createStep(
   "resolve-wishlist-item",
@@ -79,8 +76,7 @@ const deleteWishlistItemStep = createStep(
     const wishlistService: WishlistModuleService =
       container.resolve(WISHLIST_MODULE)
 
-    // The row keeps its id on the way back so the link rows the compensation
-    // below re-creates still point at it.
+    // The row keeps its id, so the link rows still point at it.
     await wishlistService.createWishlistItems({
       id: item.id,
       customer_id: item.customer_id,
@@ -95,11 +91,8 @@ export const removeWishlistItemWorkflow = createWorkflow(
   (input: RemoveWishlistItemInput) => {
     const item = resolveWishlistItemStep(input)
 
-    /*
-     * The link rows go first so nothing is left pointing at a deleted wishlist
-     * item; `removeRemoteLinkStep` puts them back if a later step fails, and
-     * compensations run in reverse, so the row is re-created before its links.
-     */
+    // Links go first so nothing points at a deleted row. Compensations run in
+    // reverse, so the row comes back before its links.
     const links = transform({ item }, (data): LinkDefinition[] => [
       {
         [Modules.CUSTOMER]: { customer_id: data.item.customer_id },

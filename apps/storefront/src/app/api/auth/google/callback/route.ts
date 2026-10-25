@@ -2,17 +2,10 @@ import { completeGoogleSignIn, type GoogleFailure } from "@lib/data/google-auth"
 import { NextRequest, NextResponse } from "next/server"
 
 /**
- * Where Google sends the customer back to, and where the sign-in is finished.
- *
- * It lives under `/api` for two reasons: `middleware.ts` does not run there, so
- * the route is reachable while signed out — which is the whole point — and its
- * URL carries no country code, so the same redirect URI works for every region
- * and is the one URL to allow-list on the OAuth client. The country is put back
- * by the middleware on the way out.
- *
- * The outcome is reported as a redirect to the sign-in page rather than a page
- * of its own: the customer's next move is always to try again, sign in with
- * their password, or nothing.
+ * Where Google returns and the sign-in finishes. Under /api because middleware
+ * does not run there (the route must work signed out) and the URL carries no
+ * country code, so one redirect URI serves every region. Failures redirect back
+ * to the sign-in page.
  */
 const FAILURE_PARAM: Record<GoogleFailure, string> = {
   cancelled: "google_cancelled",
@@ -32,11 +25,8 @@ export async function GET(request: NextRequest) {
   const code = params.get("code")
   const state = params.get("state")
 
-  /*
-   * Google answers a refusal itself, with `error=access_denied` and no code —
-   * the customer closing the consent screen is the common case, not a failure of
-   * ours, so it reads as "cancelled" rather than as something broken.
-   */
+  // No code means the customer closed the consent screen, which is a cancel,
+  // not a failure.
   if (!code || !state) {
     return backToSignIn(request, FAILURE_PARAM.cancelled)
   }

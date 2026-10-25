@@ -88,10 +88,7 @@ export default async function PaginatedProducts({
 
   return (
     <>
-      {/*
-       * A card's title is an `h3` (the plate's own level). Without this
-       * section heading the page went `h1` → `h3` on a category or collection.
-       */}
+      {/* Card titles are h3, so the listing needs an h2 in between. */}
       <h2 className="sr-only">Products</h2>
       <ul
         className="grid w-full grid-cols-2 gap-x-4 gap-y-8 small:grid-cols-3 small:gap-x-6"

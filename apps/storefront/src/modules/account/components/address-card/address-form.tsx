@@ -104,7 +104,7 @@ const FIELDS: {
 ]
 
 type AddressFormProps = {
-  /** Keeps add and edit fields from sharing ids when both dialogs exist. */
+  /* Keeps add and edit field ids apart when both dialogs exist. */
   idPrefix: "add" | "edit"
   values: AddressFormValues
   errors: Record<string, string>
@@ -114,11 +114,7 @@ type AddressFormProps = {
   region: HttpTypes.StoreRegion
 }
 
-/**
- * The address inputs. Values are held by the caller so a rejected submit keeps
- * what was typed: React resets an uncontrolled field once a form action runs.
- * Fields are a single column so the modal stays readable on a phone.
- */
+/* Values are held by the caller: React resets an uncontrolled field after a form action. */
 const AddressForm = ({
   idPrefix,
   values,

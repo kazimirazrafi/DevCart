@@ -9,11 +9,6 @@ type RelatedProductsProps = {
   countryCode: string
 }
 
-/**
- * The rail under the product page. Which products belong there, and why, is
- * `listRelatedProducts`'s decision (category, then collection, then a fill so
- * the spec's minimum of four is met); this only renders them.
- */
 export default async function RelatedProducts({
   product,
   countryCode,

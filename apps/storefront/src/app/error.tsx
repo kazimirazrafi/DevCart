@@ -3,11 +3,8 @@
 import RouteError from "@modules/common/components/route-error"
 
 /**
- * The last boundary before Next's own. It catches what the group boundaries
- * cannot: a failure in the layouts they sit inside (the nav's own reads, for
- * one), which unmounts those layouts — hence no nav or footer, and no country
- * code to build a link from. It still renders inside the root layout, so the
- * fonts and the design tokens are there.
+ * The last boundary before Next's own: it catches failures in the layouts the
+ * group boundaries sit inside, so there is no nav, footer or country code here.
  */
 export default function RootError({
   error,

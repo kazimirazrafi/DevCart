@@ -24,12 +24,8 @@ type SubscribeCompensation = {
 }
 
 /**
- * Puts an address on the list, or recognizes that it is already there.
- *
- * The read-then-write is not atomic, so two requests for the same address can
- * both see nothing and both try to insert. The unique index is the rule, not the
- * read: the loser's insert fails, it reads the winner's row, and the visitor is
- * told they are subscribed either way. Subscribing twice is not an error.
+ * Puts an address on the list or finds it there. The read-then-write can race;
+ * the unique index decides, and the loser reads the winner's row.
  */
 const subscribeStep = createStep(
   "subscribe",
@@ -102,13 +98,8 @@ type WelcomeInput = {
 }
 
 /**
- * The welcome email, through the notification module — which is Resend once
- * `RESEND_API_KEY` and `RESEND_FROM` are set, and the local provider otherwise.
- *
- * A failed email must not lose the subscriber: the row is already written, and
- * a provider outage at this moment is not something the visitor can act on. It
- * is logged and the signup still succeeds. A repeat signup sends nothing, so
- * subscribing twice cannot become two emails.
+ * The welcome email. A provider failure is logged and the signup still succeeds,
+ * and a repeat signup sends nothing.
  */
 const sendWelcomeStep = createStep(
   "send-welcome",

@@ -1,11 +1,7 @@
 import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
 import { Rule } from "@modules/design-system"
 
-/**
- * The account area while it resolves who is asking. It is reached signed in and
- * signed out, so it is the one shape both have: a heading, a rule and a small
- * form's worth of fields.
- */
+/** The account area while it resolves who is asking: one shape for both states. */
 export default function AccountLoading() {
   return (
     <div className="flex w-full flex-col gap-6" data-testid="account-loader">

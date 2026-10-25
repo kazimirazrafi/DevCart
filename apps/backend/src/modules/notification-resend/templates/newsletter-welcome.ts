@@ -7,11 +7,7 @@ export type NewsletterWelcomeData = {
   supportEmail?: string
 }
 
-/**
- * The one email a mailing-list signup produces. It confirms the address is on
- * the list, says how often the list is written to, and gives a way out — an
- * address that cannot be removed is not a list anyone should be put on.
- */
+/** The mailing-list signup email, with the way out included. */
 export const newsletterWelcome = (data: NewsletterWelcomeData): EmailContent => {
   const storeName = data.storeName ?? "DevCart"
   const supportEmail = data.supportEmail ?? "support@kazimirazrafi.dev"

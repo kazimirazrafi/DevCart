@@ -2,13 +2,8 @@ import { MetadataRoute } from "next"
 
 import { absoluteUrl } from "@lib/util/seo"
 
-/*
- * Everything a customer can browse is fair game. The disallowed paths are the
- * ones that only make sense for one visitor — their account, cart, checkout,
- * order and the token-carrying pages — and the storefront's own API routes.
- * Each of those pages also answers `noindex` in its metadata, so a crawler that
- * arrives from a link rather than the sitemap still leaves it alone.
- */
+/* Per-visitor pages (account, cart, checkout, order, token links) and the API
+ * routes are disallowed; those pages also answer noindex in their metadata. */
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
@@ -28,8 +23,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    // No `host`: it is a Yandex-era directive that wants a bare hostname and
-    // the sitemap line already tells every crawler where the site lives.
+    // No `host`: the sitemap line already names where the site lives.
     sitemap: absoluteUrl("/sitemap.xml"),
   }
 }

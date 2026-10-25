@@ -17,7 +17,6 @@ import ErrorMessage from "../error-message"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
-  /** Why the customer came back from a redirect-based payment, if they did. */
   returnedFailure?: PaymentFailure | null
   "data-testid": string
 }
@@ -59,12 +58,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   }
 }
 
-/**
- * What the button is doing, said in words as well as in the spinner. `pending`
- * is its own state because it is the one case where retrying is the wrong
- * action: the bank has the payment and asking for a card again could charge
- * twice.
- */
+// `pending` is its own state: asking for a card again could charge twice.
 type Phase = "idle" | "confirming" | "placing" | "pending"
 
 const labelOf = (phase: Phase, payLabel: string) => {
@@ -102,24 +96,13 @@ const StripePaymentButton = ({
   )
   const [failure, setFailure] = useState<PaymentFailure | null>(null)
 
-  /*
-   * A ref, not the state below: `disabled` only applies on the next render, so
-   * a double click can land two submissions in the same tick. Stripe refuses a
-   * second confirmation of the same intent, and Medusa locks the cart while it
-   * completes, but two cart completions from one click still race for that
-   * lock and one of them shows the customer a misleading failure.
-   */
+  // A ref, not state: `disabled` only applies on the next render.
   const submitting = useRef(false)
 
   const stripe = useStripe()
   const elements = useElements()
   const { countryCode } = useParams()
 
-  /*
-   * The button names the amount because this is the click that takes it. A
-   * button that says "Place order" while charging a card leaves the customer
-   * guessing whether the money moved.
-   */
   const payLabel = `Pay ${totalOf(cart)} and place order`
 
   const submitOrder = async () => {
@@ -127,11 +110,7 @@ const StripePaymentButton = ({
 
     const result = await placeOrder()
 
-    /*
-     * A placed order redirects out of `placeOrder`, so reaching here means no
-     * order exists. Keep the button usable unless the payment is genuinely
-     * mid-flight, in which case the next press must check rather than pay.
-     */
+    // A placed order redirects, so reaching here means no order exists.
     if (!result.ok) {
       submitting.current = false
       setPhase(result.kind === "payment_pending" ? "pending" : "idle")
@@ -174,23 +153,10 @@ const StripePaymentButton = ({
             },
           },
         },
-        /*
-         * Leave the site only when the selected method actually requires it, so
-         * card payments still complete inline. A card that needs 3-D Secure
-         * shows Stripe's modal here; if the bank redirects instead, the return
-         * page finishes the order server-side.
-         */
         redirect: "if_required",
       })
     } catch (cause) {
-      /*
-       * A declined card is *returned* by Stripe, not thrown, so it is handled
-       * below with Stripe's own code. What lands here is a failure of the
-       * integration itself — the payment element is not mounted, the key does
-       * not match, the network dropped mid-call. It used to escape as an
-       * unhandled rejection: the button sat spinning, nothing was said and
-       * there was no way to retry.
-       */
+      // A declined card is returned, not thrown: this is an integration failure.
       console.error("Stripe confirmPayment failed", cause)
       submitting.current = false
       setPhase("idle")
@@ -301,8 +267,6 @@ const ManualTestPaymentButton = ({
         {submitting ? "Placing order…" : "Place order"}
       </Button>
 
-      {/* Cash on delivery takes no money here, and the receipt that follows
-          says the same thing, so the two cannot disagree. */}
       <p className="max-w-prose text-small text-ink/75">
         You pay {totalOf(cart)} to the courier when your order arrives.
       </p>

@@ -24,12 +24,7 @@ type StoreHitsProps = {
   currencyCode: string
 }
 
-/**
- * How long the grid waits for a first response before calling it a failure. A
- * search that only stalls keeps InstantSearch in a loading state with no error,
- * so the timeout is what turns "nothing ever arrives" into something the
- * customer can act on.
- */
+/* A stalled search never errors, so the grid times out instead. */
 const RESPONSE_TIMEOUT_MS = 10_000
 
 const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
@@ -50,12 +45,7 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
     }
   }, [isSearching, currentPage, refinementKey])
 
-  /*
-   * Time the wait from when a query starts, not from the last status change: a
-   * client that keeps retrying a dead endpoint keeps emitting status updates,
-   * and a resettable timeout would never fire. Answering the query clears the
-   * guard so the next failure gets its own countdown.
-   */
+  /* Counted from when the query starts, so retries cannot postpone it. */
   useEffect(() => {
     if (!hasNoResultsYet) {
       setTimedOut(false)
@@ -77,15 +67,7 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
     refinementKey === settled.current.refinementKey &&
     currentPage !== settled.current.page
 
-  /*
-   * The grid is the tallest thing on the listing, so whichever state paints
-   * first decides where the footer sits. A response has arrived and is empty
-   * only when `isSettled` says so; every other empty grid is still waiting for
-   * one. That distinction has to hold identically on the server and on the
-   * client's first render, or hydration swaps the server's skeleton for the
-   * one-line "no products" message and the twelve plates that follow move the
-   * page by more than a screen.
-   */
+  /* Must be identical on the server and the first client render, or hydration shifts the page. */
   const settledEmpty = isSettled && !items.length
   const showSkeleton =
     !timedOut &&
@@ -124,7 +106,7 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
         </p>
       ) : (
         <>
-          {/* Card titles are `h3`; the listing's own `h1` needs a level between. */}
+          {/* Card titles are h3; the listing's own h1 needs a level between. */}
           <h2 className="sr-only">Products</h2>
           <ul
             className="grid w-full grid-cols-2 gap-x-4 gap-y-8 small:grid-cols-3 small:gap-x-6"
@@ -139,15 +121,7 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
                 href={`/products/${hit.handle}`}
                 title={hit.title ?? "Untitled product"}
                 thumbnail={hit.thumbnail}
-                /*
-                 * The first row's images are the page's largest paint. Without
-                 * `priority` next/image marks every plate `loading="lazy"`, and
-                 * the browser's preload scanner skips them — under Lighthouse's
-                 * simulated connection that delays the first image to ~2.9 s
-                 * even though the markup is in the server HTML. Eager, high
-                 * priority on the first four (two rows on a phone, a row and a
-                 * bit on a desktop) buys the largest paint back.
-                 */
+                /* The first row is the largest paint; lazy loading delays it. */
                 priority={index === 0}
                 price={<HitPrice hit={hit} currencyCode={currencyCode} />}
               />

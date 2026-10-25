@@ -19,19 +19,10 @@ type ItemProps = {
   item: HttpTypes.StoreCartLineItem
   type?: "full" | "preview"
   currencyCode: string
-  /**
-   * Units of this line's variant still buyable, or `null` when stock is not a
-   * limit. `undefined` means the caller did not ask (see `remainingUnits`).
-   */
   availableUnits?: number | null
 }
 
-/*
- * The most units one line may hold. Stock can lower this but never raise it:
- * a well-stocked catalogue reports hundreds of units, and a picker with
- * hundreds of entries is not a quantity control. Ten also matches what the
- * starter offered, so nothing that worked before stops working.
- */
+// A picker with hundreds of entries is not a quantity control.
 const MAX_LINE_QUANTITY = 10
 
 const Item = ({
@@ -45,11 +36,7 @@ const Item = ({
   const [pendingQuantity, setPendingQuantity] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  /*
-   * The server's quantity is the truth. A confirmed change comes back as a new
-   * `item.quantity`, which drops the optimistic value; a rejected one never
-   * does, so the select snaps back to what the cart actually holds.
-   */
+  // A confirmed change returns a new quantity and clears the optimistic value.
   useEffect(() => {
     setPendingQuantity(null)
   }, [item.quantity])
@@ -64,11 +51,7 @@ const Item = ({
   const exceedsStock = available !== null && item.quantity > available
 
   const changeQuantity = async (nextQuantity: number) => {
-    /*
-     * A select can hand back an empty value if it is asked for an option that
-     * does not exist, and the API reads quantity 0 as "delete this line". Only
-     * a real, positive quantity is worth sending.
-     */
+    // The API reads quantity 0 as "delete this line".
     if (!Number.isInteger(nextQuantity) || nextQuantity < 1) {
       return
     }
@@ -91,13 +74,6 @@ const Item = ({
         setError(result.message)
         setPendingQuantity(null)
       } else {
-        /*
-         * Ask for the route again. The action already revalidated the cart and
-         * usually repaints it, but that repaint is not guaranteed to land
-         * (measured: roughly one change in ten left the row showing the previous
-         * quantity and money), so the totals and the stock warnings are
-         * refreshed explicitly.
-         */
         router.refresh()
       }
     } catch (cause) {

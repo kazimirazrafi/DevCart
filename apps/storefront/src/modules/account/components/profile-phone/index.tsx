@@ -19,8 +19,7 @@ type MyInformationProps = {
 const ProfilePhone: React.FC<MyInformationProps> = ({ customer }) => {
   const router = useRouter()
   const [successState, setSuccessState] = useState(false)
-  // Controlled for the same reason as the name fields: a rejected number has to
-  // stay in front of the customer next to its message.
+  // Controlled so a rejected number stays next to its message.
   const [phone, setPhone] = useState(customer.phone ?? "")
 
   const [state, formAction] = useActionState<

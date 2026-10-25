@@ -11,20 +11,11 @@ type Props = {
   token: string
 }
 
-/**
- * The page the emailed link opens. The token is carried in the URL (Medusa
- * signed it for this purpose and expires it after fifteen minutes) and posted
- * back with the new password; a second submission of the same link is refused
- * by the API because the token is consumed on first use.
- */
+/* The emailed token is carried in the URL, works once and expires in 15 minutes. */
 const ResetPassword = ({ token }: Props) => {
   const [message, formAction] = useActionState(resetPassword, null)
 
-  /*
-   * Controlled for the same reason as every other rejected form: the fields
-   * have to survive the error, because the customer's next move is to correct
-   * one of them.
-   */
+  /* Controlled so the fields survive a rejected submit. */
   const [password, setPassword] = useState("")
   const [confirmation, setConfirmation] = useState("")
 

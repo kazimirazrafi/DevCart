@@ -6,12 +6,7 @@ const Bar = ({ className }: { className: string }) => (
   <div className={`animate-pulse bg-ink/10 motion-reduce:animate-none ${className}`} />
 )
 
-/**
- * A product page while its product is on the way: the gallery column, the
- * buying column (title, price, one row of option chips per option, the add
- * button) and the related strip below. Same columns as the real page, so the
- * layout settles instead of jumping when the product arrives.
- */
+/* Same columns as the real product page, so the layout settles in place. */
 const SkeletonProductPage = () => {
   return (
     <div

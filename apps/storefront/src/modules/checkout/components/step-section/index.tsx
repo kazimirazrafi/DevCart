@@ -7,7 +7,6 @@ import type { CheckoutStepId } from "../../lib/steps"
 
 type StepSectionProps = {
   id: CheckoutStepId
-  /** Position in the sequence, from one. */
   number: number
   title: string
   isOpen: boolean
@@ -15,12 +14,6 @@ type StepSectionProps = {
   children: ReactNode
 }
 
-/**
- * One step of the checkout: a numbered heading, the step's own content, and a
- * closing rule. Every step is built from this shell so the chrome cannot drift
- * between them, and so "closed" always means the same thing — the step has been
- * answered and can be reopened by clicking it in the stepper or its Edit link.
- */
 const StepSection = ({
   id,
   number,

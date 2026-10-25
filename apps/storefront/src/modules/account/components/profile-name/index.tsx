@@ -20,11 +20,7 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
   const router = useRouter()
   const [successState, setSuccessState] = useState(false)
 
-  /*
-   * Controlled, because React resets an uncontrolled field once a form action
-   * runs (the defect K2 found on the checkout email): a rejected name came back
-   * empty, so the message pointed at a field the customer could no longer see.
-   */
+  /* Controlled so a rejected name keeps what was typed. */
   const [values, setValues] = useState({
     first_name: customer.first_name ?? "",
     last_name: customer.last_name ?? "",
@@ -42,8 +38,7 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
 
     setSuccessState(state.ok)
 
-    // Repaint the name the page reads, so the row and the fields agree after a
-    // save without waiting for a full reload.
+    // Refresh so the row above the edit form shows the saved name.
     if (state.ok) {
       router.refresh()
     }

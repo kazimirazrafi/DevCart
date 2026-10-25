@@ -7,10 +7,7 @@ import { removeWishlistItemWorkflow } from "../../../../workflows/remove-wishlis
 
 /**
  * DELETE /store/wishlist/:id
- *
- * Removes one save. The workflow scopes the row to the signed-in customer, so
- * somebody else's id answers `404` rather than deleting it; 204 on success,
- * with no body, because there is nothing left to return.
+ * The workflow scopes the row to the customer, so a foreign id answers 404.
  */
 export async function DELETE(
   req: AuthenticatedMedusaRequest,

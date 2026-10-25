@@ -62,11 +62,7 @@ const SearchResults = ({ onNavigate }: { onNavigate: () => void }) => {
         />
       </div>
 
-      {/*
-       * The results replace the panel without a navigation, so a screen reader
-       * has nothing to follow. One polite status line says what happened: how
-       * many products matched, that it is still searching, or that it failed.
-       */}
+      {/* Results change without navigation, so the count is announced here. */}
       <p
         role="status"
         aria-live="polite"
@@ -131,12 +127,6 @@ const SearchResults = ({ onNavigate }: { onNavigate: () => void }) => {
   )
 }
 
-/**
- * Everything the search drawer does once it is open: the InstantSearch state,
- * the client that talks to the search service, and the results list. Nothing
- * here is useful before a visitor opens the drawer, which is why this file is
- * loaded on demand by `Search` in ./index.tsx rather than imported directly.
- */
 const SearchPanel = ({ onNavigate }: { onNavigate: () => void }) => {
   return (
     <InstantSearch

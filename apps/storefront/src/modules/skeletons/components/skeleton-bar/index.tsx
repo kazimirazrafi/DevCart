@@ -1,11 +1,6 @@
 import clsx from "clsx"
 
-/**
- * One pulsing bar of ink. Every skeleton in this folder is built from these, so
- * the placeholders share a single width and rhythm instead of each drawing its
- * own grey box. Motion is off for anyone who asked for reduced motion
- * (docs/DESIGN.md §5.1).
- */
+/* Every skeleton in this folder is built from these bars. */
 const SkeletonBar = ({ className }: { className?: string }) => (
   <div
     aria-hidden="true"

@@ -29,11 +29,8 @@ export async function GET(req: NextRequest) {
   const rejected = () =>
     NextResponse.redirect(`${origin}${prefix}/cart?error=payment_failed`)
 
-  /*
-   * Every outcome comes back to the payment step with a code, because the
-   * customer left before Stripe could tell the browser anything. The step is
-   * where a card can be retried, and the notice there says why they are back.
-   */
+  // Every outcome returns to the payment step with a code, since the browser
+  // never saw the result.
   const backToPayment = (code: string, extra?: Record<string, string>) => {
     const params = new URLSearchParams({
       step: "payment",
@@ -71,19 +68,14 @@ export async function GET(req: NextRequest) {
 
   await setCartId(cartId)
 
-  // The customer backed out or the bank declined. Stripe puts the PaymentIntent
-  // back into `requires_payment_method`, so the Payment Element can mount
-  // against it again — return to the payment step and let them retry.
+  // Backed out or declined: Stripe resets the intent, so the payment step can
+  // mount again and the customer can retry.
   if (redirectStatus === "failed") {
     return backToPayment("declined")
   }
 
-  /*
-   * Stripe says the off-site authorization finished, which is not the same as
-   * the order existing: `placeOrder` completes the cart on the server, where
-   * Medusa confirms the payment with Stripe before it builds the order, and
-   * only a real order redirects to its confirmation page.
-   */
+  // An authorised payment is not an order yet: placeOrder completes the cart on
+  // the server, and only a real order redirects to its confirmation page.
   const placed = await placeOrder(cartId)
 
   if (!placed.ok) {

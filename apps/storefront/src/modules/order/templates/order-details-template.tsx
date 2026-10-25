@@ -13,12 +13,6 @@ type OrderDetailsTemplateProps = {
   order: HttpTypes.StoreOrder
 }
 
-/**
- * The account's view of an order: the same receipt the confirmation page shows,
- * reached later. The order number is the headline fact in mono, then what was
- * bought and what it cost, then delivery and payment — all read from the order
- * the Store API returned rather than replayed from the cart (K5).
- */
 const OrderDetailsTemplate = ({ order }: OrderDetailsTemplateProps) => {
   return (
     <div

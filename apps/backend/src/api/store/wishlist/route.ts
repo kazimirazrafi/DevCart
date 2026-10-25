@@ -10,16 +10,8 @@ import type { StoreAddWishlistItemBody } from "./validators"
 
 /**
  * GET /store/wishlist
- *
- * The signed-in customer's saves, newest first. Both routes here are behind
- * the `authenticate` middleware in `src/api/middlewares.ts`, so `actor_id` is
- * the customer's id and the query needs no separate ownership filter: the list
- * is always "mine".
- *
- * The rows carry ids only. Prices are a region calculation and a product page
- * reads them with the region's context, so the storefront loads the products a
- * second time through the product endpoints rather than this route inventing a
- * price format of its own.
+ * The signed-in customer's saves, newest first, as ids only: prices depend on
+ * the region, so the storefront reads products through the product endpoints.
  */
 export async function GET(
   req: AuthenticatedMedusaRequest,
@@ -47,10 +39,7 @@ export async function GET(
 
 /**
  * POST /store/wishlist
- *
- * Saves a product for the signed-in customer. Saving something already saved
- * is not an error — the heart is a toggle and the answer has to be the row that
- * holds the save — so the first save is `201` and a repeat is `200`.
+ * A repeat save is not an error: 201 the first time, 200 after that.
  */
 export async function POST(
   req: AuthenticatedMedusaRequest<StoreAddWishlistItemBody>,

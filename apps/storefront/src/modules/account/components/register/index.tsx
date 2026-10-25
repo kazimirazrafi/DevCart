@@ -13,7 +13,7 @@ type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
 }
 
-/** See the note in the sign-in form: only a path on this site is followed. */
+/* Only a path on this site is followed after sign-in. */
 const samePath = (value: string | null) =>
   value && value.startsWith("/") && !value.startsWith("//") ? value : null
 
@@ -22,12 +22,7 @@ const Register = ({ setCurrentView }: Props) => {
   const router = useRouter()
   const redirectTo = samePath(useSearchParams().get("redirect"))
 
-  /*
-   * Controlled on purpose, and for the same reason as the sign-in form: a
-   * rejected signup would otherwise come back with every field the customer
-   * just filled in wiped out. The email matters most — the whole point of a
-   * rejection here is that the address is already taken.
-   */
+  /* Controlled so a rejected signup keeps the values that were typed. */
   const [values, setValues] = useState({
     first_name: "",
     last_name: "",
@@ -39,11 +34,7 @@ const Register = ({ setCurrentView }: Props) => {
   const setValue = (name: keyof typeof values) => (value: string) =>
     setValues((current) => ({ ...current, [name]: value }))
 
-  /*
-   * Signing up signs the customer in (the backend only defers that when it
-   * requires email verification), so the page has to be asked for again to swap
-   * the form for the account. A `?redirect=` is followed by the action itself.
-   */
+  /* Signing up signs the customer in, so refetch the page to show the account. */
   useEffect(() => {
     if (message?.state === "success") {
       router.refresh()
@@ -97,7 +88,6 @@ const Register = ({ setCurrentView }: Props) => {
       </div>
 
       <form className="flex flex-col gap-5" action={formAction}>
-        {/* The action needs it to return the customer to the page they came from. */}
         <input type="hidden" name="redirect" value={redirectTo ?? ""} />
 
         <div className="grid grid-cols-1 gap-5 small:grid-cols-2">
@@ -162,11 +152,7 @@ const Register = ({ setCurrentView }: Props) => {
         />
 
         <div>
-          {/*
-           * Not `register-button`: the sign-in page's "Create an account"
-           * switch already owns that id, and two elements answering to one test
-           * id are a trap for whoever drives this next.
-           */}
+          {/* Distinct from the sign-in page's create-account switch. */}
           <SubmitButton
             size="large"
             className="w-full"

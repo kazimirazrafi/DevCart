@@ -1,10 +1,6 @@
 import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
 
-/**
- * A cart line while the cart is on its way. A list item, not a table row: the
- * cart's own lines are `<li>` inside a `<ul>` (the checkout summary used to put
- * one inside a `<tbody>` and cost every page a client re-render — see K2).
- */
+/* A list item, matching the real cart's `<li>` inside a `<ul>`. */
 const SkeletonCartItem = () => {
   return (
     <li

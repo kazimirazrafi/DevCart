@@ -18,27 +18,16 @@ import {
   updateProductsWorkflow,
 } from "@medusajs/medusa/core-flows"
 
+import { detailsForProduct } from "./lib/product-details"
+
 /**
- * Fills the shop with a department-store catalogue: 194 products across 24
- * leaf categories in 8 departments, each published, priced in USD and EUR, in
- * the store's sales channel, with a shipping profile and stock at the
- * warehouse — so a fresh install has a shop that lists, filters, opens product
- * pages and can be checked out end to end.
+ * Seeds the department-store catalogue: 194 products across 24 leaf categories
+ * in 8 departments, published, priced in USD and EUR, in the store's channel,
+ * with stock at the warehouse.
  *
- * The product data (titles, descriptions, brands, prices, ratings, photography)
- * is vendored in `data/storefront-catalogue.json`, so the run needs no network
- * and produces the same catalogue every time.
- *
- * Run it from `apps/backend`, after emptying the catalogue:
- *
- * ```bash
- * pnpm run reset-catalog
- * pnpm run seed-catalogue
- * ```
- *
- * Re-running it skips products that already exist by handle, and only creates
- * the inventory levels that are missing, so it can top up a database that was
- * emptied by hand.
+ * Data comes from data/storefront-catalogue.json, so the run needs no network.
+ * Re-running skips products whose handle exists and only fills in missing
+ * inventory levels.
  */
 
 type CatalogueProduct = {
@@ -111,6 +100,7 @@ const DEPARTMENTS: {
       { key: "mens-shirts", name: "Shirts", handle: "mens-shirts" },
       { key: "mens-shoes", name: "Men's Shoes", handle: "mens-shoes" },
       { key: "mens-watches", name: "Men's Watches", handle: "mens-watches" },
+      { key: "sunglasses", name: "Sunglasses", handle: "sunglasses" },
     ],
   },
   {
@@ -178,8 +168,7 @@ const COLLECTIONS: { title: string; handle: string; matches: (p: CatalogueProduc
 const SIZED_CATEGORIES = ["mens-shirts", "tops", "womens-dresses"]
 const SHOE_CATEGORIES = ["mens-shoes", "womens-shoes"]
 
-/** The currencies every price is written in: the store's own region plus EUR,
- * which the search index also prices (see `src/search/helpers/pricing.ts`). */
+/** Currencies every price is written in; the search index prices EUR too. */
 const CURRENCIES = [
   { code: "usd", rate: 1 },
   { code: "eur", rate: 0.92 },
@@ -187,6 +176,10 @@ const CURRENCIES = [
 
 /** Products created per workflow run, so one bad row cannot roll back the shop. */
 const BATCH_SIZE = 10
+
+/** Marks this script's own details, so a re-run refreshes them and never
+ * touches admin-written copy. */
+const DETAILS_SOURCE = "seed"
 
 type SeedContext = {
   container: ExecArgs["container"]
@@ -239,6 +232,7 @@ export default async function seedCatalogue({ container }: ExecArgs) {
   const refs = await ensureReferenceData(ctx, shippingProfile.id)
   await createProducts(ctx, refs, salesChannelId)
   await ensureDepartmentLinks(ctx, refs)
+  await ensureProductDetails(ctx)
   await ensureInventoryLevels(ctx, stockLocationId)
   await reindexSearch(ctx)
 
@@ -528,6 +522,10 @@ async function createProducts(
       sales_channels: [{ id: salesChannelId }],
       metadata: {
         brand: item.brand,
+        // The long-form band under the photos. Written from the product's own
+        // facts, so the demo shop opens with a page that reads like a shop's.
+        details: detailsForProduct(item),
+        details_source: DETAILS_SOURCE,
         rating: item.rating,
         review_count: item.reviewCount,
         discount_percentage: item.discountPercentage,
@@ -565,9 +563,71 @@ async function createProducts(
 }
 
 /**
- * Adds the department to products that only carry their leaf category, which
- * is what a re-run over a catalogue seeded by an older version finds.
+ * Writes details for products seeded before it existed and refreshes its own
+ * earlier copy. Admin-written details are left alone, which the details_source
+ * marker distinguishes. Products not in the catalogue are skipped.
  */
+async function ensureProductDetails(ctx: SeedContext) {
+  const { data: products } = await ctx.query.graph({
+    entity: "product",
+    fields: ["id", "handle", "metadata"],
+  })
+
+  const byHandle = new Map(
+    (products as {
+      id: string
+      handle: string
+      metadata?: Record<string, unknown> | null
+    }[]).map((product) => [product.handle, product])
+  )
+
+  const repairs: { id: string; metadata: Record<string, unknown> }[] = []
+
+  for (const item of CATALOGUE) {
+    const product = byHandle.get(item.handle)
+
+    if (!product) {
+      continue
+    }
+
+    const current = product.metadata?.details
+    const written = product.metadata?.details_source === DETAILS_SOURCE
+
+    if (typeof current === "string" && current.trim() && !written) {
+      continue
+    }
+
+    const details = detailsForProduct(item)
+
+    if (current === details) {
+      continue
+    }
+
+    repairs.push({
+      id: product.id,
+      metadata: {
+        ...(product.metadata ?? {}),
+        details,
+        details_source: DETAILS_SOURCE,
+      },
+    })
+  }
+
+  if (!repairs.length) {
+    ctx.logger.info("[seed-catalogue] every product already has details")
+    return
+  }
+
+  await updateProductsWorkflow(ctx.container).run({
+    input: { products: repairs },
+  })
+
+  ctx.logger.info(
+    `[seed-catalogue] wrote product details for ${repairs.length} product(s)`
+  )
+}
+
+/** Adds the department to products that only carry their leaf category. */
 async function ensureDepartmentLinks(ctx: SeedContext, refs: Refs) {
   const { data: products } = await ctx.query.graph({
     entity: "product",
@@ -681,12 +741,8 @@ async function ensureInventoryLevels(ctx: SeedContext, stockLocationId: string) 
   )
 }
 
-/**
- * The storefront listing is served by the product search index, and a
- * short-lived `medusa exec` process can exit before the event bus has ingested
- * the last batch. A full reindex is awaited and also drops anything the reset
- * removed.
- */
+/** A short-lived exec process can exit before the last batch is ingested, so
+ * the reindex is awaited. It also drops products the reset removed. */
 async function reindexSearch(ctx: SeedContext) {
   const search = ctx.container.resolve(Modules.SEARCH)
   const { indexes } = await search.reindex({ index: "product" })

@@ -15,19 +15,9 @@ type ResetPasswordBody = {
 const MIN_PASSWORD_LENGTH = 8
 
 /**
- * Sets a new password from the single-use token in the reset email.
- *
- * Medusa's own `/auth/customer/emailpass/update` stops after the password
- * write: for an address that already had a customer (one created with Google,
- * say) the password ends up on an unlinked auth identity, so signing in with it
- * authenticates nobody. This route verifies the same reset token, then runs a
- * workflow that stores the password and associates the identity with the
- * customer who owns the address — the one moment where reading the inbox has
- * been proven, which is what makes the association safe.
- *
- * The token check mirrors the core update route on purpose: signature and actor
- * type via the framework's own verifier, then the stored token row (consumed by
- * the workflow) for expiry, provider and single use.
+ * Sets a new password from the reset email's token. Medusa's own update route
+ * leaves the new password on an unlinked identity for customers created through
+ * Google, so the workflow here stores it and links the identity to the customer.
  */
 export async function POST(
   req: MedusaRequest<ResetPasswordBody>,

@@ -9,11 +9,6 @@ type OrderCardProps = {
   order: HttpTypes.StoreOrder
 }
 
-/*
- * One order in the history, as a plate: the number, the money and the date are
- * the facts a customer scans for, so they sit in one row; what was bought is a
- * short list below it. No rounding and no shadow, like every other plate.
- */
 const OrderCard = ({ order }: OrderCardProps) => {
   const units =
     order.items?.reduce((total, item) => total + item.quantity, 0) ?? 0

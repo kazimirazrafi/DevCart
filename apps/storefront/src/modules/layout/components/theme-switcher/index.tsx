@@ -2,32 +2,10 @@
 
 import { ComputerDesktop, Moon, Sun } from "@medusajs/icons"
 import clsx from "clsx"
-import { useId, type ElementType } from "react"
+import type { ElementType } from "react"
 
 import useTheme from "@lib/hooks/use-theme"
 import type { ThemePreference } from "@lib/theme"
-
-/*
- * Native radios rather than buttons: a radio group is what this is (one of
- * three, always one chosen), arrow keys move between the options for free, and
- * a screen reader announces "2 of 3" without any role juggling. The inputs are
- * visually hidden and the label carries the look; the focus ring is drawn on the
- * label because the input itself is 1px.
- *
- * The look is the design system's own: hairline segments, the chosen one filled
- * with ink and set in stock, which inverts correctly in dark mode because both
- * are tokens. `on-ink` is for the menu panel, whose ground is the ink itself,
- * so the hairline and the unselected label have to be stock instead.
- *
- * Two shapes of the same control:
- * - `full` — the three words, used in the panel where there is room for them.
- * - `compact` — the same three choices as icons, for the header, which is
- *   where a visitor looks first and where the width is shared with the cart.
- *
- * Both can be on screen at once (the header's and, with the panel open, the
- * panel's), so the radio group's name comes from `useId` rather than being a
- * constant: one name for both would make them a single group with two controls.
- */
 
 type ThemeOption = {
   value: ThemePreference
@@ -56,7 +34,10 @@ const ThemeSwitcher = ({
   testIdPrefix = "theme",
 }: ThemeSwitcherProps) => {
   const { preference, setTheme } = useTheme()
-  const groupName = useId()
+  // Derived from the prefix, not useId: the header's copy and the side menu's
+  // must stay in separate radio groups, and a generated id differed between the
+  // server render and hydration, which React reports as an attribute mismatch.
+  const groupName = `${testIdPrefix}-colour-theme`
   const onInk = tone === "on-ink"
 
   return (
@@ -87,7 +68,6 @@ const ThemeSwitcher = ({
           return (
             <label
               key={option.value}
-              /* The header's copy is icons only, so the word is also a tooltip. */
               title={variant === "compact" ? option.label : undefined}
               className={clsx(
                 "relative flex cursor-pointer items-center border-l py-1.5 text-small font-semibold transition-colors first:border-l-0",

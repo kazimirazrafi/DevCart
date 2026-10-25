@@ -3,11 +3,7 @@
 import clsx from "clsx"
 import { usePagination } from "react-instantsearch"
 
-/*
- * Page controls for the search-driven listing. `usePagination` writes the page
- * into the InstantSearch URL state, so a page is linkable and the back button
- * works. Buttons rather than links because InstantSearch owns the navigation.
- */
+/* usePagination keeps the page in the URL; InstantSearch owns the navigation. */
 const SearchPagination = () => {
   const { pages, currentRefinement, nbPages, refine } = usePagination({
     padding: 2,

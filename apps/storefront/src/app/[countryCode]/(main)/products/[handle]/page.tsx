@@ -13,15 +13,8 @@ type Props = {
 }
 
 /*
- * Rendered per request rather than baked at build time.
- *
- * This page reads the customer's cache id (through the product reads) and the
- * `v_id` search param, so it is dynamic by nature. Prerendering it anyway —
- * the `generateStaticParams` this page used to carry — only baked the products
- * that existed at build time and answered every product added since (an import,
- * a product created in the admin) with a 500: the static route hit a dynamic
- * API and Next raised DYNAMIC_SERVER_USAGE. The reads themselves stay cached, so
- * a repeat view does not re-fetch the catalogue.
+ * Rendered per request: the page reads the cache id cookie and the v_id search
+ * param, and prerendering it breaks for products added after the build.
  */
 export const dynamic = "force-dynamic"
 
@@ -47,12 +40,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { handle } = params
   const region = await getRegion(params.countryCode)
 
-/*
- * Missing region or handle returns plain metadata rather than calling
-   * `notFound()`: a `notFound()` raised while metadata resolves bypasses this
-   * route group's not-found page and renders the root one. The page component
-   * below raises it instead.
-   */
+/* Missing region or handle returns plain metadata; the page component below
+ * raises notFound(), which keeps the 404 inside this route group. */
   if (!region) {
     return notFoundMetadata()
   }
@@ -100,11 +89,7 @@ export default async function ProductPage(props: Props) {
 
   const images = getImagesForVariant(pricedProduct, selectedVariantId)
 
-  /*
-   * The rating a search result shows. The same read feeds the reviews section,
-   * and both are cached for a minute, so an approval in the admin reaches the
-   * product's structured data without a deploy.
-   */
+  // The rating shown in search results; the same read feeds the reviews section.
   const { summary } = await listProductReviews({
     productId: pricedProduct.id,
     limit: 1,

@@ -18,18 +18,9 @@ jest.setTimeout(180 * 1000)
 const SECRET = "integration-test-email-verification-secret-0123456789"
 const PASSWORD = "supersecret"
 
-/*
- * Guest email verification, over HTTP against a booted app.
- *
- * The code is never in a response, so these tests read it where the customer
- * does: the notification the store just composed for that address. The mail
- * provider is pinned to Medusa's local one so nothing leaves the machine — it
- * stores the notification and logs it, which is the same path a real inbox
- * takes, minus delivery.
- *
- * The token the customer keeps after confirming is then spent at the only
- * place that matters: completing the cart.
- */
+/* Guest email verification over HTTP. The code is read from the stored
+ * notification, and the token is spent completing a cart. Uses the local mail
+ * provider, so nothing is delivered. */
 process.env.EMAIL_VERIFICATION_SECRET = SECRET
 // Empty rather than deleted: `loadEnv` skips keys that are already present, so
 // an empty value keeps the Resend provider out of this suite.
@@ -84,10 +75,7 @@ medusaIntegrationTestRunner({
       return data.code
     }
 
-    /**
-     * Clears the resend cooldown, which is otherwise the only way to ask for a
-     * second code inside one test. The limit itself is asserted separately.
-     */
+    /** Clears the resend cooldown; the limit is asserted separately. */
     const clearCooldown = async (email: string) => {
       const [row] = await verificationService().listEmailVerifications({
         email,
@@ -332,7 +320,7 @@ medusaIntegrationTestRunner({
         "x-email-verification-token": confirmed.data.token,
       })
 
-      // The cart is empty, so completion fails for its own reasons — but no
+      // The cart is empty, so completion fails for its own reasons, but no
       // longer at the verification gate, which is what this asserts.
       expect(response.status).not.toBe(403)
       expect(response.data.type).not.toBe("email_verification_required")

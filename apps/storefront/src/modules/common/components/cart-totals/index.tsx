@@ -16,11 +16,6 @@ type CartTotalsProps = {
   }
 }
 
-/**
- * The money breakdown, shared by the cart, checkout and order pages. Amounts are
- * mono so the columns line up down the page — this is machine data, which is
- * exactly what docs/DESIGN.md reserves the mono face for.
- */
 const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
   const {
     currency_code,

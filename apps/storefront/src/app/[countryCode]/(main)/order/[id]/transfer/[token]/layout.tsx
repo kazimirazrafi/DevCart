@@ -1,9 +1,6 @@
 import { Metadata } from "next"
 
-/*
- * All three transfer pages (the form, accept and decline) are reached from a
- * link carrying a one-time token, so none of them may be crawled or followed.
- */
+/* All three transfer pages carry a one-time token, so none may be indexed. */
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }

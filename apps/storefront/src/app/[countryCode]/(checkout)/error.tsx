@@ -2,11 +2,7 @@
 
 import RouteError from "@modules/common/components/route-error"
 
-/**
- * The checkout's own boundary. A failed checkout load is not the moment to
- * suggest browsing the catalogue, so the way out leads back to the cart, which
- * is where everything the customer has entered still lives.
- */
+/** The way out leads back to the cart, where the customer's details still live. */
 export default function CheckoutGroupError({
   error,
   reset,

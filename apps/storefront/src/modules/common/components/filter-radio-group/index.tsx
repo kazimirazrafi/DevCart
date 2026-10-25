@@ -11,11 +11,7 @@ type FilterRadioGroupProps = {
   "data-testid"?: string
 }
 
-/*
- * A titled set of mutually exclusive choices — the listing's sort order. Native
- * radios keep keyboard and screen-reader behaviour, and the selected row is
- * marked with weight as well as colour so it does not rely on either alone.
- */
+// Native radios; the selected row is bold as well as coloured.
 const FilterRadioGroup = ({
   title,
   items,

@@ -36,14 +36,8 @@ type WrittenReviewCompensation = {
 }
 
 /**
- * A review has to be of something real, and a customer gets one per product.
- * Both checks live here rather than in the route because they are the rule,
- * not the transport.
- *
- * A rejected review is the exception to "one": the customer was told no, and
- * leaving them no way to try again would be a dead end. The write step re-opens
- * that row instead of adding a second one, so a customer still holds at most
- * one review per product.
+ * The product must exist and a customer gets one review per product. A rejected
+ * review is re-opened rather than duplicated, so the rule still holds.
  */
 const assertReviewableStep = createStep(
   "assert-reviewable",
@@ -91,17 +85,13 @@ type WriteReviewStepInput = {
   previous: ExistingReview | null
 }
 
-/**
- * Writes the review as `pending`: moderation is what makes it public, so a
- * customer cannot approve their own words.
- */
+/** Written as `pending`: moderation is what makes a review public. */
 const writeReviewStep = createStep(
   "write-review",
   async ({ input, previous }: WriteReviewStepInput, { container }) => {
     const reviewService: ReviewModuleService = container.resolve(REVIEW_MODULE)
 
-    // Trimmed here as well as in the route's schema: the rule is the module's,
-    // not one transport's.
+    // Trimmed here too: the rule belongs to the module, not the transport.
     const title = input.title.trim()
     const body = input.body.trim()
 
@@ -146,8 +136,7 @@ const writeReviewStep = createStep(
       return
     }
 
-    // Re-opening a rejected review is undone by putting the row back exactly as
-    // it was, so a failed run leaves no half-written review behind.
+    // Put the rejected row back exactly as it was.
     if (compensation.previous) {
       await reviewService.updateReviews({
         id: compensation.previous.id,
@@ -168,14 +157,8 @@ export const createProductReviewWorkflow = createWorkflow(
       transform({ input, previous }, (data) => data)
     )
 
-    /*
-     * The module's two columns are not enough on their own: the links are what
-     * let a product find its reviews and a review find its author, so they are
-     * written with the review, in the same workflow.
-     *
-     * Re-opening a rejected review already has them, so they are only created
-     * for a genuinely new row.
-     */
+    // Links let a product find its reviews and a review its author. Only a new
+    // row needs them; a re-opened review already has them.
     const links = transform(
       { input, review },
       (data): LinkDefinition[] => [

@@ -15,12 +15,6 @@ type OrderCompletedTemplateProps = {
   order: HttpTypes.StoreOrder
 }
 
-/**
- * What the customer sees immediately after checkout: the order number first,
- * then what was bought, what it cost and where it is going. Everything here
- * reads from the order the Store API returned, so the page is a receipt for
- * what was actually created rather than a replay of the cart.
- */
 export default async function OrderCompletedTemplate({
   order,
 }: OrderCompletedTemplateProps) {
@@ -28,11 +22,6 @@ export default async function OrderCompletedTemplate({
 
   const isOnboarding = cookies.get("_medusa_onboarding")?.value === "true"
 
-  /*
-   * The first thing a customer checks on this page is whether the money moved.
-   * It is answered in the header, from the order's payment status, and again
-   * beside the payment method further down.
-   */
   const payment = paymentSummary(order)
 
   return (

@@ -37,14 +37,8 @@ export default async function Checkout(props: {
     return notFound()
   }
 
-  /*
-   * Whether the contact step is done is not on the cart: a guest's address is
-   * only finished once a code was mailed and typed back, and that proof is a
-   * token in a cookie rather than a column. It is read here, next to the
-   * session, so both halves of "who is checking out" come from one place.
-   * The backend re-checks the token when the cart is completed, so this is the
-   * page's view of the same fact, not the authority.
-   */
+  // A guest's verified address lives in a cookie, not on the cart. The backend
+  // re-checks the token on completion, so this is a view of the fact.
   const access: CheckoutAccess = {
     signedIn: Boolean(customer),
     emailVerified: Boolean(
@@ -54,12 +48,8 @@ export default async function Checkout(props: {
     ),
   }
 
-  /*
-   * The URL names the step; the cart decides whether it is a step the customer
-   * is allowed to be on. A step whose prerequisites are missing sends them back
-   * to the first thing still unfinished rather than rendering a form that
-   * cannot be submitted.
-   */
+  // The URL names the step, the cart decides whether it is reachable; an
+  // unfinished prerequisite redirects to the first thing still missing.
   const requested = searchParams.step
   const currentStep = resolveCheckoutStep(
     cart,
@@ -75,10 +65,7 @@ export default async function Checkout(props: {
   if (currentStep !== requested) {
     const params = new URLSearchParams({ step: currentStep })
 
-    /*
-     * A customer redirected to a step they cannot open has still just come back
-     * from a payment, so the reason survives the bounce.
-     */
+    // A customer bounced between steps has still just returned from a payment.
     if (paymentErrorCode) {
       params.set("payment_error", paymentErrorCode)
     }
@@ -86,11 +73,8 @@ export default async function Checkout(props: {
     redirect(`/${countryCode}/checkout?${params}`)
   }
 
-  /*
-   * The contact step redirects back with what just happened to a code, so the
-   * panel can say "we sent one" instead of guessing. `change=1` reopens the
-   * address field when the customer realizes they typed the wrong one.
-   */
+  // The contact step returns with a code so the panel can say what happened;
+  // change=1 reopens the address field.
   const verificationParam = searchParams.verification
   const verificationCode = Array.isArray(verificationParam)
     ? verificationParam[0]
@@ -101,22 +85,14 @@ export default async function Checkout(props: {
       : undefined
   const changingEmail = searchParams.change === "1"
 
-  /*
-   * The payment-return route sends the customer back here with a code saying
-   * how the off-site payment ended, because the browser never saw the result.
-   * It is read here and passed down, so the notice renders on whichever step
-   * they land on without any client-side URL parsing.
-   */
+  // The payment-return route brings the outcome back as a code, read here and
+  // passed down so the notice renders on whichever step the customer lands.
   const paymentFailure = describePaymentReturn(paymentErrorCode)
 
   return (
     <>
       <div className="content-container pt-8">
-        {/*
-         * The steps are `h2`s, so the page needs its `h1` above them. It is for
-         * assistive tech only: the stepper already says where the customer is,
-         * and a visible "Checkout" title would compete with it.
-         */}
+        {/* The steps are h2s, so this h1 is for assistive tech only. */}
         <h1 className="sr-only">Checkout</h1>
         <CheckoutSteps cart={cart} current={currentStep} access={access} />
         <Rule className="mt-4" weight="heavy" />

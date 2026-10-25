@@ -41,15 +41,8 @@ const AccountInfo = ({
   }, [isSuccess, close])
 
   /*
-   * These three panels are plain blocks, not disclosures: they are always in
-   * the tree and their open/closed look comes from the classes below, driven by
-   * this component's own state. They used to be `Disclosure`/`Disclosure.Panel`
-   * with `static`, which added nothing but an id Headless UI generates — and
-   * those ids drifted between the server render and hydration, so React logged
-   * "A tree hydrated but some attributes of the server rendered HTML didn't
-   * match the client properties" on `/account/profile` (measured, and
-   * intermittent: 2 loads in 36). Without the generated ids there is nothing
-   * left to drift.
+   * Plain blocks instead of Disclosure: the ids Headless UI generated there
+   * drifted between the server render and hydration.
    */
   return (
     <div className="text-small" data-testid={dataTestid}>
@@ -78,7 +71,6 @@ const AccountInfo = ({
         </div>
       </div>
 
-      {/* Success state */}
       <div
         className={clx(
           "transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden",
@@ -95,7 +87,6 @@ const AccountInfo = ({
         </Badge>
       </div>
 
-      {/* Error state  */}
       <div
         className={clx(
           "transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden",
@@ -112,13 +103,7 @@ const AccountInfo = ({
         </Badge>
       </div>
 
-      {/*
-        The editor stays mounted so the panel can animate, which means its
-        inputs are still in the DOM while it is closed. `inert` is what keeps
-        them out of the tab order and out of the accessibility tree — an
-        `aria-hidden` alone left focusable fields hidden from assistive tech
-        but still reachable with Tab (axe: "aria-hidden-focus").
-      */}
+      {/* The editor stays mounted to animate, so inert keeps it out of the tab order. */}
       <div
         className={clx(
           "transition-[max-height,opacity] duration-300 ease-in-out overflow-visible motion-reduce:transition-none",

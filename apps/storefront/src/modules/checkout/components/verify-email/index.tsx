@@ -12,28 +12,14 @@ import { useActionState, useEffect, useState } from "react"
 import ErrorMessage from "../error-message"
 import { SubmitButton } from "../submit-button"
 
-/** Mirrors the backend's resend cooldown, so the button agrees with it. */
+// Mirrors the backend's resend cooldown.
 const RESEND_SECONDS = 60
 
-/**
- * Step 1, second half: the code that proves the address is the customer's.
- *
- * The code is typed here rather than followed as a link so the customer never
- * leaves the checkout with a cart in a cookie and comes back to a page that no
- * longer knows what they were doing. It is a plain form with no cleverness: a
- * wrong code keeps everything they typed, and "resend" is a separate form so a
- * customer who mistypes the code cannot accidentally ask for another one.
- *
- * The countdown is an affordance, not the rule. The backend owns the cooldown
- * and the hourly limit, and its message is what the customer reads if this
- * browser's clock disagrees with it.
- */
 const VerifyEmail = ({
   email,
   notice,
 }: {
   email: string
-  /** `sent` when a code was just mailed, `wait` when one already was. */
   notice?: "sent" | "wait"
 }) => {
   const { countryCode } = useParams<{ countryCode: string }>()
@@ -50,7 +36,6 @@ const VerifyEmail = ({
     notice === "sent" ? RESEND_SECONDS : 0
   )
 
-  // A freshly mailed code restarts the wait, whatever this browser thought.
   useEffect(() => {
     if (resendState?.resent) {
       setCooldown(RESEND_SECONDS)

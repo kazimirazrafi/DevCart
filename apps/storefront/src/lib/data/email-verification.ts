@@ -13,15 +13,9 @@ import {
 } from "./cookies"
 
 /*
- * The checkout's half of guest email verification.
- *
- * The backend mails a six-digit code and, when it is typed back, answers with a
- * signed token. This module carries that token in an HttpOnly cookie and reads
- * the two answers it cannot get from the SDK: whether a code was accepted, and
- * why one was not. The SDK keeps only the HTTP status and the top-level
- * message, and the useful part here is `error.code` (`invalid_code`,
- * `expired_code`, `too_many_attempts`, `resend_cooldown`), so the two routes are
- * called directly instead of through `sdk.client`.
+ * The checkout's half of guest email verification: it carries the signed token
+ * in an HttpOnly cookie and calls the two routes directly, because the SDK drops
+ * error.code (invalid_code, expired_code, too_many_attempts, resend_cooldown).
  */
 
 const backendUrl = () =>
@@ -105,9 +99,8 @@ const normalizeVerificationEmail = (email: string) =>
   email.trim().toLowerCase()
 
 /**
- * The cart's address, read from the server rather than from the form: the code
- * is checked against the address the order will be sent to, so a hidden input
- * cannot point it at a different one.
+ * The cart's address, read from the server rather than the form, so a hidden
+ * input cannot point the code at a different address.
  */
 const cartEmail = async (): Promise<string | null> => {
   const cartId = await getCartId()
@@ -127,10 +120,8 @@ const cartEmail = async (): Promise<string | null> => {
 }
 
 /**
- * Whether this browser already proved it reads `email`. Only the presence and
- * the address are read here; the signature is the backend's to check when the
- * cart is completed, which is why nothing in the storefront can grant itself an
- * order by writing a cookie.
+ * Whether this browser already proved it reads `email`. Only presence and the
+ * address are checked here; the backend verifies the signature on completion.
  */
 export const isEmailVerified = async (email: string): Promise<boolean> => {
   const verification = await getEmailVerification()
@@ -215,9 +206,8 @@ export async function resendVerificationCode(
 
 /**
  * Step 1's code form. A correct code is stored as a cookie and the customer
- * moves on to the address; a wrong one keeps them here with the reason, because
- * the alternative — trusting the browser and finding out at the review step —
- * would take an address and a delivery choice first.
+ * moves on; a wrong one keeps them here with the reason, rather than letting
+ * them fill in an address first.
  */
 export async function confirmVerificationCode(
   _state: CheckoutStepState,

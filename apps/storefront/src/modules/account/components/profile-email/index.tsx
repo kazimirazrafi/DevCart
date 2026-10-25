@@ -7,14 +7,7 @@ type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
 }
 
-/**
- * The email is shown, not edited. In Medusa the address a customer signs in
- * with lives on the auth identity, and the customer record's `email` is only a
- * copy; changing the copy would leave the two disagreeing and lock the customer
- * out of the address on their next sign-in. The starter's editor was a stub
- * that reported "Email updated succesfully" while writing nothing, which is
- * worse than saying so.
- */
+/* The sign-in address lives on the auth identity, so this copy is read-only. */
 const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
   return (
     <div className="text-small" data-testid="account-email-editor">

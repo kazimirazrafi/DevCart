@@ -8,11 +8,7 @@ export type PasswordResetData = {
   expiresInMinutes?: number
 }
 
-/**
- * The reset link and nothing else worth stealing: no order history, no account
- * details. It says how long the link lives, because a customer who finds the
- * email an hour later needs to know why it no longer works.
- */
+/** The reset link only, with its lifetime stated. */
 export const passwordReset = (data: PasswordResetData): EmailContent => {
   const storeName = data.storeName ?? "DevCart"
   const minutes = data.expiresInMinutes ?? 15

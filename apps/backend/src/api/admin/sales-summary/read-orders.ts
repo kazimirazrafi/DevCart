@@ -22,21 +22,14 @@ const FULFILLMENT_FIELDS = [
   "fulfillments.canceled_at",
 ]
 
-/** One page of orders per read; a year of a busy shop is a handful of these. */
+/** One page per read. */
 const PAGE_SIZE = 500
-/** Enough for 20,000 orders in the window — beyond that the answer says so. */
+/** Ceiling of 20,000 orders per window; past that `truncated` is set. */
 const MAX_PAGES = 40
 
 /**
- * Every order in a window, read through the Query API in pages.
- *
- * The caller sums these in memory rather than in SQL: the numbers have to agree
- * with the orders an admin can open, including their currency, and a hand
- * written aggregate would have to repeat every rule about which orders count.
- *
- * Draft and cancelled orders are excluded — they were never revenue.
- * `truncated` is honest about the read's ceiling rather than returning a total
- * that silently stops at 20,000 orders.
+ * Every order in a window, paged through the Query API. Drafts and cancellations
+ * are excluded; `truncated` reports the read's ceiling rather than hiding it.
  */
 export const readOrdersInRange = async (
   req: MedusaRequest,

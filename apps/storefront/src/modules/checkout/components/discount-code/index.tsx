@@ -14,14 +14,6 @@ type DiscountCodeProps = {
   cart: HttpTypes.StoreCart
 }
 
-/**
- * The cart's promotion codes.
- *
- * A code is applied by sending the cart's whole code list, and Medusa answers
- * `200` whether or not the code was accepted, so the server action reads the
- * applied promotions back and reports a refusal. The code stays in the field
- * when it is refused, because the customer most likely mistyped it.
- */
 const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false)
@@ -47,7 +39,6 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
 
       router.refresh()
     } catch {
-      // The actions return their failures; this only catches what escaped one.
       setErrorMessage("Could not update the promotion code. Try again.")
     } finally {
       setPending(false)
@@ -96,7 +87,6 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
         {isOpen && (
           <>
             <div className="mt-2 flex w-full items-end gap-x-2">
-              {/* The field grows; the button keeps its own width. */}
               <div className="flex-1">
                 <Input
                   id="promotion-input"

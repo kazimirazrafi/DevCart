@@ -12,10 +12,9 @@ export const metadata: Metadata = {
 }
 
 /**
- * Outside `/account` on purpose: `middleware.ts` sends a signed-out visitor to
- * the sign-in page from every `/account/*` URL, and the person opening a reset
- * link is signed out by definition. A link without a country code is turned into
- * one by the middleware, so the email can carry a single URL for every region.
+ * Outside /account on purpose: middleware redirects every /account/* URL to
+ * sign-in, and the person opening a reset link is signed out. The middleware also
+ * adds the country code, so the email carries one URL for every region.
  */
 export default async function ResetPasswordPage(props: {
   searchParams: Promise<{ token?: string | string[] }>

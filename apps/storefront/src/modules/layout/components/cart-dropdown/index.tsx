@@ -18,18 +18,9 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
 
-/**
- * The link is an icon, so its name has to be written: "Cart, 2 items" is what a
- * screen reader reads, and it is also the string that tells the difference
- * between an empty cart and a full one when nothing is visible but a bag.
- */
 const cartLabel = (count: number) =>
   `Cart, ${count} item${count === 1 ? "" : "s"}`
 
-/**
- * The number beside the bag. Mono, because it is a count rather than a word,
- * and kept on screen at zero so the control does not jump as the cart fills.
- */
 const CartCount = ({ count }: { count: number }) => (
   <span
     className="font-mono text-small text-ink/70"
@@ -77,7 +68,6 @@ const CartDropdown = ({
     open()
   }
 
-  // Clean up the timer when the component unmounts
   useEffect(() => {
     return () => {
       if (activeTimer) {
@@ -88,7 +78,7 @@ const CartDropdown = ({
 
   const pathname = usePathname()
 
-  // open cart dropdown when modifying the cart items, but only if we're not on the cart page
+  // Preview the cart after an item changes, except on the cart page.
   useEffect(() => {
     if (itemRef.current !== totalItems && !pathname.includes("/cart")) {
       timedOpen()
@@ -102,13 +92,6 @@ const CartDropdown = ({
 
   return (
     <>
-      {/**
-       * The popover's panel is desktop-only, so on a phone the button that
-       * opened it did nothing a customer could see: the click toggled a panel
-       * that is `hidden` below `small`, and the link it was wrapped around never
-       * navigated. The phone gets its own plain link — the same count, the same
-       * destination — and the desktop keeps the hover preview.
-       */}
       <LocalizedClientLink
         href="/cart"
         className="flex h-full items-center gap-x-1.5 px-1 hover:text-ink small:hidden"
@@ -125,11 +108,6 @@ const CartDropdown = ({
         onMouseLeave={close}
       >
         <Popover className="relative h-full">
-          {/*
-           * The trigger is the link itself. Wrapping an `<a>` in a button put a
-           * link inside a button, which is invalid markup and swallows the link's
-           * own keyboard behaviour.
-           */}
           <PopoverButton
             as={LocalizedClientLink}
             href="/cart"

@@ -4,11 +4,7 @@ import { useToggleRefinement } from "react-instantsearch"
 
 import { priceAttribute } from "@lib/search-client"
 
-/**
- * Narrows to products whose calculated price is below their original in the
- * region's currency. Hides itself when nothing is discounted, which is the
- * case until a price list applies to some product.
- */
+/* Shown only while something in the catalogue is discounted. */
 const OnSaleToggle = ({ currencyCode }: { currencyCode: string }) => {
   const { value, refine, canRefine } = useToggleRefinement({
     attribute: priceAttribute("on_sale", currencyCode),

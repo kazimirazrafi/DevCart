@@ -35,24 +35,16 @@ const adminUrl = () =>
   `${(process.env.BACKEND_URL || "http://localhost:9000").replace(/\/+$/, "")}/app`
 
 /**
- * Emails the admin when stock is at or below the threshold, at most once per
- * level every `LOW_STOCK_ALERT_COOLDOWN_HOURS` (24 by default).
- *
- * The dedupe is the `stock_alert` row rather than the job's schedule: an hourly
- * job has to be able to run hourly, and a level that stays low for a week is
- * one shortage, not 168 emails.
- *
- * Nothing in here may take the backend down. A notification failure is logged
- * and the alert rows are left alone, so the next run tries again — recording
- * the alert before the mail is confirmed sent is how a shortage goes missing
- * for a day.
+ * Emails the admin once per level per cooldown. The `stock_alert` row is the
+ * dedupe, not the schedule. A notification failure is logged and the rows are
+ * left alone, so the next run retries instead of a shortage going quiet.
  */
 export default async function lowStockAlertJob(container: MedusaContainer) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const recipient = process.env.LOW_STOCK_ALERT_EMAIL?.trim()
 
   if (!recipient) {
-    // Off by configuration, not broken: a fresh clone has no admin address.
+    // Off by configuration, not broken.
     logger.info(
       "LOW_STOCK_ALERT_EMAIL is not set; skipping the low-stock check."
     )
@@ -97,9 +89,8 @@ export default async function lowStockAlertJob(container: MedusaContainer) {
   const alertService: StockAlertModuleService =
     container.resolve(STOCK_ALERT_MODULE)
 
-  // `$in`, not a bare array: the module service's filter treats an array as a
-  // value to compare against, and answers nothing rather than matching any of
-  // it — which would make every run look like a first alert.
+  // `$in` is required: the module treats a bare array as one value, which
+  // would make every run look like a first alert.
   const existing = await alertService.listStockAlerts({
     inventory_item_id: {
       $in: Array.from(new Set(lines.map((line) => line.inventory_item_id))),
@@ -190,11 +181,7 @@ export default async function lowStockAlertJob(container: MedusaContainer) {
   )
 }
 
-/**
- * Hourly by default. The cooldown, not the schedule, is what limits how often
- * an admin hears about the same product, so a deployment that wants a quiet
- * night can move this without changing the rule.
- */
+/** Hourly by default; the cooldown, not this, limits repeat alerts. */
 export const config = {
   name: "low-stock-alert",
   schedule: process.env.LOW_STOCK_ALERT_SCHEDULE || "0 * * * *",

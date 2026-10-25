@@ -1,8 +1,4 @@
-/*
- * A placeholder line for the tables that render order items. It is a table row
- * on purpose: its caller puts it inside `<tbody>`, where anything else would be
- * hoisted out by the HTML parser.
- */
+/* A table row on purpose: the caller puts it inside `<tbody>`. */
 const SkeletonLineItem = () => {
   return (
     <tr className="border-b border-ink/20">

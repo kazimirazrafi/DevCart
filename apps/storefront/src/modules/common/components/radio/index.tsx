@@ -9,8 +9,6 @@ const Radio = ({ checked, 'data-testid': dataTestId }: { checked: boolean, 'data
         className="group relative flex h-5 w-5 items-center justify-center outline-none"
         data-testid={dataTestId || 'radio-button'}
       >
-        {/* Drawn as a border rather than the preset's shadow-borders: a shadow
-            colour is a fixed sRGB value and would not follow the theme. */}
         <div className="border border-ink/40 bg-stock group-hover:border-ink group-data-[state=checked]:border-riso-blue group-data-[state=checked]:bg-riso-blue group-disabled:border-ink/20 group-disabled:bg-ink/10 flex h-[14px] w-[14px] items-center justify-center rounded-full transition-colors">
           {checked && (
             <span

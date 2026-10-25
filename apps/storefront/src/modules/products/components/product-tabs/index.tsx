@@ -33,12 +33,6 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
   )
 }
 
-/*
- * Specs are facts, so they are set as a definition list and the values are
- * mono, the one place in this design that is allowed to look like a data sheet
- * (docs/DESIGN.md §3). A field with no value is left out rather than shown as
- * a dash.
- */
 const ProductInfoTab = ({ product }: ProductTabsProps) => {
   const specs: { term: string; value: string | null | undefined }[] = [
     { term: "Material", value: product.material },

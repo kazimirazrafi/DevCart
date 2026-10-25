@@ -3,26 +3,10 @@ import { createHmac, timingSafeEqual } from "node:crypto"
 import { MedusaError } from "@medusajs/framework/utils"
 
 /*
- * Who may read an order.
- *
- * Medusa leaves `GET /store/orders/:id` unauthenticated on purpose: a guest has
- * no account to sign in with, so the order id is the only thing the storefront
- * can hand them after checkout. That makes the id a password, and the id is
- * also a URL — it ends up in browser history, screenshots, shared links and
- * server logs, any of which let someone else read the order's email, address
- * and contents.
- *
- * So the id stays the address and a separate secret is the capability. The
- * token is derived rather than stored: HMAC-SHA256 over the order id and an
- * expiry, keyed by `ORDER_ACCESS_SECRET`. Nothing is written to the order, both
- * apps can mint a link for the same order without a round trip, and possession
- * of the id alone is worth nothing. The trade is that a token cannot be revoked
- * on its own — rotating the secret revokes every outstanding link at once,
- * which is the documented behaviour.
- *
- * The same algorithm lives in `apps/storefront/src/lib/util/order-access.ts`.
- * The two must agree: the storefront mints the link it redirects to after
- * checkout, and this side is what checks it.
+ * An order id is a URL, so the link carries a token instead: HMAC over the id
+ * and an expiry, keyed by ORDER_ACCESS_SECRET. Rotating the secret revokes
+ * every outstanding link. The storefront mints the same token (see
+ * apps/storefront/src/lib/util/order-access.ts), so both sides must agree.
  */
 
 const TOKEN_VERSION = "v1"
@@ -34,11 +18,7 @@ export const ORDER_ACCESS_TTL_MS = 30 * 24 * 60 * 60 * 1000
 const secret = (): string => {
   const value = process.env.ORDER_ACCESS_SECRET
 
-  /*
-   * Refusing to sign or verify is the safe failure. A fallback secret would
-   * make every deployment that forgot the variable use a value that is in the
-   * repository, which is the same as leaving the route open.
-   */
+  // Refusing is the safe failure; a fallback secret would ship in the repo.
   if (!value || value.length < 32) {
     throw new MedusaError(
       MedusaError.Types.UNEXPECTED_STATE,
@@ -54,11 +34,7 @@ const sign = (orderId: string, expiresAt: number): string =>
     .update(`${TOKEN_VERSION}:${orderId}:${expiresAt}`)
     .digest("base64url")
 
-/**
- * A link-safe token that lets its holder read one order until `expiresAt`.
- * The order id is part of what is signed, so a token for one order is useless
- * against another.
- */
+/** Token for one order until `expiresAt`; the order id is part of the signature. */
 export const createOrderAccessToken = (
   orderId: string,
   {
@@ -94,8 +70,7 @@ export const verifyOrderAccessToken = (
 
   const expiresAt = Number(expiresAtRaw)
 
-  // Expired or malformed. Checked before signing so a stale link costs one
-  // comparison rather than an HMAC.
+  // Checked before signing, so a stale link costs one comparison.
   if (!Number.isSafeInteger(expiresAt) || expiresAt <= now) {
     return false
   }
@@ -111,10 +86,7 @@ export const verifyOrderAccessToken = (
 const storefrontUrl = () =>
   (process.env.STOREFRONT_URL || "http://localhost:8000").replace(/\/+$/, "")
 
-/**
- * Where an email's "View your order" goes. No country code: the storefront's
- * middleware adds the visitor's region, exactly as it does for any other link.
- */
+/** No country code: the storefront's middleware adds the visitor's region. */
 export const orderAccessUrl = (orderId: string): string =>
   `${storefrontUrl()}/order/${orderId}/confirmed?token=${encodeURIComponent(
     createOrderAccessToken(orderId)

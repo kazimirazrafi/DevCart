@@ -14,14 +14,9 @@ export type PasswordResetState =
   | null
 
 /**
- * Asks Medusa to start the reset. The API answers `201` whether or not the
- * address has an account, on purpose — otherwise this form would be a way to
- * ask the store who its customers are. The answer to the customer is therefore
- * the same in both cases, and says what to do next rather than claiming an
- * email was sent.
- *
- * The email itself is a subscriber's job (backend `auth.password_reset`), so
- * nothing here waits for delivery.
+ * Asks Medusa to start the reset. The API answers 201 whether or not the address
+ * has an account, so the response cannot be used to discover customers. The
+ * email is sent by a backend subscriber; nothing here waits for delivery.
  */
 export async function requestPasswordReset(
   _currentState: unknown,
@@ -34,13 +29,8 @@ export async function requestPasswordReset(
   }
 
   try {
-    /*
-     * The route answers `201 Created` with a plain-text body, not JSON. The SDK
-     * parses the response only when `accept` asks for JSON, so asking for text
-     * here is what keeps its parser from turning a successful request into
-     * "Unexpected token 'C', \"Created\" is not valid JSON" — measured before
-     * this line existed, while the email itself was already on its way.
-     */
+    // The route answers with plain text, and the SDK only parses JSON when asked,
+    // so accept text or a successful request throws a parse error.
     await sdk.client.fetch("/auth/customer/emailpass/reset-password", {
       method: "POST",
       body: { identifier: email },
@@ -54,15 +44,10 @@ export async function requestPasswordReset(
 }
 
 /**
- * Sets the new password with the single-use token from the emailed link.
- *
- * The backend route validates the token itself: it has to be signed for this
- * purpose, it expires after fifteen minutes, and it is consumed on first use,
- * so a second submission of the same link is refused. That refusal is what the
- * customer reads here, with the way out (ask for a new link) rather than
- * "invalid token". The route also links the identity to an existing customer
- * (one created with Google, or by registering this address) — without that,
- * the password would log in to an identity no customer record belongs to.
+ * Sets the new password with the single-use token from the emailed link. The
+ * backend validates the token: signed for this purpose, valid for fifteen
+ * minutes, consumed on first use. It also links the identity to an existing
+ * customer record for the same address.
  */
 export async function resetPassword(
   _currentState: unknown,

@@ -8,15 +8,9 @@ import { HttpTypes } from "@medusajs/types"
 
 type ImageGalleryProps = {
   images: HttpTypes.StoreProductImage[]
-  /** Product name, used in the main image's alt text. */
   title?: string
 }
 
-/**
- * One main image with a thumbnail strip below it (docs/DESIGN.md "Product"). The
- * selected image is the one a customer asked for by clicking, so no autoplay and
- * no scroll-triggered swapping; the preview updates only on that click.
- */
 const ImageGallery = ({ images, title }: ImageGalleryProps) => {
   const [selectedId, setSelectedId] = useState(images[0]?.id)
   const selected = images.find((image) => image.id === selectedId) ?? images[0]

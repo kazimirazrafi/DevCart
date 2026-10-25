@@ -20,19 +20,6 @@ const plainText = (value?: string | null) =>
         .trim()
     : ""
 
-/**
- * schema.org `Product` for the page's product, as Google reads a product page:
- * name, description, images, brand, category, and one `Offer` per variant with
- * the price the visitor is actually shown (the Store API prices variants for
- * the request's region) and whether that variant can be bought. The current
- * variant is named in each offer's URL rather than in the product URL, so the
- * canonical page stays one URL.
- *
- * `aggregateRating` is what turns the same page into a result with stars, so it
- * is read from the reviews the product actually has: approved only, the whole
- * product rather than one page of reviews, and omitted entirely until the first
- * review is published — a rating of zero is not a rating.
- */
 export default function ProductJsonLd({
   product,
   countryCode,
@@ -87,8 +74,6 @@ export default function ProductJsonLd({
     aggregateRating: rated
       ? {
           "@type": "AggregateRating",
-          // One decimal, as the summary reports it: Google accepts more but
-          // shows a rounded figure anyway.
           ratingValue: reviewSummary!.average.toFixed(1),
           reviewCount: reviewSummary!.count,
           bestRating: 5,

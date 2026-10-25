@@ -17,12 +17,7 @@ type RefinementListProps = {
   "data-testid"?: string
 }
 
-/*
- * Sort and option filters for a category or collection page. These pages read
- * plain query parameters (`sortBy`, `optionValueIds`, `page`) rather than the
- * search listing's InstantSearch state, because their products come from the
- * Store API directly.
- */
+/* These pages read sort and filter state from the URL; products come from the Store API. */
 const RefinementList = ({
   sortBy,
   hideOptionsPicker = false,

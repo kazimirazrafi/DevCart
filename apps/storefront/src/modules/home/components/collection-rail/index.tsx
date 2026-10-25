@@ -5,12 +5,6 @@ import ProductPreview from "@modules/products/components/product-preview"
 
 import RailScroller from "./scroller"
 
-/**
- * One row of products that scrolls sideways — best sellers, new arrivals, a
- * department's picks. It scrolls natively with snap points: on a phone it is a
- * swipe, and on a desktop the RailScroller's buttons and the scrollbar move it,
- * so a mouse can reach the products past the edge.
- */
 export default function CollectionRail({
   id,
   title,

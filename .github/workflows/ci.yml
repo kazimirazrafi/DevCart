@@ -16,9 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # The storefront refuses to build without a publishable key. No backend is
-      # running in CI, so a placeholder value is enough to get past the env check;
-      # pages that fetch data fail soft.
+      # No backend runs in CI, so a placeholder gets past the storefront's env
+      # check; pages that fetch data fail soft.
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_ci_placeholder
 
     steps:
@@ -39,16 +38,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Only a critical advisory fails the build. This toolchain carries a long
-      # list of high findings inside Medusa's own transitive dependencies, which
-      # Dependabot raises but this repository cannot patch; a critical one in a
-      # production dependency must not ship. Measured 23 October 2026, after the
-      # Next.js and proxy-addr updates: 18 high, 0 critical.
+      # Only a critical advisory fails the build: Medusa's transitive dependencies
+      # carry high findings this repository cannot patch.
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level=critical
 
-      # The apps read configuration from .env files, which are not committed.
-      # Copy the templates so a clean checkout has the structure it expects.
+      # .env files are not committed; copy the templates a clean checkout needs.
       - name: Prepare environment files
         run: |
           cp apps/backend/.env.template apps/backend/.env
@@ -60,9 +55,8 @@ jobs:
       - name: Typecheck
         run: pnpm run typecheck
 
-      # The storefront's unit tests run on Node's built-in runner and need no
-      # database or running backend. The backend's suites boot a real app
-      # against Postgres, so they run in their own job below.
+      # The storefront's unit tests need no database; the backend's suites boot a
+      # real app against Postgres in their own job below.
       - name: Test
         run: pnpm --filter @dtc/storefront run test
 
@@ -73,10 +67,8 @@ jobs:
     name: backend tests
     runs-on: ubuntu-latest
 
-    # The suites create and drop their own databases through Medusa's test
-    # runner, so the service needs only a user with the right to create a
-    # database. The runner's credentials come from the four DB_* variables
-    # below, which is the same shape `apps/backend/.env.test` has locally.
+    # The suites create and drop their own databases, so the service only needs a
+    # user with the right to create one. Credentials come from the DB_* values.
     services:
       postgres:
         image: postgres:15-alpine
@@ -115,13 +107,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # The app reads its configuration from .env files, which are not
-      # committed. Copy the templates so a test run has the structure it
-      # expects; the database itself comes from the service above.
+      # .env files are not committed; the database comes from the service above.
       - name: Prepare environment files
         run: cp apps/backend/.env.template apps/backend/.env
 
-      # `test` is unit, module-integration and HTTP-integration, in that order,
-      # because a broken unit test should stop the expensive suites.
+      # Unit, module-integration and HTTP-integration, cheapest first.
       - name: Unit, module and HTTP suites
         run: pnpm --filter @dtc/backend run test

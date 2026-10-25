@@ -1,12 +1,6 @@
-/*
- * The checkout's payment messaging, tested without a browser or a Stripe
- * account: every case here is a shape Stripe.js and the Store API actually
- * return, and the assertion is on what the customer is told — retry, verify,
- * wait, or nothing was taken.
- *
- * Run with `pnpm run test` in apps/storefront. Node strips the types from the
- * module under test, so this needs no build step and no test framework.
- */
+/* Payment messaging, tested without a browser or a Stripe account: each case is a
+ * shape Stripe.js and the Store API return, asserted on what the customer is told.
+ * Node strips the types, so there is no build step and no test framework. */
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 

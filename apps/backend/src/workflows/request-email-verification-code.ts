@@ -23,11 +23,7 @@ export type RequestEmailVerificationCodeInput = {
   email: string
 }
 
-/**
- * The two reasons a send can be refused. Both say when asking again would be
- * allowed, because "too many requests" without a number is a dead end on a
- * checkout page.
- */
+/** Both refusals carry the wait, which a checkout page needs to show. */
 export type RequestEmailVerificationCodeResult =
   | { status: "sent"; resend_after_seconds: number; expires_in_seconds: number }
   | { status: "rate_limited"; reason: "cooldown" | "window"; retry_after_seconds: number }
@@ -41,10 +37,7 @@ type PreviousState = {
   window_sent_count: number
 }
 
-/**
- * What the compensation restores: the row that was there before this send, or
- * nothing at all when the code was the first one for the address.
- */
+/** The row as it was before this send, or nothing for a first code. */
 type SendCompensation = {
   email: string
   existingId: string | null
@@ -55,18 +48,10 @@ const secondsUntil = (at: number, now: number) =>
   Math.max(1, Math.ceil((at - now) / 1000))
 
 /**
- * Issues a code and mails it, replacing any code already outstanding for the
- * address.
- *
- * The send limits live on the row rather than only in memory so they survive a
- * restart and hold across processes: five an hour per address, with a minute
- * between two, which is enough for a customer whose mail is slow and far too
- * little to use the endpoint to flood an inbox.
- *
- * Sending is part of this step on purpose. If the provider refuses the message,
- * the step throws and its compensation puts the row back exactly as it was, so
- * the customer can retry immediately instead of being locked out of their own
- * checkout by a cooldown that bought them nothing.
+ * Issues and mails a code, replacing any outstanding one. Send limits live on
+ * the row so they survive restarts. A provider failure throws, and the
+ * compensation restores the row so the customer is not locked out by a cooldown
+ * that bought them nothing.
  */
 const sendEmailVerificationCodeStep = createStep(
   "send-email-verification-code",
@@ -212,11 +197,8 @@ const sendEmailVerificationCodeStep = createStep(
 )
 
 /**
- * Sends a guest the six-digit code that proves they can read their address.
- *
- * Nothing about this address is revealed here: whether it already belongs to a
- * customer, whether it was verified before, whether the mail was delivered. The
- * answer is the same for every address, and only the inbox knows.
+ * Sends a guest a six-digit code. The answer is the same for every address, so
+ * nothing about the address is revealed.
  */
 export const requestEmailVerificationCodeWorkflow = createWorkflow(
   "request-email-verification-code",

@@ -10,7 +10,6 @@ type ItemsPreviewTemplateProps = {
   cart: HttpTypes.StoreCart
 }
 
-/** Placeholder line shown only if the cart has not resolved yet. */
 const SkeletonRow = () => (
   <li
     className="flex gap-4 border-b border-ink/20 py-6"
@@ -25,12 +24,6 @@ const SkeletonRow = () => (
   </li>
 )
 
-/**
- * The checkout summary's lines. A list, not a table: each line renders as a
- * list item, and a `<tbody>` may only contain rows — the previous markup nested
- * `<li>` inside `<tbody>`, which the browser's parser hoists out of the table
- * and which React reported as a hydration mismatch on every checkout page.
- */
 const ItemsPreviewTemplate = ({ cart }: ItemsPreviewTemplateProps) => {
   const items = cart.items
   const hasOverflow = items && items.length > 4

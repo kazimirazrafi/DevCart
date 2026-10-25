@@ -16,6 +16,10 @@ node_modules
 # Testing
 coverage
 
+# Playwright: traces, screenshots and the HTML report of an end-to-end run
+apps/storefront/test-results
+apps/storefront/playwright-report
+
 # Next.js
 **/.next/
 **/out/
@@ -63,3 +67,11 @@ backups/
 
 # Lighthouse CI reports written by `pnpm run lighthouse`.
 .lighthouseci/
+
+# Uploads and CSV exports written to the local file provider at runtime.
+apps/backend/static/*
+!apps/backend/static/product-import-template.csv
+
+# Private working notes: specs, roadmap, deployment specifics.
+# Never committed or published.
+private-docs/

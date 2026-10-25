@@ -9,12 +9,6 @@ type Status = "idle" | "sending" | "done" | "error"
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
-/**
- * The drop list. It posts to the store's own newsletter route, so an address
- * that is entered here is stored (once) rather than disappearing into a
- * success message. `already` is a success: the visitor is on the list either
- * way, and telling them off for subscribing twice helps nobody.
- */
 const Newsletter = () => {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<Status>("idle")
@@ -44,11 +38,7 @@ const Newsletter = () => {
       setEmail("")
     } catch (error) {
       setStatus("error")
-      /*
-       * A rate limit is the one refusal with its own sentence, written for the
-       * customer and naming a wait of minutes. Repeating the generic copy here
-       * would tell them to try again "in a moment", which is the wrong advice.
-       */
+      // A rate limit already carries a customer-facing message with its wait.
       const apiMessage = error instanceof Error ? error.message : ""
       setMessage(
         /too many/i.test(apiMessage)
@@ -81,11 +71,6 @@ const Newsletter = () => {
 
         <div className="small:col-span-6">
           <form onSubmit={submit} className="flex flex-col gap-3" noValidate>
-            {/*
-             * The field is written out rather than built from the design
-             * system's `Input`: that component is drawn for the `stock` sheet,
-             * and this band is the ink side, where a label has to be `stock`.
-             */}
             <label
               htmlFor="newsletter-email"
               className="text-small font-semibold text-stock"
@@ -93,11 +78,6 @@ const Newsletter = () => {
               Email address
             </label>
             <div className="flex flex-col gap-3 small:flex-row">
-              {/*
-               * `flex-1` only from `small`, where the field and the button
-               * share a row. In the stacked mobile layout the form is a column,
-               * so a basis of 0 would collapse the field's height.
-               */}
               <input
                 id="newsletter-email"
                 name="email"

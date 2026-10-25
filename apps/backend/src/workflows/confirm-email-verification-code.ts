@@ -19,11 +19,7 @@ export type ConfirmEmailVerificationCodeInput = {
   code: string
 }
 
-/**
- * What the checkout is told. Only `verified` carries a secret; the rest say
- * what the customer should do next — retype, ask for a new code, or stop
- * guessing.
- */
+/** Only `verified` carries a secret; the rest say what to do next. */
 export type ConfirmEmailVerificationCodeResult =
   | { status: "verified"; token: string; expires_at: number }
   | { status: "invalid"; attempts_left: number }
@@ -31,18 +27,9 @@ export type ConfirmEmailVerificationCodeResult =
   | { status: "too_many_attempts" }
 
 /**
- * Spends the code that was mailed to this address.
- *
- * A correct code is consumed in the same write that returns the token, so it
- * cannot be replayed: a second confirmation finds no live hash. A wrong code
- * costs one of five attempts, and the fifth burns the code rather than leaving
- * a million-guess window open. The token that comes back is proof for the
- * *address*, not for this code, so the cart's completion can check it without
- * another database read.
- *
- * The step is deliberately the whole of this workflow: there is nothing left
- * to do after a token is minted, and nothing was written before it that a later
- * failure would have to undo.
+ * Spends the code and returns the token. A correct code is consumed in the same
+ * write, so it cannot be replayed; five wrong ones burn it. The token proves the
+ * address, so cart completion needs no further read.
  */
 const confirmEmailVerificationCodeStep = createStep(
   "confirm-email-verification-code",
@@ -58,8 +45,7 @@ const confirmEmailVerificationCodeStep = createStep(
       { take: 1 }
     )
 
-    // No row, or a code already spent or replaced: indistinguishable from a
-    // wrong code, and never a hint that this address was tried before.
+    // Logically a wrong code, and no hint that this address was tried before.
     if (!row?.code_hash) {
       return new StepResponse<ConfirmEmailVerificationCodeResult>({
         status: "invalid",

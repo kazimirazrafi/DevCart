@@ -1,8 +1,3 @@
-/**
- * Four facts across the top of the page, each in its own cell of one hairline
- * grid. The numbers are read from the catalogue, not written into the copy, so
- * the bar cannot claim a rating the shop does not have.
- */
 export default function TrustBar({
   productCount,
   averageRating,

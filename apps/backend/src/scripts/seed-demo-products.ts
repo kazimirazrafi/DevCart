@@ -1,12 +1,7 @@
 /**
- * Demo data only — creates 50 published products so the store page's
- * pagination and option facets have something to work with. Safe to delete
- * along with the products it creates; nothing in the app depends on it.
- *
- *   npx medusa exec ./src/scripts/seed-demo-products.ts
- *
- * Re-running it is a no-op for anything it already created: every product uses
- * a deterministic handle, and existing handles are skipped.
+ * Demo data: 50 published products for the store page's pagination and
+ * facets. Nothing in the app depends on it. Re-runnable; existing handles are
+ * skipped.
  */
 import {
   createCollectionsWorkflow,
@@ -24,17 +19,15 @@ import type { ExecArgs } from '@medusajs/framework/types'
 
 const PRODUCT_COUNT = 50
 const HANDLE_PREFIX = 'demo'
-/** Products are created in batches so one failure doesn't roll back all 50. */
+/** Created in batches so one failure does not roll back all 50. */
 const BATCH_SIZE = 10
 /** Caps the variant count per product, since options multiply. */
 const MAX_VARIANTS = 12
 /** Products per awaited search-ingestion call. */
 const INGEST_CHUNK_SIZE = 25
 
-/**
- * Deterministic PRNG (mulberry32). Keeps re-runs identical, so the same handle
- * always describes the same product.
- */
+/** Deterministic PRNG (mulberry32), so a handle always describes the same
+ * product. */
 function makeRandom(seed: number) {
   let state = seed
 

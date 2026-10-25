@@ -6,10 +6,6 @@ export type RuleProps = HTMLAttributes<HTMLHRElement> & {
   weight?: "hairline" | "heavy"
 }
 
-/**
- * A horizontal rule is real structure in this design — it separates bands and
- * closes plates — so it always uses the ink plate, never a tinted grey.
- */
 export const Rule = forwardRef<HTMLHRElement, RuleProps>(
   ({ className, weight = "hairline", ...props }, ref) => {
     return (

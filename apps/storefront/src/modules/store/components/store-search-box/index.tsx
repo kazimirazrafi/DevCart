@@ -6,11 +6,7 @@ import { useSearchBox } from "react-instantsearch"
 
 const DEBOUNCE_MS = 250
 
-/**
- * Free-text search over the listing, refining the same InstantSearch state the
- * sidebar filters do. The input is held locally so typing stays responsive
- * while the query itself is debounced.
- */
+/* The input is local so typing stays responsive while the query is debounced. */
 const StoreSearchBox = () => {
   const timer = useRef<number | undefined>(undefined)
 
@@ -27,8 +23,7 @@ const StoreSearchBox = () => {
 
   useEffect(() => () => window.clearTimeout(timer.current), [])
 
-  // Follow the query when it changes elsewhere — cleared with the filters, or
-  // arriving from the URL on load, which `routing` restores after mount.
+  // Follow the query when it changes elsewhere, e.g. from the filters or the URL.
   useEffect(() => {
     setInputValue(query)
   }, [query])

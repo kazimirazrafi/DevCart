@@ -30,17 +30,8 @@ type ResendResponse = {
 const DEFAULT_BASE_URL = "https://api.resend.com"
 const REQUEST_TIMEOUT_MS = 10_000
 
-/**
- * Sends this store's email through Resend's HTTP API.
- *
- * There is no SDK dependency: the whole integration is one POST, and the
- * template rendering that would otherwise live in Resend's hosted templates
- * lives in `../templates` where it is versioned with the code that fills it.
- *
- * Failures are thrown, not swallowed — the notification module stores the
- * notification and the order-placed subscriber is what decides that a failed
- * email must not fail the order.
- */
+/** Sends email through Resend's HTTP API, with templates in ../templates.
+ * Failures are thrown; the subscriber decides whether that fails the order. */
 export class ResendNotificationService extends AbstractNotificationProviderService {
   static identifier = "resend"
 
@@ -130,11 +121,8 @@ export class ResendNotificationService extends AbstractNotificationProviderServi
     const body = (await response.json().catch(() => null)) as ResendResponse | null
 
     if (!response.ok) {
-      /*
-       * The response body explains the rejection (an unverified sender, a bad
-       * key, a malformed address). It is logged because it is the only place
-       * that reason exists; the recipient is not, because it is personal data.
-       */
+      /* The response body is the only place the reason exists. The recipient
+       * is personal data and is not logged. */
       this.logger_.error(
         `Resend rejected the "${notification.template}" email: ${response.status} ${
           body?.message ?? body?.name ?? "no reason given"

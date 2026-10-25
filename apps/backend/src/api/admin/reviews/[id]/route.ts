@@ -8,11 +8,7 @@ import type { AdminModerateReviewBody } from "../validators"
 
 /**
  * POST /admin/reviews/:id
- *
- * Approving and rejecting are one write with a different word, so they are one
- * route: `{ status: "approved" | "rejected" }`. Approval is what makes a review
- * visible on the storefront; rejection keeps it out without deleting what the
- * customer wrote, so the row still explains itself if it is looked at again.
+ * Approve or reject in one write. Rejection keeps the row for the record.
  */
 export async function POST(
   req: AuthenticatedMedusaRequest<AdminModerateReviewBody>,

@@ -21,12 +21,8 @@ export type ShipmentData = {
   shippingMethod?: string | null
 }
 
-/**
- * The shipment is the second half of the order story: the confirmation said
- * what was bought, this says what has left and how to follow it. It carries no
- * prices on purpose — the money was settled in the confirmation, and repeating
- * it invites the two emails to disagree after a refund.
- */
+/** The shipment email: what left and how to track it. No prices, so a later
+ * refund cannot make it disagree with the confirmation. */
 export const shipment = (data: ShipmentData): EmailContent => {
   const storeName = data.storeName ?? "DevCart"
   const orderNumber = String(data.orderNumber ?? "")
@@ -59,10 +55,7 @@ export const shipment = (data: ShipmentData): EmailContent => {
     `
     : ""
 
-  /*
-   * A fulfillment can carry more than one label (split parcels, a reprint), so
-   * every number is printed rather than assuming the first is the parcel.
-   */
+  /* A fulfillment can carry several labels, so print all of them. */
   const tracking = (data.tracking ?? []).filter(
     (entry) => entry.number || entry.url
   )

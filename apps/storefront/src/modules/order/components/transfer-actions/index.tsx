@@ -7,11 +7,6 @@ import { useState } from "react"
 
 type TransferStatus = "pending" | "success" | "error"
 
-/**
- * The two answers to a transfer request. Both stay on screen while the request
- * is in flight and while the result is not a failure, so a second click cannot
- * race the first; a success replaces them with the outcome.
- */
 const TransferActions = ({ id, token }: { id: string; token: string }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [status, setStatus] = useState<{
@@ -42,10 +37,6 @@ const TransferActions = ({ id, token }: { id: string; token: string }) => {
     setStatus({ accept: null, decline: success ? "success" : "error" })
   }
 
-  /*
-   * Only a success takes the buttons away. A failed attempt leaves them, so the
-   * customer can try again without reloading the page they arrived on.
-   */
   const resolved = status?.accept === "success" || status?.decline === "success"
 
   return (

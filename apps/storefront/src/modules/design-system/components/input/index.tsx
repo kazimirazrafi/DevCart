@@ -2,16 +2,10 @@ import clsx from "clsx"
 import { forwardRef, InputHTMLAttributes } from "react"
 
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id"> & {
-  /** Required: the label is associated with the field through this id. */
   id: string
   label: string
-  /** Guidance shown below the field when there is no error. */
   hint?: string
-  /**
-   * Error message. Rendered in ink, not pink: `riso-pink` is 3.13:1 on `stock`
-   * (docs/DESIGN.md §2.1) so it may only mark, never carry words. The pink
-   * border is the marker; this text says what went wrong.
-   */
+  /** Rendered in ink: pink is too low contrast to carry text. */
   error?: string
 }
 

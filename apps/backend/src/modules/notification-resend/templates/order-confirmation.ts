@@ -31,11 +31,7 @@ const amount = (value: unknown): number | undefined => {
   return Number.isFinite(parsed) ? parsed : undefined
 }
 
-/**
- * What the customer keeps: the order number, what they bought, what it cost and
- * where it is going. It deliberately repeats the confirmation page rather than
- * inventing anything the page does not show, so the two cannot disagree.
- */
+/** The order confirmation email: same facts as the confirmation page. */
 export const orderConfirmation = (data: OrderConfirmationData): EmailContent => {
   const storeName = data.storeName ?? "DevCart"
   const orderNumber = String(data.orderNumber ?? "")

@@ -18,29 +18,11 @@ type StockAlertService = {
 }
 
 /**
- * Empties the catalogue so the shop can be built by hand.
+ * Empties the catalogue: products, options, categories, collections, tags,
+ * types, price lists, leftover inventory items and their stock alerts.
+ * Keeps the store, regions, channel, location, customers and orders.
  *
- * Deletes products (which takes their variants, option values, images and
- * exclusive inventory items, and removes the products from the search index),
- * then product options, categories deepest-first, collections, tags, types,
- * price lists, then whatever inventory items are left over and the low-stock
- * alert rows that point at them.
- *
- * What it deliberately keeps: the store, regions and currencies, tax regions,
- * the sales channel and its publishable key, the stock location with its
- * shipping options and fulfillment setup, payment providers, and every customer
- * and order. Those are configuration and history rather than catalogue —
- * deleting the sales channel or the region would make the storefront stop
- * selling, and Medusa has no order-deletion workflow because orders are
- * records.
- *
- * Run it from `apps/backend`:
- *
- * ```bash
- * pnpm run reset-catalog
- * ```
- *
- * Safe to re-run on an already-empty store.
+ * Run from apps/backend: pnpm run reset-catalog
  */
 export default async function resetCatalog({ container }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)

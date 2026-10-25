@@ -1,17 +1,6 @@
 import type { LegalLink } from "./links"
 
-/**
- * The text of every policy the storefront publishes.
- *
- * It lives in one module rather than in the seven route files so the documents
- * can be read side by side and so a shared fact — the despatch window, the
- * thirty-day return period, the support address — is stated once. The pages
- * themselves only choose a document and render it.
- *
- * These are the store's own operating rules, not a template left for the owner
- * to fill in: the timing, the shipping options and the processor named here are
- * the ones the checkout and the seed data actually use.
- */
+/* Every policy in one module, so shared facts are stated once. */
 export type LegalSection = {
   heading: string
   paragraphs?: string[]

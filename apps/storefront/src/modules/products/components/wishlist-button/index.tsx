@@ -15,23 +15,10 @@ import {
 type WishlistButtonProps = {
   productId: string
   variantId?: string | null
-  /**
-   * The saved row, when the caller already knows it (the wishlist page reads
-   * its own list). Otherwise the shared store answers, which is one request per
-   * page for every heart on it.
-   */
   initialEntry?: { id: string } | null
-  /** `large` is the buy box's height, beside Add to cart. */
   size?: "small" | "large"
-  /** Shows "Save" / "Saved" next to the heart. */
   withLabel?: boolean
-  /**
-   * Re-reads the route after a change, for a page whose own contents depend on
-   * the wishlist (a removed plate has to disappear). The catalogue's hearts do
-   * not set it: there, a refresh is a request that changes nothing.
-   */
   refreshOnChange?: boolean
-  /** Placed on the wrapper, for a heart laid over a card. */
   className?: string
 }
 
@@ -49,19 +36,6 @@ const HeartIcon = ({ filled }: { filled: boolean }) => (
   </svg>
 )
 
-/**
- * The heart.
- *
- * It is a real `button` with `aria-pressed`, not a link and not a checkbox: the
- * state is "saved / not saved" and a screen reader should hear that change.
- *
- * Nothing is drawn as saved until the server has confirmed it, and a failure is
- * reported rather than leaving a heart that lies. A signed-out visitor is sent
- * to sign in and brought back to the page they were on.
- *
- * Pink is the fill, never the words: `riso-pink` is 3.13:1 on `stock`, so it may
- * mark but not carry text (docs/DESIGN.md §2.1).
- */
 const WishlistButton = ({
   productId,
   variantId,
@@ -152,11 +126,6 @@ const WishlistButton = ({
               : "h-9 w-9"
         )}
       >
-        {/*
-         * Pink is the fill and only the fill (3.13:1 on `stock`, so it may mark
-         * but not carry words), and it gives way to the hover state so the
-         * heart stays visible on the ink fill.
-         */}
         <span
           className={clsx(
             "transition-colors",

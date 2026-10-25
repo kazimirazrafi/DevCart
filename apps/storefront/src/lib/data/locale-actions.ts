@@ -7,9 +7,7 @@ import { getAuthHeaders, getCacheTag, getCartId } from "./cookies"
 
 const LOCALE_COOKIE_NAME = "_medusa_locale"
 
-/**
- * Gets the current locale from cookies
- */
+
 export const getLocale = async (): Promise<string | null> => {
   try {
     const cookies = await nextCookies()
@@ -19,9 +17,7 @@ export const getLocale = async (): Promise<string | null> => {
   }
 }
 
-/**
- * Sets the locale cookie
- */
+
 export const setLocaleCookie = async (locale: string) => {
   const cookies = await nextCookies()
   cookies.set(LOCALE_COOKIE_NAME, locale, {
@@ -32,14 +28,10 @@ export const setLocaleCookie = async (locale: string) => {
   })
 }
 
-/**
- * Updates the locale preference via SDK and stores in cookie.
- * Also updates the cart with the new locale if one exists.
- */
+
 export const updateLocale = async (localeCode: string): Promise<string> => {
   await setLocaleCookie(localeCode)
 
-  // Update cart with the new locale if a cart exists
   const cartId = await getCartId()
   if (cartId) {
     const headers = {
@@ -54,7 +46,6 @@ export const updateLocale = async (localeCode: string): Promise<string> => {
     }
   }
 
-  // Revalidate relevant caches to refresh content
   const productsCacheTag = await getCacheTag("products")
   if (productsCacheTag) {
     revalidateTag(productsCacheTag)

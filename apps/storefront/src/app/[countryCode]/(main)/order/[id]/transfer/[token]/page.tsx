@@ -6,11 +6,7 @@ type Props = {
   params: Promise<{ id: string; token: string }>
 }
 
-/**
- * What the person who received a transfer request sees. Plain type on stock,
- * one measure of it, and the two answers — no illustration and a fifth of the
- * page wide, which is what this page used to be on a phone.
- */
+/** What the person who received a transfer request sees: plain type and the two answers. */
 export default async function TransferPage({ params }: Props) {
   const { id, token } = await params
 

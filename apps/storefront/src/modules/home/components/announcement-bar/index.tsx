@@ -1,13 +1,6 @@
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
-/**
- * The strip above the homepage: what a first-time visitor needs before they
- * read anything else — how it is shipped, how fast it leaves, and how long they
- * have to send something back. One line, three facts, no rotating carousel.
- *
- * No delivery threshold is claimed here: the store's shipping options are a
- * flat price per region, so "free over $X" would contradict the checkout.
- */
+// No free-shipping threshold: shipping is a flat price per region.
 const FACTS = ["Ships in 2 business days", "30-day returns", "One warehouse"]
 
 export default function AnnouncementBar() {

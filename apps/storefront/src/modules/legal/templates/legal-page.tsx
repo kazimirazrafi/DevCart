@@ -4,14 +4,6 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import type { LegalDocument } from "../content"
 import { LEGAL_LINKS, LEGAL_UPDATED, SUPPORT_EMAIL } from "../links"
 
-/**
- * One policy page.
- *
- * The article is the page; the policy list sits beside it on a wide screen and
- * above the text on a phone, where a reader arriving from a footer link needs to
- * see where else they can go before they start reading. The list is the only
- * navigation, so it is a real `<nav>` with the current document marked.
- */
 export default function LegalPage({ document }: { document: LegalDocument }) {
   const currentPath = `/${document.slug}`
 

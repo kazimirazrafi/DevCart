@@ -58,9 +58,7 @@ const moderateReviewStep = createStep(
 )
 
 /**
- * Approving and rejecting are the same write with a different word, so they are
- * one workflow. The step refuses an id that does not exist rather than letting
- * a mistyped route answer 200 about nothing.
+ * One workflow for approve and reject. A missing id is a 404, not a silent 200.
  */
 export const moderateProductReviewWorkflow = createWorkflow(
   "moderate-product-review",

@@ -1,9 +1,6 @@
 /**
- * Turning a list of orders into the numbers a dashboard shows.
- *
- * Pure on purpose: the arithmetic is the part that can be wrong in a way that
- * looks plausible (a revenue that quietly includes a cancelled order, a top
- * product list that sorts by the wrong thing), so it is tested without an API.
+ * Turns a list of orders into dashboard numbers. Pure, so the arithmetic is
+ * tested without an API.
  */
 
 export type FulfillmentForSummary = {
@@ -27,9 +24,7 @@ export type OrderForSummary = {
         total?: number | string | null
       }[]
     | null
-  /**
-   * Present only when the read asked for it; see `readOrdersInRange`.
-   */
+  /** Only present when the read asked for it. */
   fulfillments?: FulfillmentForSummary[] | null
 }
 
@@ -51,8 +46,7 @@ const money = (value: unknown): number => {
     return 0
   }
 
-  // Currency amounts with a float tail ("1234.5600000000002") are noise, not
-  // money; two decimals is what a price can carry.
+  // Two decimals, so a float tail does not leak into a total.
   return Math.round(amount * 100) / 100
 }
 
@@ -60,10 +54,8 @@ const currencyOf = (order: OrderForSummary) =>
   (order.currency_code || "eur").toLowerCase()
 
 /**
- * One currency's revenue cannot be added to another's, so revenue is reported
- * per currency rather than as a single figure. The store's catalogue is priced
- * in more than one currency, and a total that silently mixed them would be
- * wrong in a way nobody would notice until it mattered.
+ * Revenue is reported per currency: adding two currencies together produces a
+ * number that looks right and is not.
  */
 export const summariseSales = (
   orders: OrderForSummary[],
@@ -95,9 +87,7 @@ export const summariseSales = (
       }
 
       const quantity = Number(item.quantity ?? 0)
-      // Keyed by product when the order knows it, so two products that share a
-      // title stay two rows; the title is the fallback for an order placed
-      // before the product existed.
+      // Keyed by product id, so products sharing a title stay separate rows.
       const key = item.product_id || title
       const entry = products.get(key) ?? {
         product_id: item.product_id ?? null,
@@ -123,9 +113,7 @@ export const summariseSales = (
       quantity: entry.quantity,
       revenue_by_currency: Object.fromEntries(entry.revenue),
     }))
-    // Most units first — a "top products" list is about what moved. Ties go to
-    // the product that brought in more, then to the title, so the same data
-    // always produces the same order.
+    // Most units first, then revenue, then title for a stable order.
     .sort((a, b) => {
       if (b.quantity !== a.quantity) {
         return b.quantity - a.quantity
@@ -153,13 +141,9 @@ export const summariseSales = (
 }
 
 /**
- * Whether everything the order asked to be sent has left the warehouse.
- *
- * Medusa reports the same thing as an order's `fulfillment_status`, but it
- * computes that while serializing an order and does not let it be filtered on,
- * so the same rule is applied here to the shipments themselves: an order with
- * no fulfillment has shipped nothing, and a cancelled fulfillment is not going
- * to ship — it is left out rather than held against the order forever.
+ * Whether everything the order asked for has shipped. Medusa's own
+ * `fulfillment_status` cannot be filtered on, so the rule is applied to the
+ * shipments: no fulfillment means nothing shipped; a cancelled one is ignored.
  */
 export const isShipped = (order: OrderForSummary): boolean => {
   const live = (order.fulfillments ?? []).filter(
@@ -169,11 +153,6 @@ export const isShipped = (order: OrderForSummary): boolean => {
   return live.length > 0 && live.every((fulfillment) => Boolean(fulfillment.shipped_at))
 }
 
-/**
- * How many of these orders still owe the customer a shipment.
- *
- * Only meaningful on orders read with `withFulfillments` — without the
- * shipments every order looks unshipped.
- */
+/** How many orders still owe a shipment. Only meaningful with fulfillments read. */
 export const countUnshipped = (orders: OrderForSummary[]): number =>
   orders.filter((order) => !isShipped(order)).length

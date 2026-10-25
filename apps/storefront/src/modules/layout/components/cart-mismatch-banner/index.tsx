@@ -29,12 +29,7 @@ function CartMismatchBanner(props: {
     }
   }
 
-  /*
-   * A notice about the cart, not part of the page: `aside` gives it a landmark
-   * of its own, so the content is announced and axe's "content outside a
-   * landmark" rule is satisfied. Yellow fill with ink text is the one sanctioned
-   * highlight (12.40:1); the starter's orange-800 on orange-300 was 4.33:1.
-   */
+  // A cart notice rather than page content, so it gets its own landmark.
   return (
     <aside
       aria-label="Cart transfer notice"

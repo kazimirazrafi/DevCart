@@ -3,11 +3,8 @@
 @import "tailwindcss/utilities";
 
 /*
- * DevCart theme tokens.
- *
- * Colours are stored as raw sRGB channels so Tailwind can build `rgb(... / <alpha-value>)`
- * utilities from them and opacity modifiers keep working. The hex value in each comment is
- * the source of truth for design work; docs/DESIGN.md §2.1 records the contrast ratios.
+ * DevCart theme tokens. Colours are raw sRGB channels so Tailwind can apply
+ * opacity modifiers; the hex in each comment is the reference value.
  */
 @layer base {
   :root {
@@ -18,40 +15,26 @@
     --dc-riso-yellow: 255 212 0; /* #FFD400 */
     --dc-riso-green: 0 121 66; /* #007942 */
 
-    /* The browser's own furniture (scrollbars, form controls) is light too. */
+    /* Browser chrome (scrollbars, form controls) follows the light theme. */
     color-scheme: light;
 
-    /* Spacing scale. `--dc-gutter` is the page edge, `--dc-section` the space
-       between bands, `--dc-content` the max width of a reading column. */
+    /* Page gutter, space between sections, and reading width. */
     --dc-gutter: 1.5rem;
     --dc-section: 6rem;
     --dc-content: 80rem;
 
-    /* The system is square. Kept as a variable so the value is stated once. */
+    /* The system is square. */
     --dc-radius: 0px;
 
-    /* Single focus treatment, reused by every interactive component. */
+    /* Shared focus ring, used by every interactive component. */
     --dc-focus-ring-width: 2px;
     --dc-focus-ring-offset: 2px;
   }
 
   /*
-   * Dark mode is the same print, inverted: the sheet becomes the ink's own
-   * near-black and the type becomes the stock. Every component already paints
-   * with these six tokens, so nothing else in the codebase names a mode.
-   *
-   * The riso inks cannot simply be carried over — `#006DAE` on a near-black
-   * sheet is 2.6:1 — so each one is re-mixed at print strength for a dark
-   * ground while keeping its hue. Two consequences follow, and both are the
-   * rules below in practice:
-   *
-   * - blue, pink and green become the *light* inks here, so the type that sits
-   *   on a fill of one of them is `stock` (the near-black), exactly as it is in
-   *   light mode. `bg-riso-blue text-stock` reads at 7.99:1 either way.
-   * - yellow stays a fill rather than a text colour, but it becomes a dark
-   *   mustard so that `ink` (now the paper) still reads on it: 5.75:1.
-   *
-   * The measurements are recorded in docs/DESIGN.md §2.2.
+   * Dark mode inverts paper and ink. The riso inks are re-mixed for a dark
+   * ground: blue, pink and green become light inks (so type on them is
+   * `stock`), and yellow becomes a dark mustard so `ink` reads on it.
    */
   .dark {
     --dc-stock: 20 21 26; /* #14151A */
@@ -71,22 +54,14 @@
     color: rgb(var(--dc-ink));
   }
 
-  /*
-   * One visible focus ring for the whole system. Components do not repeat it
-   * except where they paint their own background and need an offset colour.
-   */
+  /* One visible focus ring for the whole system. */
   :focus-visible {
     outline: var(--dc-focus-ring-width) solid rgb(var(--dc-riso-blue));
     outline-offset: var(--dc-focus-ring-offset);
   }
 
-  /*
-   * Reduced motion is a preference, not a suggestion. The design is mostly
-   * still, but panels slide, the accordion chevron turns and skeletons pulse;
-   * for a visitor who has asked the system not to animate, all of it settles
-   * to its end state instead. `0.01ms` rather than `none` keeps transition
-   * `end` handlers firing, which Headless UI relies on to unmount a panel.
-   */
+  /* Reduced motion: settle animations to their end state. 0.01ms rather than
+     `none` keeps transition `end` handlers firing for Headless UI. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -123,12 +98,8 @@
     @apply left-0;
   }
 
-  /*
-   * Chrome paints an autofilled field in its own yellow-white and ignores the
-   * field's background. The inset shadow is the only way to repaint it, so it
-   * has to name the theme's paper rather than white — otherwise a filled-in
-   * email address glows light in dark mode.
-   */
+  /* Chrome ignores the field background on autofill; the inset shadow repaints
+     it with the theme's paper so dark mode does not glow white. */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,

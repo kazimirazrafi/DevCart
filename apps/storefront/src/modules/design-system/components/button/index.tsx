@@ -11,11 +11,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean
 }
 
-/*
- * Colour choices are fixed by the contrast rules in docs/DESIGN.md §2.1:
- * `stock` on `riso-blue` is 4.53:1, so that pairing is the only blue fill.
- * `ink` is never placed on `riso-blue` (3.21:1).
- */
+// ink on riso-blue is too low contrast to use as a fill.
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
     "bg-riso-blue text-stock border border-riso-blue hover:bg-ink hover:border-ink " +
@@ -35,11 +31,6 @@ const BASE =
   "inline-flex items-center justify-center gap-2 rounded-square font-sans font-semibold " +
   "transition-colors duration-150 disabled:cursor-not-allowed"
 
-/**
- * The button look as a class string, for the places that need a button-shaped
- * *link* (`<a>` inside `<button>` is invalid markup). `Button` itself is built
- * from this, so a link styled with it cannot drift from the real button.
- */
 export const buttonClass = ({
   className,
   variant = "primary",
@@ -59,8 +50,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         type={props.type ?? "button"}
-        // aria-busy tells assistive tech the action is running; `disabled` alone
-        // just looks inert.
         aria-busy={loading || undefined}
         disabled={disabled || loading}
         className={buttonClass({ variant, size, className })}

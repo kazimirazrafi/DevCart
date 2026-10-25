@@ -6,22 +6,15 @@ import { requestEmailVerificationCodeWorkflow } from "../../../../workflows/requ
 import type { StoreRequestEmailCodeBody } from "../validators"
 
 /*
- * Per-caller limit in front of the per-address one. A customer needs one or two
- * codes; a script walking a list of addresses needs a wall, and the address
- * limits cannot see the walk because every address is new to them.
+ * Per-caller limit before the per-address one: the address limits cannot see a
+ * script walking a list, because every address is new to them.
  */
 const CALLER_WINDOW = { limit: 20, windowMs: 10 * 60 * 1000 }
 
 /**
  * POST /store/email-verification/request
- *
- * Mails a six-digit code to the address the customer is checking out with. The
- * answer is the same whether the address is new, belongs to an account, or was
- * verified yesterday, so the endpoint cannot be used to find out which
- * addresses this store has seen.
- *
- * A code is only ever mailed to the address in the body; the address is not
- * written to the cart here, because `POST /store/carts/:id` is what owns that.
+ * Mails a six-digit code. The answer is the same for every address, so the
+ * endpoint does not reveal which addresses the store has seen.
  */
 export async function POST(
   req: MedusaRequest<StoreRequestEmailCodeBody>,
@@ -72,23 +65,15 @@ export async function POST(
       })
     }
 
-    /*
-     * `sent` rather than the workflow's own `status`: the storefront only needs
-     * to know that something was mailed and when it may ask again. The code is
-     * not here — it exists only in the inbox and as an HMAC in the database.
-     */
+    // The code itself is never returned, only what it existed as an HMAC.
     return res.status(201).json({
       sent: true,
       resend_after_seconds: result.resend_after_seconds,
       expires_in_seconds: result.expires_in_seconds,
     })
   } catch (error) {
-    /*
-     * The row was rolled back by the step's compensation, so this is not a
-     * cooldown: the customer can try again as soon as the provider is back.
-     * The provider's own reason is logged; the customer is told only that the
-     * message did not go out.
-     */
+    // The step's compensation rolled the row back, so this is not a cooldown.
+    // The provider's reason is logged; the customer is told the mail failed.
     const reason =
       error instanceof Error
         ? error.message

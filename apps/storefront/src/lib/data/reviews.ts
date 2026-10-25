@@ -46,15 +46,9 @@ export type ReviewActionState =
   | null
 
 /**
- * Who is asking, read fresh on every request.
- *
- * `retrieveCustomer` in `lib/data/customer.ts` caches its answer with
- * `force-cache`, and Next's data cache key for a fetch is its url — the
- * Authorization header is not part of it. On a page whose whole point is "is
- * this visitor allowed to write a review?", a cached signed-in answer would
- * hand the form to the next visitor who is not signed in. This read is
- * `no-store`, and it only runs when the auth cookie is actually present, so an
- * anonymous visit costs nothing.
+ * Who is asking, read fresh: the data cache is keyed by url, not by the
+ * Authorization header, so a cached answer would leak one customer's session to
+ * the next visitor. It only runs when an auth cookie is present.
  */
 export const retrieveReviewer = async (): Promise<HttpTypes.StoreCustomer | null> => {
   const headers = await getAuthHeaders()
@@ -81,12 +75,8 @@ const EMPTY: ProductReviewsPage = {
 }
 
 /**
- * The catalogue-wide rating picture from published reviews, for the homepage.
- *
- * `average` is null until the first review is approved, which is why the trust
- * bar and the review rail have a "New" state rather than a 0.0. The cached copy
- * is short-lived: an approval in the admin should reach the homepage without a
- * deploy.
+ * The catalogue-wide rating picture, for the homepage. `average` is null until
+ * the first review is approved, so callers show a "New" state rather than 0.0.
  */
 export const getCatalogueReviewSummary =
   async (): Promise<CatalogueReviewSummary> => {
@@ -103,15 +93,9 @@ export const getCatalogueReviewSummary =
   }
 
 /**
- * The approved reviews of one product, newest first.
- *
- * Only moderated reviews come back — the route decides that, not this module —
- * and the response is an aggregate, so a page that shows it must revalidate at
- * least as often: an approval made in the admin has no way to reach a browser
- * that cached the empty list forever.
- *
- * A failed read returns an empty page rather than throwing: the product page is
- * worth showing without its reviews, and the section says so.
+ * The approved reviews of one product, newest first. Only moderated reviews come
+ * back; the route decides that. A failed read returns an empty page so the
+ * product page still renders.
  */
 export const listProductReviews = async ({
   productId,
@@ -136,13 +120,9 @@ export const listProductReviews = async ({
 }
 
 /**
- * Writes a review for the signed-in customer.
- *
- * Bound to its product id by the form (`createProductReview.bind(null, id)`)
- * so it keeps `useActionState`'s `(state, formData)` shape. The API is the
- * validator — one review per customer per product, a rating from 1 to 5, and
- * moderation before publication — so the messages here are what it said,
- * translated for a customer.
+ * Writes a review for the signed-in customer. Bound to its product id by the form
+ * so it keeps useActionState's (state, formData) shape. The API enforces one
+ * review per customer per product; its messages are translated here.
  */
 export const createProductReview = async (
   productId: string,
@@ -191,14 +171,8 @@ export const createProductReview = async (
     return { ok: false, message: medusaErrorMessage(error) }
   }
 
-  /*
-   * Deliberately no `revalidateTag` here. A new review is `pending`, so the
-   * public list and the summary this page shows cannot have changed, and the
-   * tag revalidation is not free: it refreshes the route while the action's
-   * result is being rendered, which remounts the form and throws away the
-   * "your review is with us" answer the customer is owed (observed: the form
-   * simply vanished after a successful submit).
-   */
+  // No revalidateTag: a new review is pending, so the public list has not
+  // changed, and refreshing here remounts the form and drops its success message.
   return {
     ok: true,
     message:

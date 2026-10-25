@@ -24,10 +24,6 @@ type MobileActionsProps = {
   optionsDisabled: boolean
 }
 
-/*
- * The sticky bar a phone gets instead of the inline buy box once the buy box
- * scrolls out of view, plus the sheet that holds the same option chips.
- */
 const MobileActions: React.FC<MobileActionsProps> = ({
   product,
   variant,
@@ -157,11 +153,6 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                   className="flex h-full w-full transform flex-col gap-y-3 overflow-hidden border-t border-ink bg-stock text-left"
                   data-testid="mobile-actions-modal"
                 >
-                  {/*
-                   * The sheet had no title, so it announced itself as just
-                   * "dialog". The title is for assistive tech: on the phone the
-                   * sheet is unmistakably the option picker.
-                   */}
                   <Dialog.Title className="sr-only">
                     Choose options
                   </Dialog.Title>

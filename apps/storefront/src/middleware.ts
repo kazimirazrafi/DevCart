@@ -61,11 +61,6 @@ async function getRegionMap(cacheId: string) {
   return regionMapCache.regionMap
 }
 
-/**
- * Fetches regions from Medusa and sets the region cookie.
- * @param request
- * @param response
- */
 async function getCountryCode(
   request: NextRequest,
   regionMap: Map<string, HttpTypes.StoreRegion | number>
@@ -97,9 +92,6 @@ async function getCountryCode(
   return countryCode
 }
 
-/**
- * Middleware to handle region selection and onboarding status.
- */
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.includes(".")) {
     return NextResponse.next()
@@ -111,22 +103,13 @@ export async function middleware(request: NextRequest) {
   const regionMap = await getRegionMap(cacheId)
   const countryCode = await getCountryCode(request, regionMap)
 
-  // if the country code is available, use it, otherwise use the default region
   const country = countryCode || DEFAULT_REGION
   const firstPathSegment = request.nextUrl.pathname.split("/")[1]?.toLowerCase()
   const urlHasCountry = firstPathSegment === country.toLowerCase()
 
-  /*
-   * Everything under `/account` is the customer's own pages, and `/account`
-   * itself is where signing in happens. Without the auth cookie those pages are
-   * sent to sign in carrying the page that was asked for, so signing in returns
-   * the customer there instead of dropping them on the overview.
-   *
-   * The cookie is only checked for presence: middleware runs on the Edge, where
-   * the JWT cannot be verified without handing it the backend's secret. A stale
-   * or forged token still passes this check, and every account page reads the
-   * customer through the Store API, which is what actually refuses it.
-   */
+  /* /account pages redirect to sign-in with the requested page as ?redirect.
+   * The JWT is only checked for presence: it cannot be verified on the Edge, and
+   * the account pages themselves read the customer through the Store API. */
   const pathWithoutCountry = urlHasCountry
     ? request.nextUrl.pathname.slice(country.length + 1) || "/"
     : request.nextUrl.pathname
@@ -153,7 +136,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // if the url doesn't have the country, redirect to it
   const redirectPath =
     request.nextUrl.pathname === "/" ? "" : request.nextUrl.pathname
   const queryString = request.nextUrl.search || ""

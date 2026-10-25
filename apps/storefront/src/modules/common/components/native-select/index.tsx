@@ -52,8 +52,7 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
             {...props}
             className={clsx(
               "flex-1 appearance-none border-none bg-transparent px-3 py-2.5 pr-9 text-body transition-colors duration-150 outline-none",
-              // The placeholder is a disabled option, so the empty value is
-              // what tells us to mute the closed select.
+              // The placeholder option is disabled, so an empty value means no choice yet.
               isPlaceholder ? "text-ink/70" : "text-ink"
             )}
           >

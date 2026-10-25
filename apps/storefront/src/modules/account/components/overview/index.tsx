@@ -9,16 +9,6 @@ type OverviewProps = {
   orders: HttpTypes.StoreOrder[] | null
 }
 
-/*
- * The account's landing page: who is signed in, how complete the profile is and
- * what was ordered recently. It is a page of bands rather than a card — the
- * heading, the two facts and the orders each sit between rules, like the rest of
- * the storefront.
- *
- * It used to be wrapped in `hidden small:block`, which made the whole overview
- * disappear on a phone; the grid below stacks instead. The test ids are the ones
- * the account checks from earlier phases read, so they stay on the same facts.
- */
 const Overview = ({ customer, orders }: OverviewProps) => {
   const firstName = customer?.first_name ?? ""
 

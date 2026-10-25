@@ -7,11 +7,6 @@ import ChevronDown from "@modules/common/icons/chevron-down"
 
 type NativeSelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "size">
 
-/**
- * The cart's quantity picker: a native select, so it keeps the platform's
- * keyboard and screen-reader behaviour. Square and ink-bordered like everything
- * else, with the chevron drawn on top of the field.
- */
 const CartItemSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
   ({ className, children, ...props }, ref) => {
     return (

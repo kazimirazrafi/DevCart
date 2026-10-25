@@ -9,18 +9,6 @@ const FACTS = [
 const DEPARTMENTS =
   "Electronics, fashion, beauty, home, groceries, sports, toys and books."
 
-/**
- * The sign-in page's brand panel.
- *
- * The design is a printed label rather than a photograph: a stock sheet inside
- * two misregistered ink plates, the way the hero and the product plates are
- * built. Because it is made of the theme's tokens and nothing else, it inverts
- * with dark mode along with the rest of the page — there is no image to pick a
- * second version of, and no light-only surface to glare through.
- *
- * Decorative, so it is hidden from assistive technology and drops out entirely
- * below `small`, where the form is the whole page.
- */
 export default function AuthArtwork() {
   return (
     <aside

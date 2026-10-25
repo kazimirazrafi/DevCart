@@ -15,9 +15,8 @@ export type ResetPasswordWorkflowInput = {
 }
 
 /*
- * The token itself (signature, purpose, actor type) is checked by the API route
- * with the framework's verifier; the stored token row is what proves it is
- * still live and unused, and consuming it here is what makes it single-use.
+ * The route checks the token's signature; consuming the stored row here is what
+ * makes it single-use.
  */
 const consumeResetTokenStep = createStep(
   "consume-reset-token",
@@ -63,10 +62,8 @@ const updatePasswordStep = createStep(
 )
 
 /**
- * Finishes a password reset: spends the token, stores the new password, and
- * associates the identity with the customer who owns the address. The last step
- * is what makes the new password sign in to an existing account (one created
- * with Google, for instance) instead of an identity no customer belongs to.
+ * Spends the token, stores the password and links the identity to the customer,
+ * so the new password signs in to an account created through Google too.
  */
 export const resetPasswordWorkflow = createWorkflow(
   "reset-password",

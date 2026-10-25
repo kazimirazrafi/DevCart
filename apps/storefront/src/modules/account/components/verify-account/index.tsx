@@ -13,8 +13,7 @@ const VerifyAccount = () => {
   const searchParams = useSearchParams()
   const token = searchParams.get("token")
   const [state, setState] = useState<VerificationState>("verifying")
-  // Guard against the effect running twice in React Strict Mode, which would
-  // consume the single-use token before the customer sees the result.
+  // Single-use token: guard against Strict Mode running the effect twice.
   const confirmed = useRef(false)
 
   useEffect(() => {
@@ -62,11 +61,7 @@ const VerifyAccount = () => {
 
         <Rule />
 
-        {/*
-         * A button-shaped link rather than a button inside an anchor: nesting
-         * one interactive element in another is invalid markup and reads as two
-         * controls to assistive tech.
-         */}
+        {/* A link styled as a button: nesting controls is invalid markup. */}
         <div>
           <LocalizedClientLink
             href="/account"
