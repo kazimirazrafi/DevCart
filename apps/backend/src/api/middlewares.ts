@@ -8,6 +8,7 @@ import {
 import { AdminModerateReviewSchema } from "./admin/reviews/validators"
 import { ensureEmailVerified } from "./middlewares/ensure-email-verified"
 import { callerKey, rateLimit } from "./middlewares/rate-limit"
+import { resolveImportCategories } from "./middlewares/resolve-import-categories"
 import { resolveImportTags } from "./middlewares/resolve-import-tags"
 import { ensureOrderAccess } from "./middlewares/ensure-order-access"
 import {
@@ -19,36 +20,17 @@ import { StoreCreateReviewSchema } from "./store/products/[id]/reviews/validator
 import { StoreAddWishlistItemSchema } from "./store/wishlist/validators"
 
 /*
- * Coarse per-caller flood limits for the routes a stranger can hit without a
- * cart or an account. They are not a per-account lockout — a slow guess against
- * one address is a different control this project does not have — and they are
- * deliberately generous, because a shop, an office or a phone network can put
- * many people behind one address. What they stop is a script: a list of
- * addresses to mail, an account factory, a review or newsletter flood.
- *
- * The counters live in Redis when `REDIS_URL` is set (see lib/rate-limit.ts),
- * so the limit is shared by every instance rather than multiplied by them.
+ * Guest-reachable routes share a flood limit per caller. Generous on purpose:
+ * offices and mobile networks put many people behind one address.
  */
 const FIVE_MINUTES = 5 * 60 * 1000
 const TEN_MINUTES = 10 * 60 * 1000
 const AN_HOUR = 60 * 60 * 1000
 
-/*
- * Writing a review is the one store route that needs to know who is asking:
- * the customer id is the review's author and the half of its "one per customer
- * per product" key. The middleware answers 401 before the handler runs, so the
- * handler can treat `auth_context.actor_id` as present.
- */
 export default defineMiddlewares({
   routes: [
-    /*
-     * Medusa leaves this one route open so a guest can open the confirmation
-     * page they were just sent to; the order id is then the only credential,
-     * and an id is a URL. `ensureOrderAccess` replaces that with the order's
-     * owner or a signed token, and answers everything else as not-found.
-     * `allowUnauthenticated` only means the authenticate middleware does not
-     * reject a guest before the check runs.
-     */
+    // Medusa leaves this read open for guests, so the owner or a signed token
+    // is checked here instead.
     {
       method: ["GET"],
       matcher: "/store/orders/:id",
@@ -59,14 +41,8 @@ export default defineMiddlewares({
         ensureOrderAccess,
       ],
     },
-    /*
-     * A guest's order is only created once they have proved they read the
-     * address it will be sent to. The check runs before the cart is completed,
-     * so an unverified checkout is refused while it is still a cart and before
-     * any payment is authorized. A signed-in customer is exempt (their address
-     * belongs to an account), which is why the authenticate middleware lets an
-     * unauthenticated request through instead of rejecting it.
-     */
+    // Runs before the cart is completed, so an unverified guest checkout is
+    // refused before any payment is authorized. Signed-in customers skip it.
     {
       method: ["POST"],
       matcher: "/store/carts/:id/complete",
@@ -77,12 +53,7 @@ export default defineMiddlewares({
         ensureEmailVerified,
       ],
     },
-    /*
-     * Authentication is Medusa's own route, not ours, so the limit is attached
-     * by path. Sign-in and registration are separated because they are bought
-     * and abused for different reasons: one guesses passwords, the other
-     * manufactures accounts.
-     */
+    // Medusa's own auth routes, so the limits are attached by path.
     {
       method: ["POST"],
       matcher: "/auth/customer/emailpass",
@@ -122,11 +93,7 @@ export default defineMiddlewares({
         }),
       ],
     },
-    /*
-     * Both reset routes: Medusa's, which mints the token, and this project's,
-     * which consumes it. They share one counter, because asking twice is asking
-     * twice whichever door is used.
-     */
+    // Medusa's reset route and ours share one counter.
     {
       method: ["POST"],
       matcher: "/auth/customer/emailpass/reset-password",
@@ -163,10 +130,6 @@ export default defineMiddlewares({
       matcher: "/store/email-verification/confirm",
       middlewares: [validateAndTransformBody(StoreConfirmEmailCodeSchema)],
     },
-    /*
-     * The homepage's signup form. Open to guests by design, so the only thing
-     * checked here is that the body carries a usable address.
-     */
     {
       method: ["POST"],
       matcher: "/store/newsletter",
@@ -186,8 +149,7 @@ export default defineMiddlewares({
       matcher: "/store/products/:id/reviews",
       middlewares: [
         authenticate("customer", ["bearer", "session"]),
-        // After `authenticate`, so the counter is the customer's, not the
-        // address a whole office shares.
+        // After authenticate, so the counter is the customer's, not an address.
         rateLimit({
           bucket: "review-create",
           limit: 10,
@@ -204,22 +166,18 @@ export default defineMiddlewares({
       matcher: "/admin/reviews/:id",
       middlewares: [validateAndTransformBody(AdminModerateReviewSchema)],
     },
-    /*
-     * A product import CSV names its tags by value, while the importer reads
-     * those columns as tag ids and fails the whole file on the first one it
-     * does not find. This rewrites them (creating the tags the file names)
-     * before the workflow sees it; see the middleware for the whole story.
-     */
+    // Import CSVs name tags and categories; both are rewritten to ids before
+    // the workflow sees the file.
     {
       method: ["POST"],
       matcher: "/admin/products/imports",
-      middlewares: [resolveImportTags],
+      middlewares: [
+        resolveImportTags,
+        // Categories second: the pass above writes the file this one reads.
+        resolveImportCategories,
+      ],
     },
-    /*
-     * A wishlist is always somebody's, so all three routes answer 401 before
-     * the handler runs. `actor_id` is then the customer id the handler writes
-     * and filters by — nothing in the body can name a different customer.
-     */
+    // Wishlist routes are always scoped to the signed-in customer.
     {
       method: ["GET"],
       matcher: "/store/wishlist",
@@ -230,8 +188,7 @@ export default defineMiddlewares({
       matcher: "/store/wishlist",
       middlewares: [
         authenticate("customer", ["bearer", "session"]),
-        // A heart is a toggle and two taps can race; the limit is well above
-        // any real browsing so it only catches a script.
+        // A toggle, so the limit only has to catch scripts.
         rateLimit({
           bucket: "wishlist-save",
           limit: 300,
@@ -249,9 +206,7 @@ export default defineMiddlewares({
       middlewares: [authenticate("customer", ["bearer", "session"])],
     },
     {
-      // The product index declares filterable `status` and `sales_channel_ids`,
-      // so the route narrows it to published products in the key's sales
-      // channels.
+      // The product index filters on status and sales channel.
       method: ["POST"],
       matcher: "/store/search",
       middlewares: [

@@ -10,10 +10,7 @@ type ItemProps = {
   currencyCode: string
 }
 
-/*
- * A table row, because its caller renders it inside a `<tbody>`: anything else
- * would be hoisted out of the table by the HTML parser.
- */
+// Table row: the caller renders it inside a <tbody>.
 const Item = ({ item, currencyCode }: ItemProps) => {
   return (
     <tr

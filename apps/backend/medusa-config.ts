@@ -5,20 +5,60 @@ import {
   Modules,
 } from "@medusajs/framework/utils"
 
+import { adminBrandingPlugin } from "./admin-branding"
 import { adminLandingPlugin } from "./admin-landing"
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd())
 
 /*
- * Stripe is registered only when there is a key to register it with: the
- * provider refuses to load with a missing `apiKey` ("Required option `apiKey`
- * is missing in Stripe plugin"), and that failure takes the whole backend down
- * at startup rather than disabling one payment option. So a checkout without a
- * key keeps the manual provider instead of not booting at all.
- *
- * The provider's identifier becomes `pp_stripe_stripe` (the `pp_<identifier>_<id>`
- * shape), which is the id the seed adds to the region and the storefront maps to
- * a title in `lib/constants.tsx`.
+ * S3 when the bucket is fully configured, local disk otherwise. The provider
+ * throws on a missing option, so a half-configured bucket must fall back rather
+ * than stop the backend from booting. S3_FILE_URL is the public read base for
+ * hosts whose endpoint is not public (R2, Spaces).
+ */
+const s3Endpoint = process.env.S3_URL?.replace(/\/+$/, "")
+const s3Region = process.env.S3_REGION || "auto"
+const s3FileUrl =
+  process.env.S3_FILE_URL?.replace(/\/+$/, "") ||
+  (s3Endpoint
+    ? `${s3Endpoint}/${process.env.S3_BUCKET}`
+    : `https://${process.env.S3_BUCKET}.s3.${s3Region}.amazonaws.com`)
+
+const fileStorageProviders =
+  process.env.S3_BUCKET &&
+  process.env.S3_ACCESS_KEY_ID &&
+  process.env.S3_SECRET_ACCESS_KEY
+    ? [
+        {
+          resolve: "@medusajs/medusa/file-s3",
+          id: "s3",
+          options: {
+            file_url: s3FileUrl,
+            bucket: process.env.S3_BUCKET,
+            access_key_id: process.env.S3_ACCESS_KEY_ID,
+            secret_access_key: process.env.S3_SECRET_ACCESS_KEY,
+            region: s3Region,
+            // Empty for AWS; R2, MinIO and Spaces need one.
+            endpoint: s3Endpoint || undefined,
+            prefix: process.env.S3_PREFIX || undefined,
+            // R2, B2 and Object-Ownership buckets reject ACL headers.
+            acl: process.env.S3_ACL === "false" ? false : undefined,
+          },
+        },
+      ]
+    : [
+        {
+          resolve: "@medusajs/medusa/file-local",
+          id: "local",
+          options: {
+            backend_url: `${process.env.MEDUSA_BACKEND_URL ?? "http://localhost:9000"}/static`,
+          },
+        },
+      ]
+
+/*
+ * Stripe only loads with a key: a missing one throws at startup. Its provider
+ * id is pp_stripe_stripe, which the seed puts on the region.
  */
 const stripeProvider = process.env.STRIPE_API_KEY
   ? [
@@ -27,16 +67,9 @@ const stripeProvider = process.env.STRIPE_API_KEY
         id: "stripe",
         options: {
           apiKey: process.env.STRIPE_API_KEY,
-          // Medusa serves the endpoint itself at /hooks/payment/stripe_stripe;
-          // without the secret every delivery fails verification and no
-          // Stripe-driven order or payment update happens (see docs/SETUP.md).
+          // Medusa serves the webhook at /hooks/payment/stripe_stripe.
           webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-          // The provider defaults to manual capture, which only authorizes the
-          // card: the customer's money is held, not taken, and their receipt
-          // can say no more than "authorised". This store takes payment at the
-          // checkout, so the intent is created with automatic capture and a
-          // successful order is paid for. Cancellations are refunded from the
-          // admin (a captured payment has to be refunded, not voided).
+          // Capture at checkout instead of only authorizing the card.
           capture: true,
         },
       },
@@ -44,16 +77,8 @@ const stripeProvider = process.env.STRIPE_API_KEY
   : []
 
 /*
- * Email (E1-E3). The notification module has no provider unless one is named,
- * so this picks exactly one for the `email` channel: Resend once both its key
- * and a verified sender are configured, and Medusa's local provider otherwise.
- * The local provider stores the notification and logs it, which keeps a fresh
- * clone and CI working (and keeps this project's dev runs off a real inbox)
- * while the order and reset flows themselves still run end to end.
- *
- * Two providers on one channel is a startup error in the notification module,
- * which is why this is a choice rather than a list: the fallback is replaced,
- * not joined, when Resend is set up.
+ * Resend once its key and sender are set, the local provider otherwise. Two
+ * providers on one channel is a startup error, so this is one or the other.
  */
 const emailNotificationProviders =
   process.env.RESEND_API_KEY && process.env.RESEND_FROM
@@ -65,8 +90,7 @@ const emailNotificationProviders =
             apiKey: process.env.RESEND_API_KEY,
             from: process.env.RESEND_FROM,
             channels: ["email"],
-            // Left empty in normal use; a local stub can stand in for Resend
-            // when the email paths are tested without sending anything.
+            // Left empty in normal use; a stub can stand in for Resend.
             baseUrl: process.env.RESEND_BASE_URL || undefined,
             storeName: process.env.STORE_NAME || undefined,
           },
@@ -81,14 +105,8 @@ const emailNotificationProviders =
       ]
 
 /*
- * The admin's own notifications (product export finished/failed, import
- * summaries, the bell in the dashboard) travel on the `feed` channel. Listing
- * `providers` replaces the notification module's defaults, so the feed provider
- * has to be named explicitly next to whichever email provider is in use —
- * without it those notifications have no destination and the workflows that
- * send them fail, which is what made Export and Import appear broken. The local
- * provider only stores the notification (the dashboard reads it back); nothing
- * is delivered.
+ * Naming providers replaces the module's defaults, so the feed channel must be
+ * listed too; without it export and import notifications go nowhere.
  */
 const notificationProviders = [
   ...emailNotificationProviders,
@@ -100,17 +118,9 @@ const notificationProviders = [
 ]
 
 /*
- * Product import/export are background workflows: the export runs
- * `backgroundExecution: true` and the import waits for confirmation. The
- * in-memory workflow engine cannot run a step in the background, so both left
- * the workflow stuck and the admin waiting for a notification that never came.
- * The Redis engine runs those steps on a queue; Redis is already part of the
- * project's local infrastructure (docker-compose.yml) and of the production
- * deployment.
- *
- * `REDIS_URL` is optional — without it the in-memory engine is used and those
- * two admin features are the price, which keeps a bare checkout and the test
- * suites (no Redis there) booting.
+ * Import and export run steps in the background, which the in-memory engine
+ * cannot do. Without REDIS_URL the in-memory engine is used and those two
+ * features stop working; everything else still boots.
  */
 const workflowEngine = process.env.REDIS_URL
   ? [
@@ -124,16 +134,9 @@ const workflowEngine = process.env.REDIS_URL
   : []
 
 /*
- * Google sign-in (A1) is registered only when all three of its options are set.
- * The provider validates them itself and refuses to load without one ("Google
- * clientId is required"), and a provider that throws takes the whole backend
- * down at startup rather than one sign-in button — the same reason Stripe is
- * registered this way above. Without the variables the storefront's sign-in
- * form still works: it is the password path that is the baseline.
- *
- * Listing `providers` at all replaces the Auth Module's defaults, so
- * `auth-emailpass` is named back in the same array. Dropping it would take every
- * password login — customers' and admin users' — with it.
+ * Google needs all three values; the provider throws without them. Listing
+ * providers replaces the auth defaults, so emailpass is named back as well or
+ * every password login stops working.
  */
 const authModule = process.env.GOOGLE_CLIENT_ID &&
   process.env.GOOGLE_CLIENT_SECRET &&
@@ -154,8 +157,6 @@ const authModule = process.env.GOOGLE_CLIENT_ID &&
               options: {
                 clientId: process.env.GOOGLE_CLIENT_ID,
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                // The storefront page Google sends the customer back to. It is
-                // also the redirect URI the OAuth client has to allow-list.
                 callbackUrl: process.env.GOOGLE_CALLBACK_URL,
               },
             },
@@ -166,14 +167,10 @@ const authModule = process.env.GOOGLE_CLIENT_ID &&
   : []
 
 module.exports = defineConfig({
-  /*
-   * The admin opens on the custom Dashboard page rather than Medusa's built-in
-   * home, which sends every visit to Orders. See `admin-landing.ts` for why the
-   * landing has to be decided in the admin's HTML.
-   */
+  /* The two admin HTML plugins; both are described in their own files. */
   admin: {
     vite: (config) => ({
-      plugins: [adminLandingPlugin(config.base)],
+      plugins: [adminLandingPlugin(config.base), adminBrandingPlugin()],
     }),
   },
   projectConfig: {
@@ -188,68 +185,27 @@ module.exports = defineConfig({
   },
   modules: [
     ...authModule,
-    /*
-     * Product reviews (§5.5 Option A). A local module, so it needs no options;
-     * it is listed here because `medusa db:generate review` and the runtime both
-     * find modules through this array.
-     */
     {
       resolve: "./src/modules/review",
     },
-    /*
-     * Wishlist (§5.5 Option B). Same shape as the review module: local, no
-     * options, listed so `medusa db:generate wishlist` and the runtime can find
-     * it.
-     */
     {
       resolve: "./src/modules/wishlist",
     },
-    /*
-     * Guest email verification. Holds one row per address being proved: the
-     * HMAC of the live code, its expiry, the failed attempts and the send
-     * limits. The cart's completion reads the token a confirmation returns, so
-     * an unverified guest checkout cannot become an order.
-     */
     {
       resolve: "./src/modules/email-verification",
     },
-    /*
-     * Low-stock alerts (§5.5 Option C). Holds one row per inventory level: when
-     * it was last reported low, which is what keeps the hourly job from mailing
-     * the same shortage every hour.
-     */
     {
       resolve: "./src/modules/stock-alert",
     },
-    /*
-     * The homepage's mailing list. Local, no options, one table of addresses;
-     * listed here so `medusa db:generate newsletter` and the runtime find it.
-     */
     {
       resolve: "./src/modules/newsletter",
     },
     ...workflowEngine,
-    /*
-     * Local file storage. Product export streams a CSV through the file module
-     * and product import reads an uploaded one, so without this module both
-     * routes fail; the local provider writes to `apps/backend/static` and
-     * serves the download from the backend's `/static` path. The module also
-     * backs admin media uploads. `MEDUSA_BACKEND_URL` is the public origin the
-     * download links are built from, so it has to be the URL a browser can
-     * reach, not `localhost` in production.
-     */
+    /* Import, export and admin media uploads need the file module. */
     {
       resolve: "@medusajs/medusa/file",
       options: {
-        providers: [
-          {
-            resolve: "@medusajs/medusa/file-local",
-            id: "local",
-            options: {
-              backend_url: `${process.env.MEDUSA_BACKEND_URL ?? "http://localhost:9000"}/static`,
-            },
-          },
-        ],
+        providers: fileStorageProviders,
       },
     },
     {

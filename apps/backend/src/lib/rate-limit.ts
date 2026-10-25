@@ -1,19 +1,7 @@
 /*
- * A small limit for the things that have no row to count: requests from one
- * caller. It is deliberately coarse — a flood or a script walking a list of
- * addresses — and it is not a per-account lockout. Those are different
- * controls, and Medusa's authentication does not provide one, so a slow
- * password guess against a single address is not what this stops.
- *
- * The count lives in Redis when `REDIS_URL` is set, so every instance shares
- * it, and in this process's memory otherwise. The fallback is what keeps a
- * fresh clone, CI and the test suites working without a Redis server; the
- * limitation is that behind more than one instance with no Redis the limit is
- * per instance, which is still better than no limit and is documented as such.
- *
- * If Redis is configured but unreachable, a request is allowed and the fallback
- * takes over: a limiter must not be able to take checkout down. One warning is
- * logged rather than one per request.
+ * Sliding-window request limiter. Counts in Redis when `REDIS_URL` is set, so
+ * instances share one window, and in process memory otherwise. If Redis is
+ * unreachable the request is allowed and one warning is logged.
  */
 
 import Redis from "ioredis"
@@ -45,13 +33,7 @@ const sweep = (now: number, windowMs: number) => {
   }
 }
 
-/**
- * Counts one request against `key`, and says whether it may proceed.
- *
- * A refused request is not counted, so a caller who keeps hammering during a
- * cooldown does not extend it — the answer stays "wait N seconds" rather than
- * becoming a moving target.
- */
+/** A refused request is not recorded, so retrying does not extend the wait. */
 const takeFromMemory = (
   key: string,
   { limit, windowMs }: SlidingWindow,
@@ -82,11 +64,8 @@ const takeFromMemory = (
 }
 
 /*
- * A sorted set per key, so the window slides exactly as the in-memory one does
- * rather than resetting on a fixed boundary that would let a caller double its
- * allowance across two windows. It runs as one script because the read and the
- * write must not be interleaved by a second instance between them; `PEXPIRE`
- * on every call is what stops a key outliving the last request against it.
+ * A sorted set per key gives an exact sliding window. One script so the read
+ * and write cannot interleave between instances.
  */
 const TAKE_TOKEN_SCRIPT = `
 local key = KEYS[1]
@@ -141,8 +120,7 @@ const getClient = (): Promise<Redis | null> => {
   if (!client) {
     try {
       const instance = new Redis(url, {
-        // A limiter must answer quickly or not at all: a queued command
-        // against a dead Redis would turn checkout into a timeout.
+        // A queued command against a dead Redis would stall checkout.
         enableOfflineQueue: false,
         maxRetriesPerRequest: 2,
       })
@@ -160,11 +138,7 @@ const getClient = (): Promise<Redis | null> => {
   return client
 }
 
-/**
- * Counts one request against `key` and says whether it may proceed. Async
- * because the shared store is a network call; with no `REDIS_URL` it resolves
- * from memory without touching the network.
- */
+/** Counts one request against `key` and says whether it may proceed. */
 export const takeToken = async (
   key: string,
   window: SlidingWindow,

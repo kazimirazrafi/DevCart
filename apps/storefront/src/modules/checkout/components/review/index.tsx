@@ -9,11 +9,6 @@ import PaymentButton from "../payment-button"
 import PaymentReturnNotice from "../payment-return-notice"
 import StepSection from "../step-section"
 
-/**
- * Step 5: what is about to be ordered, read back. The four steps above are
- * closed and show their own summaries at this point; this is the last look
- * before the order exists, so it repeats the facts a customer checks.
- */
 const Review = ({
   cart,
   isOpen,

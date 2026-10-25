@@ -19,16 +19,11 @@ const intParam = (value: unknown, fallback: number, min: number, max: number) =>
 
 /**
  * GET /admin/sales-summary?from=&to=&limit=
- *
- * Revenue, order count and the best-selling products for a window, summed from
- * the orders `readOrdersInRange` returns. Everything except drafts and
- * cancellations is revenue, whatever its fulfillment or payment state, because
- * the total is what the customer was charged; the order list is where an
- * unpaid order is chased.
+ * Revenue, order count and top products for a window. Drafts and cancellations
+ * are not revenue, whatever the fulfillment or payment state.
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  // `readRange` raises a `MedusaError` with `INVALID_DATA`, which the framework
-  // answers as a 400 with its message — the same shape as every other route.
+  // A bad window raises INVALID_DATA, which the framework answers as a 400.
   const range = readRange(req.query.from, req.query.to)
 
   const limit = intParam(

@@ -9,11 +9,6 @@ type OrderDetailsProps = {
 const OrderDetails = ({ order, showStatus }: OrderDetailsProps) => {
   return (
     <div className="flex min-w-0 flex-col gap-2">
-      {/*
-       * An address has no spaces to break at, so a long one is a single
-       * unbreakable word. `overflow-wrap: anywhere` is what keeps it inside the
-       * receipt instead of running past the edge on a phone.
-       */}
       <p className="break-words text-body [overflow-wrap:anywhere]">
         We have sent the order confirmation to{" "}
         <span className="font-semibold" data-testid="order-email">

@@ -6,27 +6,14 @@ import { Button, Link, Rule } from "@modules/design-system"
 export type RouteErrorProps = {
   error: Error & { digest?: string }
   reset: () => void
-  /** Sentence case, says what failed rather than that something did. */
   title?: string
   message?: string
-  /** Where the secondary link goes. */
   homeHref?: string
   homeLabel?: string
-  /**
-   * `false` at the root boundary, which sits above the country segment: there
-   * is no country code to prefix there, so its link is a plain one to `/` and
-   * the middleware puts the region back.
-   */
+  /** False at the root boundary, where there is no country code to prefix. */
   localized?: boolean
 }
 
-/**
- * What a route shows when rendering it fails. Every route group has one of
- * these, so a failed read shows the storefront's own page — its chrome, its
- * type and a way forward — instead of the framework's bare error page. It is
- * deliberately not an apology: one line says what broke, the button retries the
- * render, and the digest is printed for whoever has to look it up in the logs.
- */
 export default function RouteError({
   error,
   reset,

@@ -3,11 +3,7 @@ import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
 import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item"
 import { Rule } from "@modules/design-system"
 
-/**
- * The confirmation page while the order is on its way: the same receipt the
- * customer is about to read — headline, order number in its bordered block,
- * lines, money, delivery and payment — so the page settles rather than jumps.
- */
+/* The same receipt the customer is about to read, so the page settles in place. */
 const SkeletonOrderConfirmed = () => {
   return (
     <div className="content-container py-10 small:py-16" data-testid="order-confirmed-loader">

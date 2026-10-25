@@ -53,8 +53,7 @@ describe("takeToken", () => {
     await takeToken("a", WINDOW, now + 20_000)
     await takeToken("a", WINDOW, now + 20_500)
 
-    // The oldest of the three stamps is still `now`, so the wait is measured
-    // from it: 60s - 21s, not a fresh 60s for each refusal.
+    // The wait still runs from the oldest stamp: 60s - 21s.
     expect(await takeToken("a", WINDOW, now + 21_000)).toHaveProperty(
       "retry_after_seconds",
       39
@@ -74,13 +73,9 @@ describe("takeToken", () => {
 })
 
 /*
- * The same behaviour through Redis, run only where a server is configured: the
- * standard `test:unit` script blanks `REDIS_URL` so the suite stays hermetic,
- * and CI has no Redis at all. Locally, `REDIS_URL=redis://localhost:6379` on
- * this file is what proves the shared path rather than the fallback.
- *
- * Every key is unique per run and the window is short, so nothing has to be
- * cleaned up: the script expires each key on every call.
+ * The shared path, only where a Redis is configured: the standard unit run
+ * blanks REDIS_URL, and CI has none. Keys are unique per run and expire on
+ * their own.
  */
 const describeRedis = process.env.REDIS_URL ? describe : describe.skip
 

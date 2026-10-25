@@ -18,10 +18,7 @@ import Newsletter from "@modules/home/components/newsletter"
 import ReviewHighlights from "@modules/home/components/review-highlights"
 import TrustBar from "@modules/home/components/trust-bar"
 
-/*
- * No title on purpose: the root layout's default (the store's own strapline)
- * is a better search result for the homepage than "Home | DevCart".
- */
+/* No title on purpose: the layout's default is a better search result. */
 export async function generateMetadata(props: {
   params: Promise<{ countryCode: string }>
 }): Promise<Metadata> {
@@ -41,7 +38,7 @@ const RAIL_HANDLES = [
   { handle: "tech-essentials", title: "Tech essentials" },
 ]
 
-/** Products per rail. Enough to scroll, few enough to keep the page light. */
+/** Products per rail. */
 const RAIL_SIZE = 8
 
 /** The catalogue is read two pages at a time to count each department. */
@@ -104,15 +101,11 @@ export default async function Home(props: {
       ])
 
     const catalogue = [...firstPage.products, ...secondPage.products]
-    // `count` is the whole matching catalogue, not the page, so the first read
-    // already knows how many products the shop holds.
+    // count is the whole catalogue, not the page.
     const productCount = firstPage.count
 
-    /*
-     * The review rail is the products whose published reviews put them highest,
-     * read back from the catalogue so the card keeps its price and picture. The
-     * summary is already the source of truth for the numbers next to them.
-     */
+    // The best-reviewed products, read back from the catalogue so the card keeps
+    // its price and picture.
     const reviewProductIds = reviewSummary.products
       .slice(0, REVIEW_LIMIT)
       .map((rated) => rated.product_id)

@@ -23,14 +23,6 @@ type CountrySelectProps = {
   regions: HttpTypes.StoreRegion[]
 }
 
-/*
- * The listbox owns its own open state, which is what makes it keyboard
- * operable: Enter or Space on the button opens it, the arrow keys move through
- * the countries, Enter picks one, Escape closes it and returns focus to the
- * button. An earlier version rendered the options only while a *separate*
- * hover state said so, so a keyboard user could open nothing at all — the menu
- * looked interactive and was mouse-only.
- */
 const CountrySelect = ({ regions }: CountrySelectProps) => {
   const { countryCode } = useParams()
   const currentPath = usePathname().split(`/${countryCode}`)[1]
@@ -49,11 +41,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
       .sort((a, b) => a.label.localeCompare(b.label))
   }, [regions])
 
-  /*
-   * Seeded from the URL rather than left undefined: the Listbox is given a
-   * `value`, and handing it `undefined` first made React warn that a field was
-   * changing from uncontrolled to controlled on the first open.
-   */
+  // Seeded from the URL so the Listbox is never uncontrolled on first render.
   const [current, setCurrent] = useState<CountryOption | undefined>(() =>
     options?.find((o) => o.country === countryCode)
   )

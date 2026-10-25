@@ -9,11 +9,6 @@ const ErrorMessage = ({
     return null
   }
 
-  /*
-   * Ink words behind a riso-pink rule. Pink is a marker here, not text: at this
-   * size it fails AA as a foreground (docs/DESIGN.md §2.1), and it still reads
-   * as "something is wrong" without shouting in red.
-   */
   return (
     <p
       role="alert"

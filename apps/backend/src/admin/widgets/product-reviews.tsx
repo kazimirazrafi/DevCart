@@ -57,15 +57,8 @@ const Stars = ({ rating }: { rating: number }) => (
   </span>
 )
 
-/**
- * Moderation for one product's reviews, on the product page where an admin is
- * already looking at what the review is about.
- *
- * A review is written by a customer as `pending` and is invisible on the
- * storefront until it is approved here; rejecting keeps the row so the words
- * are still on record, and the customer can submit again (their next attempt
- * re-opens this row rather than adding a second review).
- */
+/** Review moderation for one product. Reviews start as pending and stay off
+ * the storefront until approved; rejecting keeps the row on record. */
 const ProductReviewsWidget = ({ data: product }: DetailWidgetProps<AdminProduct>) => {
   const [page, setPage] = useState(0)
   const queryClient = useQueryClient()

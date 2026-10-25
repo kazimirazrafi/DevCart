@@ -55,11 +55,7 @@ type RecentOrder = {
   currency_code?: string | null
   created_at: string
   status?: string | null
-  /**
-   * Computed by `getOrdersListWorkflow` from the order's payment collections
-   * and fulfillments — the same numbers the Orders page shows, which cannot be
-   * asked of the Query API directly.
-   */
+  /** Computed by the orders list workflow, so badges match the Orders page. */
   payment_status?: string | null
   fulfillment_status?: string | null
 }
@@ -75,34 +71,14 @@ const chunk = <T,>(items: T[], size: number): T[][] => {
 }
 
 /**
- * Everything the admin's home screen reports, in one request.
- *
- * The figures are read through the Query API and the module services rather
- * than written in SQL, so they agree with the pages an admin can open from
- * them: the revenue here and the totals in the order list are the same numbers.
- * The dashboard makes one call instead of six because the six together answer
- * one question, and a page that arrives in pieces shows six different moments
- * of the shop.
- *
- * Counts come from the modules' `listAndCount` rather than from the Query API's
- * pagination metadata: the graph only reports a total when it has to filter
- * across modules, and everywhere else hands back the rows it was asked for. A
- * count taken from a page of rows would be the page size, which is a number
- * that looks right and is not.
- *
- * The charts need the window as a sequence, so the same read that produces the
- * totals is bucketed into days (`series.ts`). The window immediately before it
- * is read too — a figure with no baseline is a number nobody can act on — and
- * its days are aligned index by index with this window's, so the comparison
- * line is drawn against the same weekday positions rather than against dates
- * that shift under it.
- *
- * Reviews and stock are counted across all time: a window would drop the
- * oldest, and the oldest are precisely the ones that have been forgotten.
+ * GET /admin/dashboard
+ * Everything the admin home screen reports in one request. Totals come from the
+ * same reads the other admin pages use, so the numbers agree; the previous
+ * window is read for the comparison line.
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  // `readRange` raises a `MedusaError` with `INVALID_DATA` for a bad or
-  // oversized window, which the framework answers as a 400.
+  // A bad or oversized window raises INVALID_DATA, which the framework answers
+  // as a 400.
   const range = readRange(req.query.from, req.query.to)
 
   const span = range.to.getTime() - range.from.getTime()
@@ -128,8 +104,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     inventory,
     recentOrders,
   ] = await Promise.all([
-    // The window's orders, with their shipments: one read answers both the
-    // sales figures and how many of them still owe the customer a parcel.
+    // One read for both the sales figures and the unshipped count.
     readOrdersInRange(req, range, { withFulfillments: true }),
     readOrdersInRange(req, previousRange),
     customerService.listAndCountCustomers({}, { take: 1, select: ["id"] }),
@@ -159,8 +134,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         select: ["id", "product_id", "rating", "title", "created_at"],
       }
     ),
-    // One count per star: the satisfaction card shows the distribution, and
-    // five small counts are cheaper than reading every approved review.
+    // One count per star beats reading every approved review.
     Promise.all(
       RATINGS.map((rating) =>
         reviewService
@@ -184,9 +158,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         "variants.product.title",
       ],
     }),
-    // The orders list's own workflow, so the status badges below are the ones
-    // the Orders page would show for the same order rather than a second
-    // reading of the same payments and shipments.
+    // The Orders page's own workflow, so the badges match.
     getOrdersListWorkflow(req.scope)
       .run({
         input: {
@@ -205,9 +177,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       .then(({ result }) => (Array.isArray(result) ? result : result.rows)),
   ])
 
-  // One row per inventory level, named the way an admin would recognise the
-  // product, lowest stock first — the list is a work queue, so the item about
-  // to run out is the one worth opening.
+  // One row per inventory level, lowest stock first: this is a work queue.
   const lowStock: LowStockLine[] = (
     inventory.data as unknown as InventoryItemRow[]
   )
@@ -221,8 +191,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     })
     .sort((a, b) => a.available - b.available)
 
-  // A review names its product by ID, and the ID is not what an admin reads;
-  // the titles for the handful on screen are one extra read.
+  // An admin reads titles, not product ids.
   const productIds = Array.from(
     new Set(pendingReviews.map((review) => review.product_id))
   )
@@ -237,10 +206,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   )
 
   /*
-   * A returning customer is one who ordered in this window and already existed
-   * when it opened. The new ones are counted by creation date above; the rest
-   * are these, asked in parts so one long window cannot build a filter with
-   * thousands of ids in it.
+   * Returning customers ordered in this window and already existed when it
+   * opened. Asked in chunks so the filter cannot grow to thousands of ids.
    */
   const windowCustomerIds = Array.from(
     new Set(

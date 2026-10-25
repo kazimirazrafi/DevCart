@@ -11,12 +11,6 @@ import {
   type CheckoutStepId,
 } from "../../lib/steps"
 
-/**
- * The sequence, as links. A step is only a link once every step before it is
- * complete — the rest are shown disabled rather than hidden, so the customer can
- * see how much is left. The page itself enforces the same rule, because a
- * typed or stale URL never goes through this component.
- */
 const CheckoutSteps = ({
   cart,
   current,

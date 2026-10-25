@@ -25,11 +25,7 @@ type ReviewRow = {
   } | null
 }
 
-/**
- * The public name on a review: a first name and a last initial. A full name is
- * more than a review needs to say, and customer rows are not always complete,
- * so every part of this is optional.
- */
+/** First name and last initial; customer rows are not always complete. */
 const publicName = (customer?: ReviewRow["customer"]) => {
   const first = customer?.first_name?.trim()
   const last = customer?.last_name?.trim()
@@ -57,14 +53,8 @@ const intParam = (value: unknown, fallback: number, min: number, max: number) =>
 
 /**
  * GET /store/products/:id/reviews
- *
- * Approved reviews only, newest first, paginated. The author's name comes
- * through the review → customer module link; nothing else about the customer
- * leaves this route.
- *
- * `summary` is the whole product's rating picture rather than the current
- * page's, which is what a star average has to be to mean anything. It costs one
- * extra read of the approved ratings (ids and ratings only).
+ * Approved reviews, newest first, paginated. `summary` covers the whole
+ * product, not the current page.
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const productId = req.params.id
@@ -138,10 +128,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 /**
  * POST /store/products/:id/reviews
- *
- * Signed-in customers only (the route is behind the `authenticate` middleware
- * in `src/api/middlewares.ts`) and moderated: a review is written as `pending`
- * and appears on the storefront once an admin approves it.
+ * Authenticated and moderated: the review is written as `pending`.
  */
 export async function POST(
   req: AuthenticatedMedusaRequest<StoreCreateReviewBody>,

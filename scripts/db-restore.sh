@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 #
-# Restores a dump written by db-backup.sh — and, with --verify, proves the
-# restored database is the backup rather than an empty one.
+# Restores a dump from db-backup.sh; --verify compares row counts afterwards.
 #
 #   ./scripts/db-restore.sh <dump> <target database url>
 #   ./scripts/db-restore.sh --verify <dump> <target database url>
 #
-# The target is wiped (`pg_restore --clean --if-exists`), so the script refuses
-# to restore over the database the dump came from unless FORCE=1 is set: that is
-# the production restore, and it is the one path that cannot be undone.
+# The target is wiped (--clean --if-exists), so restoring over the dump's own
+# source database needs FORCE=1.
 #
 # Environment:
 #   FORCE=1   allow restoring over the dump's own source database
@@ -42,8 +40,7 @@ if ! command -v pg_restore >/dev/null || ! command -v psql >/dev/null; then
   exit 1
 fi
 
-# A dump that does not match its checksum is a truncated download or a bad disk,
-# and restoring it would replace a good database with a broken one.
+# A mismatched checksum is a truncated download or a bad disk.
 if [[ -f "$dump.sha256" ]]; then
   if command -v sha256sum >/dev/null; then
     actual="$(sha256sum "$dump" | awk '{print $1}')"

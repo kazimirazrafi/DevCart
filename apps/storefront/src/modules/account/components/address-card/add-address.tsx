@@ -58,10 +58,6 @@ const AddAddress = ({
   )
 }
 
-/**
- * The form only exists while the dialog is open, so every opening starts with a
- * clean action state instead of the errors of an attempt the customer cancelled.
- */
 const AddAddressForm = ({
   region,
   hasAddresses,
@@ -72,8 +68,7 @@ const AddAddressForm = ({
   onClose: () => void
 }) => {
   const router = useRouter()
-  // The first saved address becomes the default for both uses, which is what
-  // the customer almost always wants and what checkout then prefills from.
+  // The first saved address is the default for shipping and billing.
   const [values, setValues] = useState<AddressFormValues>(emptyAddressForm)
   const [isDefaultShipping, setIsDefaultShipping] = useState(!hasAddresses)
   const [isDefaultBilling, setIsDefaultBilling] = useState(!hasAddresses)

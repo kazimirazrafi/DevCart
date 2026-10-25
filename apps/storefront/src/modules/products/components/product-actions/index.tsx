@@ -20,7 +20,6 @@ type ProductActionsProps = {
   disabled?: boolean
 }
 
-/** Below this many units, the buy box says how many are left. */
 const LOW_STOCK_THRESHOLD = 5
 
 const optionsAsKeymap = (
@@ -45,7 +44,6 @@ export default function ProductActions({
   const [error, setError] = useState<string | null>(null)
   const countryCode = useParams().countryCode as string
 
-  // If there is only 1 variant, preselect the options
   useEffect(() => {
     if (product.variants?.length === 1) {
       const variantOptions = optionsAsKeymap(product.variants[0].options)
@@ -64,7 +62,6 @@ export default function ProductActions({
     })
   }, [product.variants, options])
 
-  // update the options when a variant is selected
   const setOptionValue = (optionId: string, value: string) => {
     setOptions((prev) => ({
       ...prev,
@@ -72,7 +69,6 @@ export default function ProductActions({
     }))
   }
 
-  //check if the selected options produce a valid variant
   const isValidVariant = useMemo(() => {
     return product.variants?.some((v) => {
       const variantOptions = optionsAsKeymap(v.options)
@@ -97,10 +93,7 @@ export default function ProductActions({
     router.replace(pathname + "?" + params.toString())
   }, [selectedVariant, isValidVariant])
 
-  // check if the selected variant is in stock
   const inStock = useMemo(() => {
-    // If the variant is the one being shown, it is buyable when either we do
-    // not track its inventory, it may be back-ordered, or units are left.
     if (!selectedVariant) {
       return false
     }
@@ -112,12 +105,6 @@ export default function ProductActions({
     return (selectedVariant.inventory_quantity ?? 0) > 0
   }, [selectedVariant])
 
-  /*
-   * What to tell the customer about availability. Untracked and back-ordered
-   * variants are simply available; a tracked variant either says how many are
-   * left or that it is gone, using the same threshold the seed's low-stock
-   * sizes fall under.
-   */
   const stockLabel = useMemo(() => {
     if (!selectedVariant) {
       return null
@@ -144,7 +131,6 @@ export default function ProductActions({
 
   const inView = useIntersection(actionsRef, "0px")
 
-  // add the selected variant to the cart
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) return null
 
@@ -152,8 +138,8 @@ export default function ProductActions({
     setError(null)
 
     try {
-      // The mutation reports its own failures rather than throwing: a thrown
-      // server-action error is masked to generic copy in production.
+      // The action returns failures instead of throwing; production masks
+      // thrown server-action errors to generic copy.
       const result = await addToCart({
         variantId: selectedVariant.id,
         quantity: 1,
@@ -164,13 +150,9 @@ export default function ProductActions({
         console.error(
           `Failed to add variant ${selectedVariant.id} to the cart: ${result.message}`
         )
-        // The buy box has to say something, so a click that changes nothing is
-        // not silent.
         setError(result.message)
       } else {
-        // Refresh the route so the cart count in the nav and the cart drawer
-        // pick the new line up from the server rather than from the previous
-        // render of this (statically prerendered) page.
+        // Refresh so the nav cart count picks up the new line.
         router.refresh()
       }
     } catch (cause) {
@@ -243,11 +225,6 @@ export default function ProductActions({
               : "Add to cart"}
         </Button>
 
-        {/*
-         * The saved variant is the one the customer picked, so opening the
-         * wishlist later can put the same choice back on the page. The heart
-         * works without a variant too — the product is what is saved.
-         */}
         <WishlistButton
           productId={product.id}
           variantId={selectedVariant?.id ?? null}

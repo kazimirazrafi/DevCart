@@ -10,13 +10,6 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
   return (
     <div>
       <h2 className="my-6 font-display text-h3 font-bold">Delivery</h2>
-      {/*
-       * Stacked on a phone, three columns from `small` up. Each column is a
-       * `min-w-0` flex child so a long value (an address line, an email, a
-       * courier's method name) wraps inside its own column instead of widening
-       * it and running into the next one — which is what put a long email over
-       * the shipping method on a narrow screen.
-       */}
       <div className="flex flex-col gap-6 small:flex-row small:items-start small:gap-x-8">
         <div
           className="flex w-full min-w-0 flex-col small:w-1/3"
@@ -50,11 +43,6 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
           <p className="break-words text-small text-ink/80">
             {order.shipping_address?.phone}
           </p>
-          {/*
-           * `break-words` alone leaves a single long token (an address with no
-           * spaces, a plus-tagged email) unbroken; `overflow-wrap: anywhere`
-           * lets it break mid-word and keeps it inside the column.
-           */}
           <p
             className="break-words text-small text-ink/80 [overflow-wrap:anywhere]"
             data-testid="shipping-contact-email"

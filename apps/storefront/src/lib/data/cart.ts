@@ -31,11 +31,7 @@ import {
   requestVerificationCode,
 } from "./email-verification"
 
-/**
- * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
- * @param cartId - optional - The ID of the cart to retrieve.
- * @returns The cart object if found, or null if not found.
- */
+/** The cart with this id, or the one in the cookie when no id is given. */
 export async function retrieveCart(cartId?: string, fields?: string) {
   const id = cartId || (await getCartId())
   fields ??=
@@ -49,15 +45,8 @@ export async function retrieveCart(cartId?: string, fields?: string) {
     ...(await getAuthHeaders()),
   }
 
-  /*
-   * Read the cart uncached. It is per-customer data that changes on every
-   * mutation, and the storefront re-renders it from inside the server action
-   * that just wrote it: with a cached read, that re-render can be served the
-   * entry from before the change and repaint the previous totals (measured as
-   * a stale subtotal in roughly one quantity change in ten). The routes that
-   * read a cart are dynamic anyway, so the cache saved one round trip and cost
-   * correctness.
-   */
+  // Uncached: the cart changes on every mutation, and a cached read here can
+  // repaint the previous totals right after a write.
   return await sdk.client
     .fetch<HttpTypes.StoreCartResponse>(`/store/carts/${id}`, {
       method: "GET",
@@ -133,12 +122,8 @@ export async function updateCart(data: HttpTypes.StoreUpdateCart) {
     .catch(medusaError)
 }
 
-/*
- * What a cart mutation reports back to its caller. Failures are *returned*, not
- * thrown: a production build replaces a thrown server-action error with generic
- * copy, so a thrown message never reaches the customer (see
- * `lib/util/medusa-error.ts`).
- */
+/* What a cart mutation reports. Failures are returned, not thrown: production
+ * masks a thrown server-action message. */
 export type CartMutationResult = { ok: true } | { ok: false; message: string }
 
 export async function addToCart({
@@ -300,11 +285,7 @@ export async function initiatePaymentSession(
   return { ok: true }
 }
 
-/*
- * What a promotion change reports back. Like the other cart mutations the
- * failure is returned rather than thrown: a production build replaces a thrown
- * server-action message with generic copy.
- */
+/* Promotion changes report failure the same way: returned, never thrown. */
 export type PromotionResult =
   | { ok: true; codes: string[] }
   | { ok: false; message: string }
@@ -319,13 +300,9 @@ const appliedCodes = (cart: HttpTypes.StoreCart) =>
     .filter(Boolean)
 
 /**
- * Writes the whole list of codes at once, which is what the cart API takes.
- *
- * Medusa does not reject the request when a code cannot be applied — it drops
- * the promotion from the cart and answers `200` — so the only way to tell the
- * customer their code was refused is to read the applied promotions back. A
- * refused code is then removed from the cart, so it does not ride along on
- * every later change and start working once the cart happens to qualify.
+ * Writes the whole list of codes at once. Medusa drops a code it cannot apply and
+ * still answers 200, so the list is read back; a refused code is removed so it
+ * cannot start working later.
  */
 async function writePromotionCodes(codes: string[]): Promise<PromotionResult> {
   const cartId = await getCartId()
@@ -427,10 +404,7 @@ export async function removePromotionCode(
   return writePromotionCodes(remaining)
 }
 
-/*
- * The fields an address is not usable without, and what to say about each.
- * The message is written to be read next to the field it belongs to.
- */
+/* Required address fields and the message shown next to each. */
 const REQUIRED_ADDRESS_FIELDS: [string, string][] = [
   ["first_name", "Enter a first name."],
   ["last_name", "Enter a last name."],
@@ -471,11 +445,7 @@ function addressFieldErrors(
   return errors
 }
 
-/**
- * Step 1. The email is collected on its own so a guest is identified before
- * anything else is asked of them, and so the cart has somewhere to send the
- * confirmation from before the address is entered.
- */
+/** Step 1. The email is collected first, before anything else is asked. */
 export async function setCartEmail(
   _currentState: CheckoutStepState,
   formData: FormData
@@ -505,40 +475,26 @@ export async function setCartEmail(
     return { message: medusaErrorMessage(error) }
   }
 
-  /*
-   * A previous confirmation proved a different address, which says nothing
-   * about this one.
-   */
+  // A confirmation for a different address says nothing about this one.
   await forgetVerificationFor(email)
 
-  /*
-   * A signed-in customer's address came from their account, and the order is
-   * tied to that account whatever they type, so there is nothing left to prove
-   * — the backend's completion gate exempts them for the same reason.
-   */
+  // A signed-in customer's order is tied to the account, so there is nothing to
+  // prove; the backend exempts them for the same reason.
   const signedIn = Boolean((await getAuthHeaders()).authorization)
 
   if (signedIn || (await isEmailVerified(email))) {
     redirect(`/${countryCode}/checkout?step=address`)
   }
 
-  /*
-   * A guest proves the address before anything else is asked of them: an
-   * order is only reachable through the inbox it is confirmed to, so asking for
-   * an address and a delivery slot first would be work done on trust.
-   */
+  // A guest proves the address before the address and delivery steps.
   const verification = await requestVerificationCode(email)
 
   if (verification.ok) {
     redirect(`/${countryCode}/checkout?step=contact&verification=sent`)
   }
 
-  /*
-   * The backend's limits are the authority; a code that was mailed a moment ago
-   * is still in the inbox, so the step is shown with the wait named. Anything
-   * else (the mail provider refused the message, the store is unreachable) is
-   * worth staying on the form for, so it can be retried.
-   */
+  // The backend's limits are the authority. A recent code is still in the inbox,
+  // so the step opens with the wait named; anything else stays on the form.
   if (
     verification.code === "resend_cooldown" ||
     verification.code === "too_many_codes" ||
@@ -601,17 +557,12 @@ export async function setAddresses(
 
 /*
  * Completing a cart returns the order, not the payment: the Store API answers
- * `{ type: "order" }` only after its own server-side authorization with Stripe
- * succeeded. A failure carries a reason we can classify (`payment_failed`,
- * `payment_pending` or `cart_problem`), so the checkout can tell the customer
- * what happened instead of asking them to pay again blindly.
+ * { type: "order" } only after its server-side authorization succeeded. A failure
+ * is classified so the checkout can tell the customer what to do.
  */
 export type PlaceOrderResult = { ok: true } | ({ ok: false } & PaymentFailure)
 
-/**
- * Places an order for a cart. If no cart ID is provided, it will use the cart ID from the cookies.
- * @param cartId - optional - The ID of the cart to place an order for.
- */
+/** Places an order for the cart with this id, or the one in the cookie. */
 export async function placeOrder(
   cartId?: string
 ): Promise<PlaceOrderResult> {
@@ -625,12 +576,8 @@ export async function placeOrder(
     }
   }
 
-  /*
-   * Completing a guest's cart is also where the address is proved: the token
-   * from the contact step travels with the request, and the backend refuses the
-   * completion without it. A signed-in customer sends it too when they have
-   * one; the backend ignores it for them.
-   */
+  // The address proof travels with the completion; the backend refuses a guest's
+  // cart without it and ignores it for a signed-in customer.
   const headers = {
     ...(await getAuthHeaders()),
     ...(await emailVerificationHeaders()),
@@ -641,12 +588,8 @@ export async function placeOrder(
   try {
     cartRes = await sdk.store.cart.complete(id, {}, headers)
   } catch (error) {
-    /*
-     * The route throws for anything that is not a payment outcome: a cart that
-     * has already been completed, a cart another request is completing, stock
-     * that disappeared. The message goes in the log; the customer gets the
-     * classification below.
-     */
+    // Thrown for anything that is not a payment outcome (already completed, being
+    // completed elsewhere, stock gone): logged, then classified below.
     return await explainFailedCompletion(id, {
       errorType: (error as { type?: string })?.type,
       errorMessage: medusaErrorMessage(error),
@@ -665,23 +608,15 @@ export async function placeOrder(
 
     removeCartId()
 
-    /*
-     * The confirmation page reads the order back through the Store API, which
-     * only answers the order's owner or a request holding this token. The cart
-     * that just completed is proof enough that this browser may see it, so the
-     * token is minted here and expires on its own.
-     */
+    // The confirmation page reads the order back, and the Store API only answers
+    // its owner or a request holding this token, minted here for that browser.
     redirect(
       `/${countryCode}${orderConfirmationPath(cartRes.order.id)}`
     )
   }
 
-  /*
-   * The cart came back uncompleted. The route only answers this way for a
-   * payment result (`payment_authorization_error`, `payment_requires_more`),
-   * and it puts the reason in the body — which used to be dropped here in
-   * favour of one generic sentence.
-   */
+  // The cart came back uncompleted; only a payment result reaches this branch and
+  // the route puts the reason in the body.
   return await explainFailedCompletion(id, {
     errorType: cartRes?.error?.type,
     errorMessage: cartRes?.error?.message,
@@ -689,12 +624,9 @@ export async function placeOrder(
 }
 
 /**
- * Turns a failed completion into something the customer can act on.
- *
- * The error alone is not always enough — a 400 from the Store API says "session
- * was not authorized" for both a declined card and a payment the bank is still
- * clearing. The payment session is written from Stripe's own answer on the
- * server, so its status is what separates those two cases.
+ * Turns a failed completion into something the customer can act on: the Store API
+ * uses the same 400 for a declined card and a clearing payment, so the session
+ * status is what separates them.
  */
 async function explainFailedCompletion(
   cartId: string,
@@ -729,11 +661,7 @@ async function explainFailedCompletion(
   return { ok: false, ...failure }
 }
 
-/**
- * Updates the countrycode param and revalidates the regions cache
- * @param regionId
- * @param countryCode
- */
+/** Switches the cart's region and revalidates the region and product caches. */
 export async function updateRegion(countryCode: string, currentPath: string) {
   const cartId = await getCartId()
   const region = await getRegion(countryCode)

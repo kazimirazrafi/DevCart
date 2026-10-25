@@ -25,12 +25,7 @@ type ExistingWishlistItem = {
 }
 
 /**
- * A save has to be of something real, and a variant has to belong to the
- * product it is saved with — otherwise the wishlist could hold a pairing no
- * product page could ever have produced.
- *
- * Both checks live here rather than in the route because they are the rule,
- * not the transport.
+ * The product must exist, and a variant must belong to it.
  */
 const assertWishlistableStep = createStep(
   "assert-wishlistable",
@@ -75,13 +70,9 @@ type UpsertWishlistCompensation = {
 }
 
 /**
- * Saves the product, or updates the variant on the row that already saves it.
- *
- * This is an upsert rather than a create with a uniqueness error: the customer
- * tapped a heart, and a heart is a toggle — a second tap while the first
- * request is still in flight must not answer with an error, and the unique
- * index on (customer_id, product_id) is what keeps the two from becoming two
- * rows.
+ * Upsert, not create: a heart is a toggle, so a second tap while the first
+ * request is in flight must not error. The unique index keeps one row per
+ * customer and product.
  */
 const upsertWishlistItemStep = createStep(
   "upsert-wishlist-item",
@@ -155,8 +146,7 @@ const upsertWishlistItemStep = createStep(
       return
     }
 
-    // Updating a row's variant is undone by putting the old one back, so a
-    // failed run leaves the customer's save exactly as it was.
+    // Put the old variant back.
     if (compensation.updatedId) {
       await wishlistService.updateWishlistItems({
         id: compensation.updatedId,
@@ -172,12 +162,8 @@ export const addWishlistItemWorkflow = createWorkflow(
     assertWishlistableStep(input)
     const written = upsertWishlistItemStep(input)
 
-    /*
-     * The module's columns are not enough on their own: the links are what let
-     * a customer list their saves and a product know it was saved, so they are
-     * written with the row — only for a genuinely new one, since an updated
-     * save already has them.
-     */
+    // Links let a customer list saves and a product know it was saved. An
+    // updated save already has them.
     const links = transform(
       { input, written },
       (data): LinkDefinition[] => [

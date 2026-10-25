@@ -4,14 +4,7 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import React, { forwardRef } from "react"
 
-/**
- * Use this component to create a Next.js `<Link />` that persists the current country code in the url,
- * without having to explicitly pass it as a prop.
- *
- * The ref is forwarded to the anchor so the link can stand in as a headless UI
- * trigger (`PopoverButton as={LocalizedClientLink}`), which needs to hold a ref
- * to manage focus.
- */
+// Keeps the current country code in front of `href`.
 type LocalizedClientLinkProps = Omit<
   React.ComponentPropsWithoutRef<typeof Link>,
   "href"

@@ -1,0 +1,114 @@
+name: E2E
+
+# The four customer journeys in apps/storefront/e2e, against a real backend and
+# database. Nightly and on main: a run seeds Postgres, builds both apps and drives
+# a browser through checkout, which is minutes rather than seconds.
+#
+# Both Stripe secrets are needed: without STRIPE_API_KEY the region is not seeded
+# with Stripe, so the payment step has no card form. A run without them warns and
+# skips instead of failing.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flows:
+    name: guest, account, declined card, search
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: medusa-dtc-starter
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/medusa-dtc-starter
+      DB_HOST: localhost
+      DB_PORT: "5432"
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: e2e-ci-secret
+      COOKIE_SECRET: e2e-ci-secret
+      # Read by the seed (the region's providers) and by the storefront build
+      # (whether the card element mounts).
+      STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+      NEXT_PUBLIC_STRIPE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare environment files
+        run: |
+          cp apps/backend/.env.template apps/backend/.env
+          cp apps/storefront/.env.template apps/storefront/.env.local
+
+      - name: Report missing payment secrets
+        if: env.STRIPE_API_KEY == '' || env.NEXT_PUBLIC_STRIPE_KEY == ''
+        run: |
+          echo "::warning title=E2E skipped::STRIPE_API_KEY and NEXT_PUBLIC_STRIPE_KEY must be set as repository secrets for the checkout flows to have a card form to fill in."
+
+      - name: Migrate
+        if: env.STRIPE_API_KEY != '' && env.NEXT_PUBLIC_STRIPE_KEY != ''
+        run: pnpm --filter @dtc/backend exec medusa db:migrate
+
+      # Products, a region, shipping options and the publishable key the
+      # storefront is built with below.
+      - name: Seed
+        if: env.STRIPE_API_KEY != '' && env.NEXT_PUBLIC_STRIPE_KEY != ''
+        run: pnpm --filter @dtc/backend run seed
+
+      - name: Point the storefront at the seeded key
+        if: env.STRIPE_API_KEY != '' && env.NEXT_PUBLIC_STRIPE_KEY != ''
+        run: |
+          key="$(psql "$DATABASE_URL" -At -c "select token from api_key where type = 'publishable' order by created_at limit 1")"
+          echo "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=$key" >> "$GITHUB_ENV"
+
+      # The suite starts its own backend (9001) and storefront (3001) and builds
+      # the storefront itself, so there is nothing else to start here.
+      - name: Run the flows
+        if: env.STRIPE_API_KEY != '' && env.NEXT_PUBLIC_STRIPE_KEY != ''
+        run: pnpm --filter @dtc/storefront run e2e
+
+      - name: Keep the traces and the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: |
+            apps/storefront/test-results
+            apps/storefront/playwright-report
+          retention-days: 14
+          if-no-files-found: ignore

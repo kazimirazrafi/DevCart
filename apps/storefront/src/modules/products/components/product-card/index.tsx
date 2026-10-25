@@ -5,31 +5,15 @@ import { Plate } from "@modules/design-system"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import WishlistButton from "@modules/products/components/wishlist-button"
 
-/*
- * The one product card in the storefront, built on the design-system plate so a
- * listing, a homepage rail and any other strip read as the same printed plate
- * (square corners, hairline ink border, image well, text block below).
- *
- * Price and meta are passed in rather than looked up here because their source
- * differs: server-rendered pages price a variant through `getProductPrice`,
- * while the search-driven listing reads the indexed price fields off a hit.
- */
 type ProductCardProps = {
   href: string
   title: string
   thumbnail?: string | null
   price?: React.ReactNode
   meta?: React.ReactNode
-  /** Set on cards visible without scrolling so the image loads eagerly. */
   priority?: boolean
-  /** `li` when the card is a grid item inside a list. */
   as?: "article" | "div" | "li"
   className?: string
-  /**
-   * The heart needs the product's id. It is drawn as a sibling of the card's
-   * own link, not inside it: a `button` inside an `a` is invalid markup and
-   * would turn every heart tap into a navigation.
-   */
   productId?: string
 }
 

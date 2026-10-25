@@ -18,17 +18,9 @@ export const metadata: Metadata = {
 }
 
 /**
- * The customer's saved products.
- *
- * The rows come from the wishlist module and the prices from the catalogue, in
- * the region being browsed: the Store API's price is a region calculation, so
- * the list is read for ids and the products for everything else. A saved id
- * whose product is no longer published is not in the second read and simply is
- * not shown — the save stays, because the product may come back.
- *
- * Saved with a variant, the plate says which one, so the customer can tell two
- * saves of the same product apart. The heart here refreshes the route when it
- * changes something, because on this page a removal has to take the plate away.
+ * The customer's saved products: ids from the wishlist, prices and copy from the
+ * catalogue in the current region. A save whose product is no longer published
+ * is hidden but kept, since the product may come back.
  */
 export default async function WishlistPage(props: {
   params: Promise<{ countryCode: string }>

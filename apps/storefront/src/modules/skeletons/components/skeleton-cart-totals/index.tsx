@@ -1,11 +1,6 @@
 import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
 import { Rule } from "@modules/design-system"
 
-/**
- * The money block while the figures are on their way: the same rows, the same
- * heavy rule before the total, in mono-width bars so the columns line up with
- * the real ones.
- */
 const SkeletonCartTotals = ({ header = true }: { header?: boolean }) => {
   return (
     <div className="flex flex-col gap-3">

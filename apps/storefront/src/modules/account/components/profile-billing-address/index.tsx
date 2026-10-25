@@ -80,16 +80,13 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
 
   return (
     <form action={formAction} onReset={() => clearState()} className="w-full">
-      {/* Always a string: an `undefined` value here is an uncontrolled input,
-          and the page turns controlled once the address exists. */}
+      {/* Must be a string: undefined would make the input uncontrolled. */}
       <input
         type="hidden"
         name="addressId"
         value={billingAddress?.id ?? ""}
       />
       {!billingAddress && (
-        // The address saved here *is* the billing default, which is what the
-        // profile page means by "billing address".
         <input type="hidden" name="is_default_billing" value="on" />
       )}
       <AccountInfo

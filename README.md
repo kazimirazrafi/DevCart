@@ -1,91 +1,111 @@
 # DevCart
 
-Merchandise for people who build software. A direct-to-consumer store built on Medusa v2 and Next.js.
+A department store for people who build software. The shop sells electronics, apparel, beauty, home
+goods and a small grocery range, and runs on Medusa v2 with a Next.js storefront.
 
-This is a portfolio project: correctness and clarity matter more than feature count. The build order,
-feature list and acceptance criteria live in [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md), and
-progress against them is tracked in [`ROADMAP.md`](ROADMAP.md).
+The catalogue is a demo data set (194 products across 8 departments), so the storefront is populated
+from the first run.
+
+## What is in the box
+
+- **Backend** (`apps/backend`): Medusa v2 application with the store API, admin dashboard, custom
+  modules for reviews, wishlists, email verification, newsletters and stock alerts, plus a sales
+  dashboard in the admin.
+- **Storefront** (`apps/storefront`): Next.js App Router site with product search, filters,
+  collections, categories, cart, guest and account checkout, order history, order transfer, reviews,
+  wishlists and a dark mode.
+- **Ops scripts** (`scripts/`): Postgres dump and restore helpers.
 
 ## Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | Medusa v2 (`@medusajs/medusa` 2.21.2), Node 22, TypeScript |
-| Database | PostgreSQL 15+ |
-| Cache / events | Redis |
+| Backend | Medusa v2, Node 22, TypeScript |
 | Storefront | Next.js 15 (App Router), React 19, Tailwind CSS |
-| API client | Medusa JS SDK |
-| Payments | Stripe (test mode) |
-| Search | Medusa's built-in search API + InstantSearch adapter |
+| Database | PostgreSQL 15+ |
+| Cache and events | Redis |
+| Search | Medusa search API with an InstantSearch client |
+| Payments | Stripe (card) and Medusa's manual provider (cash on delivery) |
+| Email | Resend, with Medusa's notification module |
 | Validation | Zod |
-| Tests | Jest (backend) |
-| Local infra | Docker Compose |
+| Tests | Jest (backend), node:test (storefront), Playwright (end to end) |
+| Local infrastructure | Docker Compose |
 
-## Layout
+## Repository layout
 
 ```
 apps/backend        Medusa application: API routes, workflows, modules, subscribers, jobs, admin
 apps/storefront     Next.js storefront
-docs/               Spec, setup guide, design system
-docker-compose.yml  Postgres + Redis (Meilisearch behind an opt-in profile)
-ROADMAP.md          Progress against the spec
+docs                Setup, architecture, administration, decisions, testing and deployment
+scripts             Database backup and restore
+docker-compose.yml  Postgres and Redis for local development
 ```
-
-Each app has its own `AGENTS.md` context and environment template. The storefront is optional to run if
-you only need the API.
 
 ## Quick start
 
-Full, verified instructions are in [`docs/SETUP.md`](docs/SETUP.md). The short version:
-
 ```bash
 pnpm install
-docker compose up -d                      # Postgres + Redis
+docker compose up -d
 cp apps/backend/.env.template apps/backend/.env
 cp apps/storefront/.env.template apps/storefront/.env.local
-pnpm dev                                  # backend on :9000, storefront on :8000
+
+cd apps/backend && pnpm exec medusa db:migrate && pnpm exec medusa user -e admin@example.com -p changeme
+cd ../.. && pnpm run backend:seed
 ```
 
-The backend serves the admin dashboard at `http://localhost:9000/app`. The storefront is at
-`http://localhost:8000`.
+Put a publishable key from the admin (Settings, Publishable API keys) into
+`apps/storefront/.env.local`, then run both apps:
 
-To put it on the internet, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) covers the free-tier combination
-this project was deployed against: Vercel for the storefront, Render for the backend, Supabase for
-Postgres and Upstash for Redis.
+```bash
+pnpm run dev
+```
+
+Backend on `http://localhost:9000` (admin at `/app`), storefront on `http://localhost:8000`.
+[`docs/SETUP.md`](docs/SETUP.md) has the full walkthrough, including Stripe test mode and email.
 
 ## Commands
 
-Run from the repository root unless noted. The package manager is pnpm (see `packageManager` in
-`package.json`).
+Run from the repository root unless stated otherwise. The package manager is pnpm.
 
 ```bash
-pnpm run dev                 # both apps
+pnpm run dev                 # backend and storefront
 pnpm run backend:dev         # backend only
 pnpm run storefront:dev      # storefront only
 pnpm run build               # build both apps
+pnpm run start               # run the built apps
 pnpm run lint                # lint both apps
-pnpm run test                # backend test suites
+pnpm run typecheck           # typecheck both apps
+pnpm run test                # backend suites
+pnpm run backend:seed        # store, catalogue, reviews, sales channel
 ```
 
-Backend only:
+Backend only (`cd apps/backend`):
 
 ```bash
-cd apps/backend
-pnpm exec medusa db:migrate              # apply migrations
-pnpm exec medusa user -e admin@test.com -p supersecret
+pnpm run test:unit                 # unit tests
+pnpm run test:integration:modules  # module tests against Postgres
+pnpm run test:integration:http     # HTTP suites against Postgres
+pnpm run seed-catalogue            # catalogue only
+pnpm run refresh-catalogue         # reattach products to the storefront channel and reindex
+pnpm run reset-catalog             # empty the catalogue, keep the store setup
 ```
 
-## Design
+Storefront only (`cd apps/storefront`):
 
-The visual system — palette, type scale, spacing and base components — is specified in
-[`docs/DESIGN.md`](docs/DESIGN.md) and previewable at `/{country}/design`, for example
-`http://localhost:8000/dk/design`.
+```bash
+pnpm run test    # unit tests
+pnpm run e2e     # Playwright, needs a seeded database
+```
 
-## Status
+## Documentation
 
-Phases 0–2 (foundation, core store MVP and commerce completeness) are complete. Phase 3
-(differentiators and polish) is in progress — product reviews and the wishlist ship today. See
-[`ROADMAP.md`](ROADMAP.md) for the current state of every feature.
+- [Setup](docs/SETUP.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Running the shop](docs/ADMIN.md)
+- [Decisions](docs/DECISIONS.md)
+- [Testing](docs/TESTING.md)
+- [Deployment](docs/DEPLOYMENT.md)
+- [Design system](docs/DESIGN.md)
 
 ## License
 

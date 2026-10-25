@@ -24,24 +24,9 @@ type ImportBody = {
 }
 
 /**
- * A product import CSV names its tags with values ("makeup", "footwear"), and
- * the importer is not able to: it reads `Product Tag 1`…`Product Tag 5` as tag
- * **ids** and fails the whole import on the first product whose tag it cannot
- * find ("Tag with id makeup not found"), which surfaces in the admin as nothing
- * more than "Failed to import products from file …".
- *
- * So the file is read once, before the workflow takes it, and every tag cell is
- * replaced by the id of the tag with that value — a tag is created when the
- * store does not have it yet, because a CSV that names a tag is asking for it
- * to exist. Cells that are already ids are left alone, so an exported CSV
- * round-trips unchanged.
- *
- * Medusa has no hook between "file uploaded" and "workflow reads it", so this
- * is a middleware on the route itself: Medusa applies the route's validators
- * and `authenticate` before custom middlewares, so the body is validated and
- * the request is an admin's by the time it runs, and the route reads
- * `validatedBody` — which is what is rewritten here. Any other shape (no tag
- * columns, an unreadable file) is passed through untouched.
+ * The importer reads tag columns as ids, so tag names are resolved here and the
+ * file is rewritten before the workflow runs. Missing tags are created; cells
+ * that are already ids pass through, so exported files round-trip.
  */
 export async function resolveImportTags(
   req: MedusaRequest,
@@ -87,11 +72,8 @@ export async function resolveImportTags(
       `Product import: ${values.length} tag value(s) in the file, ${ids.size} tag(s) known, importing ${file.id}`
     )
   } catch (error) {
-    /*
-     * The route's own error is the useful one — it names the column or the row
-     * that broke — so a failure here must not replace it. This only says that
-     * the rewrite did not happen.
-     */
+    // The importer's own error names the broken column or row; this must not
+    // replace it. The file is imported as uploaded.
     logger.warn(
       `Product import: could not resolve tag values, importing the file as uploaded (${
         (error as Error)?.message ?? error
@@ -103,9 +85,8 @@ export async function resolveImportTags(
 }
 
 /**
- * Every tag the store already has, plus the ones this file introduces. Listing
- * is page-wise because a shop can have more tags than one page returns, and a
- * page missed would look like new tags and fail on the unique value index.
+ * Tags the store already has, plus the ones this file introduces. Paged, since
+ * a missed page would look like a new tag.
  */
 async function resolveTagIds(
   productModule: IProductModuleService,

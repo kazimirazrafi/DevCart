@@ -16,11 +16,8 @@ export type { OrderConfirmationData } from "./order-confirmation"
 export type { PasswordResetData } from "./password-reset"
 export type { ShipmentData } from "./shipment"
 
-/**
- * The template names the subscribers ask for. Typing them here means a names
- * mismatch is a compile error in the subscriber, not an email that silently
- * never goes out.
- */
+/** Template names, typed so a mismatch fails compilation instead of silently
+ * sending nothing. */
 export const EMAIL_TEMPLATES = {
   EMAIL_VERIFICATION: "email-verification",
   ORDER_CONFIRMATION: "order-confirmation",
@@ -32,11 +29,8 @@ export const EMAIL_TEMPLATES = {
 
 export type EmailTemplateName = (typeof EMAIL_TEMPLATES)[keyof typeof EMAIL_TEMPLATES]
 
-/**
- * Renders a notification into the subject, HTML and plain text Resend needs.
- * `data` arrives from an event and has been stored as JSON, so each template
- * narrows it defensively rather than trusting the shape.
- */
+/** Renders a notification into subject, HTML and text. `data` comes from an
+ * event as JSON, so each template narrows it defensively. */
 export const renderEmail = (
   template: string | null | undefined,
   data: Record<string, unknown> | null | undefined

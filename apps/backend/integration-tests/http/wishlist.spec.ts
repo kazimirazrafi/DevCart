@@ -8,13 +8,8 @@ jest.setTimeout(180 * 1000)
 
 const PASSWORD = "supersecret"
 
-/**
- * The wishlist routes, exercised over HTTP against a booted Medusa app.
- *
- * Fixtures go through the same doors a browser does — customer sign-up,
- * publishable key, product creation through the product module — so the tests
- * cover the module, the links, the two workflows and the routes together.
- */
+/** Wishlist routes over HTTP, with fixtures created through the same routes a
+ * browser uses. */
 medusaIntegrationTestRunner({
   testSuite: ({ api, getContainer }) => {
     let container: ReturnType<typeof getContainer>
@@ -268,12 +263,8 @@ medusaIntegrationTestRunner({
         const customer = await signUpCustomer()
         const other = await signUpCustomer()
 
-        /*
-         * The schema names exactly two fields, and Medusa's body validation
-         * refuses the rest, so `customer_id` cannot be smuggled in to write
-         * into somebody else's wishlist. Refused before the workflow, which is
-         * why nothing is written either way.
-         */
+        /* customer_id cannot be sent: validation rejects unknown fields before
+         * the workflow runs. */
         const response = await save(customer.token, {
           product_id: productId,
           customer_id: other.customer.id,

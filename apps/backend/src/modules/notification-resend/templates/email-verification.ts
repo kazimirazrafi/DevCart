@@ -8,18 +8,12 @@ import {
 export type EmailVerificationData = {
   storeName?: string
   code: string
-  /** Mirrors the code's lifetime in `lib/email-verification.ts`. */
+  /** Matches the code lifetime in lib/email-verification.ts. */
   expiresInMinutes?: number
 }
 
-/**
- * The six-digit code for a guest's checkout.
- *
- * Nothing else goes in this email: no order, no cart, no address. The recipient
- * has not proved they can read the inbox until they send the code back, so
- * anything printed here would be readable by whoever the address really belongs
- * to — and by anyone watching a shared screen.
- */
+/** The six-digit code for a guest checkout. Nothing about the order or the
+ * customer goes in this email. */
 export const emailVerification = (
   data: EmailVerificationData
 ): EmailContent => {

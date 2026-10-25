@@ -9,13 +9,8 @@ import NewsletterModuleService from "../../src/modules/newsletter/service"
 
 jest.setTimeout(180 * 1000)
 
-/**
- * The homepage's signup route, exercised over HTTP against a booted app.
- *
- * The list is anonymous by design, so nothing here signs a customer in: a
- * request with the publishable key alone has to be enough, and the only thing
- * to check afterwards is what the module stored.
- */
+/** Newsletter signup over HTTP. The list is anonymous, so no customer session
+ * is used. */
 medusaIntegrationTestRunner({
   testSuite: ({ api, getContainer }) => {
     let container: ReturnType<typeof getContainer>

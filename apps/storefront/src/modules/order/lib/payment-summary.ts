@@ -2,26 +2,11 @@ import { isManual, paymentInfoMap } from "@lib/constants"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 
-/*
- * What the order says about the money, in one place.
- *
- * The receipt used to describe the payment method and nothing else, so after
- * paying there was no sentence anywhere on the site that said the card had been
- * charged. The order's own `payment_status` is the authority — it is written by
- * the payment module, not by the browser — and cash on delivery is the one case
- * where nothing was ever going to be taken.
- */
-
 export type PaymentState =
-  /** The money was taken. */
   | "received"
-  /** Approved or still clearing; not taken, and must not read as taken. */
   | "pending"
-  /** Cash on delivery: nothing online, paid to the courier. */
   | "on_delivery"
-  /** Money went back to the customer. */
   | "refunded"
-  /** Nothing was taken and nothing is expected online. */
   | "unpaid"
 
 export type PaymentSummary = {
@@ -66,10 +51,7 @@ export const paymentSummary = (
     currency_code: order.currency_code,
   })
 
-  /*
-   * A refund or a cancellation is the truth about the money whatever the
-   * method was, so those are read before the method-specific copy below.
-   */
+  // Refunds and cancellations win over the method-specific copy below.
   switch (order.payment_status) {
     case "refunded":
       return {
@@ -94,11 +76,6 @@ export const paymentSummary = (
   }
 
   if (isManual(providerOf(order))) {
-    /*
-     * Cash on delivery is collected when the order arrives and captured in the
-     * admin afterwards, so the same order can read "pay on delivery" before
-     * that and "received" after it.
-     */
     if (
       order.payment_status === "captured" ||
       order.payment_status === "partially_captured"

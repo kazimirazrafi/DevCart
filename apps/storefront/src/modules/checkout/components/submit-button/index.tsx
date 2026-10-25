@@ -23,8 +23,6 @@ export function SubmitButton({
     <Button
       type="submit"
       size={size}
-      // The starter's "transparent" variant has no equivalent in the design
-      // system; the outlined secondary button is the closest thing to it.
       variant={
         variant === "secondary" || variant === "transparent"
           ? "secondary"

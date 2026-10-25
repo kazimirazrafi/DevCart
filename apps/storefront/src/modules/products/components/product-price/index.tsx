@@ -2,11 +2,6 @@ import { HttpTypes } from "@medusajs/types"
 
 import { getProductPrice } from "@lib/util/get-product-price"
 
-/**
- * Price of the selected variant, or the cheapest variant as a "from" price
- * before anything is selected. `data-value` carries the raw amount so the cart
- * and tests never have to parse a formatted string.
- */
 export default function ProductPrice({
   product,
   variant,

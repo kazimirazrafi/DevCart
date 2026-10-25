@@ -4,10 +4,6 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import { buttonClass } from "@modules/design-system"
 import OrderCard from "../order-card"
 
-/*
- * The order history. An empty history says what to do about it rather than
- * apologising: the store is one link away.
- */
 const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
   if (orders?.length) {
     return (

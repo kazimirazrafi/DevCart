@@ -6,11 +6,6 @@ import { SubmitButton } from "@modules/checkout/components/submit-button"
 import { Input } from "@modules/design-system"
 import { useActionState, useState } from "react"
 
-/*
- * An order placed as a guest belongs to no account. Pasting its id here asks
- * Medusa to email the address on that order a link that moves it over, which is
- * the only way to attach it without an admin.
- */
 export default function TransferRequestForm() {
   const [state, formAction] = useActionState(createTransferRequest, {
     success: false,
@@ -18,11 +13,7 @@ export default function TransferRequestForm() {
     order: null,
   })
 
-  /*
-   * Controlled: a rejected id has to stay in the field the customer must
-   * correct. React resets an uncontrolled input once a form action returns
-   * (measured in K2), which would empty the very field the message points at.
-   */
+  /* Controlled so a rejected id stays in the field being corrected. */
   const [orderId, setOrderId] = useState("")
 
   return (

@@ -8,10 +8,6 @@ interface AccountLayoutProps {
   children: React.ReactNode
 }
 
-/**
- * The account shell. Signed in, it is the nav beside the page and the width is
- * shared; signed out, it steps out of the way and the sign-in form is the page.
- */
 const AccountLayout: React.FC<AccountLayoutProps> = ({
   customer,
   children,

@@ -1,22 +1,6 @@
 /**
- * DevCart review seed.
- *
- * Fills the review module with the kind of history a store accumulates: real
- * `approved` review rows, written by demo reviewers, linked to the products
- * they are about. The homepage's rating numbers and every product page read
- * these rows, so nothing in the storefront claims a rating the database cannot
- * show.
- *
- *   pnpm exec medusa exec ./src/scripts/seed-reviews.ts   # from apps/backend
- *
- * Re-runnable. Reviewers are matched by email, and the reviews those reviewers
- * already wrote are rebuilt rather than added to, so a second run leaves the
- * same set behind instead of a second copy of it.
- *
- * The ratings are deliberately ordinary: mostly fours and fives with a few
- * threes and a two, which averages 4.5 without every product looking perfect.
- * Dates are spread over the past ten months so a product page does not claim
- * every review arrived on the same afternoon.
+ * Approved reviews from demo reviewers, linked to products by handle. Re-runnable:
+ * the rows those reviewers already wrote are rebuilt, never duplicated.
  */
 import type { ExecArgs, LinkDefinition } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
@@ -24,7 +8,7 @@ import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import { REVIEW_MODULE } from "../modules/review"
 import ReviewModuleService from "../modules/review/service"
 
-/** Twenty-four reviewers, so a few people account for many products. */
+/** Reviewers, so a few people account for many products. */
 const REVIEWERS = [
   { first_name: "Ayesha", last_name: "Rahman" },
   { first_name: "Tobias", last_name: "Klein" },
@@ -58,11 +42,7 @@ const REVIEW_COUNT = 150
 const REVIEWED_PRODUCTS = 50
 const DAY_MS = 24 * 60 * 60 * 1000
 
-/**
- * Ten ratings that average 4.5 exactly, repeated to the review count. Six
- * fives, three fours and a three: the distribution a well-run shop actually
- * has, rather than a wall of five stars.
- */
+/** Ratings that average 4.5 rather than being all fives. */
 const RATING_PATTERN = [5, 5, 5, 5, 4, 4, 5, 4, 5, 3]
 
 const COPY: Record<number, { title: string; body: string }[]> = {
@@ -179,11 +159,7 @@ export default async function seedReviews({ container }: ExecArgs) {
     (_, index) => customersByEmail.get(emailFor(index))?.id
   ).filter((id): id is string => Boolean(id))
 
-  /*
-   * Rebuild the demo set rather than skip it or stack a second copy on top. The
-   * rows removed are only those written by the demo reviewers named above; a
-   * real customer's review is never touched.
-   */
+  /* Only the demo reviewers' rows are removed; real reviews are left alone. */
   const demoReviews = await reviewService.listReviews(
     { customer_id: reviewerIds },
     { select: ["id", "product_id", "customer_id"] }
@@ -213,9 +189,8 @@ export default async function seedReviews({ container }: ExecArgs) {
   const rows: SeedReview[] = []
 
   for (let index = 0; index < REVIEW_COUNT; index++) {
-    // Fifty products, three reviews each, and a different reviewer for each of
-    // a product's three: the reviewer rotation (24) shares no factor with the
-    // review spacing (50), so nobody reviews the same product twice.
+    // 24 reviewers and a 50-product spacing share no factor, so nobody
+    // reviews the same product twice.
     const product = catalogue[
       ((index % REVIEWED_PRODUCTS) * 3) % catalogue.length
     ]
@@ -234,11 +209,8 @@ export default async function seedReviews({ container }: ExecArgs) {
     })
   }
 
-  /*
-   * `created_at` is the framework's own column rather than a field on the
-   * model, so it is not part of the generated create DTO — the cast is what
-   * lets the seed backdate the rows. MikroORM writes the value it is given.
-   */
+  /* created_at is a framework column, not part of the generated DTO, hence
+   * the cast when backdating. */
   const created = await reviewService.createReviews(
     rows as unknown as Parameters<ReviewModuleService["createReviews"]>[0]
   )

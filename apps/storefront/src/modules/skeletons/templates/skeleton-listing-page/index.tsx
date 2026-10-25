@@ -5,11 +5,7 @@ const Bar = ({ className }: { className: string }) => (
   <div className={`animate-pulse bg-ink/10 motion-reduce:animate-none ${className}`} />
 )
 
-/**
- * A listing page while its products are on the way: the heading, the filter
- * rail and a page of plates. The rails only appear from `small` up, where the
- * real ones do, so a phone does not lay out a column it will not use.
- */
+/* Filter rail only from `small` up, same as the real listing. */
 const SkeletonListingPage = ({
   withFilters = true,
   numberOfProducts = 9,

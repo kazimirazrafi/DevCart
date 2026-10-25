@@ -32,16 +32,8 @@ const STORE_DESCRIPTION =
 
 const SITE_URL = getBaseURL().replace(/\/+$/, "")
 
-/*
- * Who the shop is, once per document, so a crawler can tell the brand from the
- * products it sells and attach every page to one name.
- *
- * No `SearchAction`: the listing's URL names a region, and which countries the
- * catalogue actually serves is a property of the database, not of the build
- * (that is why `sitemap.ts` resolves its region from the API). A template naming
- * the configured default would point at a 404 on a shop whose regions are
- * elsewhere, so the node exists without the sitelinks search box.
- */
+/* Organization and WebSite nodes. No SearchAction: the right region is a
+ * database fact, not a build fact, so a template URL could 404. */
 const SITE_JSON_LD = {
   "@context": "https://schema.org",
   "@graph": [
@@ -88,11 +80,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-/*
- * The browser's own chrome follows the OS, not the store's saved choice — a
- * media query cannot read localStorage — so these are the two grounds a
- * visitor can see before the page takes over.
- */
+/* The browser chrome follows the OS, so both grounds are declared. */
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#E8E9E3" },
@@ -104,44 +92,25 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      /*
-       * The theme script below adds `dark` before React runs, so the class on
-       * this element is already the visitor's choice by the time React
-       * hydrates. `suppressHydrationWarning` covers that one attribute and is
-       * scoped to this element; without it every visit in dark mode would log a
-       * mismatch. See the comment on the script for why the mode is not known
-       * at render time.
-       */
+      // The theme script adds `dark` before React hydrates, so this attribute is
+      // the visitor's choice by then; the warning is suppressed for that only.
       suppressHydrationWarning
       className={`${display.variable} ${body.variable} ${mono.variable}`}
     >
       <head>
-        {/*
-         * Runs before the first paint. Rendering the mode on the server is not
-         * possible — the preference lives in the browser's storage and the OS
-         * setting is not a header — so the server always sends the light
-         * document and this script repaints the class in place. A returning
-         * visitor therefore never sees the wrong mode flash; a visitor with
-         * JavaScript disabled keeps the light sheet, which is what the server
-         * sent.
-         */}
+        {/* Runs before the first paint: the preference is browser state, so the
+            server sends the light document and this repaints the class. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <script
           type="application/ld+json"
-          // `<` cannot appear in a store name, but escaping it keeps the
-          // element unclosable from data either way.
+          // Escaping < keeps the element unclosable from data.
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(SITE_JSON_LD).replace(/</g, "\\u003c"),
           }}
         />
       </head>
-      {/*
-       * No `<main>` here: each route group owns its own banner, content and
-       * footer, and a `main` that wrapped the header and the footer told a
-       * screen reader that the navigation was the page's content. The group
-       * layouts render `<main id="main">` around their children, which is also
-       * what the nav's skip link targets.
-       */}
+      {/* No main here: each route group renders <main id="main"> around its
+          own chrome, which is what the nav's skip link targets. */}
       <body>{props.children}</body>
     </html>
   )

@@ -1,21 +1,17 @@
 import type { OrderForSummary } from "../sales-summary/aggregate"
 
 /**
- * The dashboard's charts need the window as a sequence, not as a total.
- *
- * Pure functions on purpose: bucketing a month into days and comparing two
- * windows are the parts that can be wrong in a way that still looks plausible —
- * an order counted in the wrong day, a percentage against an empty baseline —
- * so they are testable without an API, a database or a clock.
+ * Chart helpers: day buckets, currency series and percentage change. Pure, so
+ * they can be tested without an API or a clock.
  */
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
 export type DailyBucket = {
-  /** The UTC day, as `YYYY-MM-DD`. */
+  /** UTC day, `YYYY-MM-DD`. */
   date: string
   orders: number
-  /** Money per currency: two currencies are never added together. */
+  /** Never add two currencies together. */
   revenue: Record<string, number>
 }
 
@@ -33,11 +29,8 @@ const startOfUtcDay = (date: Date) =>
 const dayKey = (date: Date) => date.toISOString().slice(0, 10)
 
 /**
- * One bucket per UTC day the window touches, both ends included.
- *
- * The days come from the range rather than from the orders, so a day without a
- * sale is a zero in the chart instead of a missing point that the line would
- * draw straight through.
+ * One bucket per UTC day in the window, both ends included. Days come from the
+ * range, so a day without a sale is a zero rather than a gap in the line.
  */
 export const dailyBuckets = (from: Date, to: Date): DailyBucket[] => {
   const start = startOfUtcDay(from)
@@ -51,11 +44,8 @@ export const dailyBuckets = (from: Date, to: Date): DailyBucket[] => {
 }
 
 /**
- * The window's orders, counted and summed into the day they were placed.
- *
- * An order outside the buckets is left out rather than folded into the nearest
- * day: the read is filtered to the same range, so that only happens when a
- * caller passes a mismatched pair, and quietly moving the day would hide it.
+ * Counts and sums the window's orders into the day they were placed. Orders
+ * outside the buckets are dropped, not folded into the nearest day.
  */
 export const bucketOrdersByDay = (
   orders: OrderForSummary[],
@@ -90,14 +80,7 @@ export const bucketOrdersByDay = (
   return buckets
 }
 
-/**
- * A per-currency series, one entry per day.
- *
- * The currencies are the union of both windows', because a chart that draws
- * this period's dollars against last period's euros has to have a row for
- * every day in both — the currency picker shows each one, whatever the earlier
- * window held.
- */
+/** One series per currency, one value per day. */
 export const revenueSeries = (
   buckets: DailyBucket[],
   currencies: string[]
@@ -111,24 +94,13 @@ export const revenueSeries = (
   return series
 }
 
-/**
- * A series cut or padded to `length`.
- *
- * The comparison line is drawn beside this window's, one point per day, and
- * the two windows can differ by a day at the edges (a range given in hours
- * rather than dates). Padding with zero keeps every point on the same day
- * index instead of sliding the earlier window along the axis.
- */
+/** Cut or zero-pad a series, so both windows share one day index. */
 export const alignTo = (values: number[], length: number): number[] =>
   Array.from({ length }, (_, index) => values[index] ?? 0)
 
 /**
- * The percentage change from a previous window, or `null` when there is
- * nothing to compare against.
- *
- * A previous window of zero is not "+100%" or "+∞%": the shop had no baseline,
- * and a made-up percentage is worse than admitting it. The page renders `null`
- * as "no comparison yet".
+ * Percentage change from the previous window. `null` when there is no baseline:
+ * zero before is not "+100%".
  */
 export const percentChange = (
   current: number,
@@ -142,6 +114,6 @@ export const percentChange = (
     return null
   }
 
-  // One decimal: a percentage is read as "up 12.5%", not to the cent.
+  // One decimal is what a percentage is read to.
   return Math.round(((current - previous) / previous) * 1000) / 10
 }

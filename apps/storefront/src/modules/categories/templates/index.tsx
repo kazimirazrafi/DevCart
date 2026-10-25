@@ -6,16 +6,6 @@ import BreadcrumbJsonLd from "@modules/common/components/breadcrumb-json-ld"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import StoreTemplate from "@modules/store/templates"
 
-/**
- * A category page: breadcrumb, title, description and the category switcher,
- * then the same search-driven listing `/store` uses with the catalogue pinned
- * to this category.
- *
- * The listing used to be server-rendered from the Store API with only a sort
- * control, which is why a category page offered no size, label or price
- * filters and no way to move to another category without going back to the
- * home page.
- */
 export default function CategoryTemplate({
   category,
   categories,

@@ -57,18 +57,9 @@ const addressLines = (address: OrderForShipmentEmail["shipping_address"]) => {
 }
 
 /**
- * Sends the shipment notification when a fulfillment is shipped.
- *
- * `shipment.created` carries the fulfillment id (not the order's), so the order
- * is found through its fulfillments. The Query API is the reader for the same
- * reason as the confirmation email: the event carries an id, not a payload the
- * email could safely print.
- *
- * The notification is keyed on the fulfillment, so a retried event does not
- * send the customer a second copy of the same shipment's email. As with every
- * email here, nothing may fail the shipment: the fulfillment is already
- * committed by the time this runs, and a subscriber that throws only costs a
- * retry.
+ * Sends the shipment email. The event carries a fulfillment id, so the order is
+ * found through its fulfillments. Keyed on the fulfillment, so a retried event
+ * does not send twice.
  */
 export default async function shipmentCreatedHandler({
   event,
@@ -117,11 +108,7 @@ export default async function shipmentCreatedHandler({
         "fulfillments.items.quantity",
         "fulfillments.items.line_item_id",
       ],
-      /*
-       * The Query API filters on the linked fulfillment as well as the order's
-       * own columns, but the generated filter type for `order` only lists the
-       * latter.
-       */
+      // Filters on the linked fulfillment, which the generated type omits.
       filters: { fulfillments: { id: fulfillmentId } } as never,
     })
 
@@ -152,10 +139,7 @@ export default async function shipmentCreatedHandler({
       return
     }
 
-    /*
-     * The fulfillment item's own title is the variant ("Black / S"); the order
-     * line is what the customer recognises as the product, so pair the two.
-     */
+    // The fulfillment item title is the variant; pair it with the order line.
     const lineItems = new Map(
       (shipped.items ?? []).map((item) => [item.id, item])
     )
@@ -191,10 +175,7 @@ export default async function shipmentCreatedHandler({
         }),
         tracking: (fulfillment.labels ?? []).map((label) => ({
           number: label.tracking_number ?? null,
-          /*
-           * The URL is printed in an email; only ever as a web link, never as
-           * whatever scheme happened to be typed into the label.
-           */
+          // Only http(s): this URL is printed in an email.
           url: /^https?:\/\//i.test(label.tracking_url ?? "")
             ? label.tracking_url
             : null,

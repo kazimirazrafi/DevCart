@@ -7,17 +7,6 @@ import { useActionState, useState } from "react"
 
 const RATINGS = [5, 4, 3, 2, 1]
 
-/**
- * The form a signed-in customer writes a review with.
- *
- * Every field is controlled: React resets an uncontrolled field once a form
- * action returns, so an error would arrive beside an empty box and the words
- * the customer wrote would be gone (the defect K2 found on the checkout email).
- *
- * The rating is a radio group rather than "click the fifth star": radios are
- * what a keyboard and a screen reader already know how to operate, and the star
- * is only how the choice is drawn.
- */
 const ProductReviewForm = ({ productId }: { productId: string }) => {
   const [state, formAction] = useActionState<ReviewActionState, FormData>(
     createProductReview.bind(null, productId),

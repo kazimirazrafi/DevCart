@@ -14,14 +14,9 @@ import {
 } from "@lib/theme"
 
 /*
- * The mode is a browser fact — a stored preference or the OS setting — so it is
- * read through `useSyncExternalStore` rather than copied into React state. Every
- * control on the page subscribes to the same store, and a change in one tab
- * reaches the others through the `storage` event.
- *
- * The server render answers "system": it cannot know better, and React swaps in
- * the real value after hydration without a mismatch warning. The head script has
- * already painted the correct mode by then, so the swap is invisible.
+ * The mode is a browser fact, so it is read through useSyncExternalStore rather
+ * than copied into state. Every control subscribes to the same store, and the
+ * storage event carries a change to the other tabs.
  */
 
 const subscribe = (onStoreChange: () => void) => {

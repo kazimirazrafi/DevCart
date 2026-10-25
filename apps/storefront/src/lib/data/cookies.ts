@@ -49,12 +49,9 @@ export const getCacheOptions = async (
   return { tags: [`${cacheTag}`] }
 }
 
-// `sameSite: "lax"` rather than `"strict"`: the customer returns from a
-// redirect-based payment method (iDEAL, Bancontact, ...) via a cross-site
-// top-level navigation. A "strict" cookie is withheld on that navigation, so
-// the storefront would see a logged-out, cartless visitor and render a 404 for
-// the checkout page instead of resuming the order. "lax" is sent on top-level
-// GET navigations while still blocking cross-site subrequests.
+// sameSite "lax", not "strict": redirect-based payments return here through a
+// cross-site navigation, and a strict cookie would make the visitor look logged
+// out with no cart.
 export const setAuthToken = async (token: string) => {
   const cookies = await nextCookies()
   cookies.set("_medusa_jwt", token, {
@@ -79,10 +76,8 @@ export type PendingCustomer = {
   phone?: string
 }
 
-// During the email verification flow the customer record isn't created until
-// the customer verifies their email and logs in. We temporarily persist the
-// extra signup fields in a cookie so they survive the customer leaving to open
-// their inbox, and read them back when creating the customer at login.
+// The customer record is created only after the address is verified, so the
+// signup fields wait in this cookie while the customer opens their inbox.
 export const setPendingCustomer = async (customer: PendingCustomer) => {
   const cookies = await nextCookies()
   cookies.set("_medusa_pending_customer", JSON.stringify(customer), {
@@ -115,15 +110,8 @@ export const removePendingCustomer = async () => {
   })
 }
 
-/*
- * Where a redirect-based sign-in (Google) should land once it comes back. The
- * round trip leaves this origin and returns on a *new* request, so the
- * destination has to be kept somewhere the browser carries: the callback route
- * has no memory of which page asked for the sign-in.
- *
- * `sameSite: "lax"` for the same reason as the auth cookie: returning from
- * Google is a cross-site top-level navigation.
- */
+/* Where a redirect-based sign-in should land afterwards; the callback arrives on
+ * a new request and has no memory of the page that started it. */
 export const setAuthReturnPath = async (path: string) => {
   const cookies = await nextCookies()
   cookies.set("_medusa_auth_return", path, {
@@ -150,17 +138,9 @@ export const removeAuthReturnPath = async () => {
   })
 }
 
-/*
- * Proof that this browser confirmed the address it is checking out with.
- *
- * The token is signed by the backend and bound to one address; the storefront
- * only carries it. It lives in an HttpOnly cookie so a script on the page
- * cannot read it, and it is sent as a header when the cart is completed — the
- * backend is what checks it, and it refuses a token for a different address.
- *
- * `sameSite: "lax"` for the same reason as the cart cookie: a redirect-based
- * payment returns here with a cross-site top-level navigation.
- */
+/* Proof that this browser confirmed the address it is checking out with. The
+ * token is signed by the backend and bound to one address; the storefront only
+ * carries it, and sends it as a header when the cart is completed. */
 export type EmailVerificationCookie = {
   email: string
   /** Expiry is inside the token; the cookie's own lifetime mirrors it. */
@@ -227,8 +207,7 @@ export const getCartId = async () => {
   return cookies.get("_medusa_cart_id")?.value
 }
 
-// See the note on `setAuthToken`: `sameSite: "lax"` so the cart cookie survives
-// the cross-site return navigation from a redirect-based payment method.
+// Lax for the same reason as the auth cookie: payments can return cross-site.
 export const setCartId = async (cartId: string) => {
   const cookies = await nextCookies()
   cookies.set("_medusa_cart_id", cartId, {

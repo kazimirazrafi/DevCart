@@ -19,11 +19,6 @@ const EMPTY_FORM: Record<string, string> = {
   "shipping_address.phone": "",
 }
 
-/*
- * The cart's address and a saved customer address are different types — the
- * saved one allows null for fields the cart type marks optional — but every
- * field is read the same way, so both are accepted and null becomes empty.
- */
 type AddressLike =
   | HttpTypes.StoreCartAddress
   | HttpTypes.StoreCustomerAddress
@@ -40,13 +35,6 @@ const fromAddress = (address?: AddressLike) => ({
   "shipping_address.phone": address?.phone || "",
 })
 
-/**
- * The shipping address form. It holds what has been typed locally so a rejected
- * submit never clears the fields, and seeds itself in this order: what the cart
- * already holds, then the signed-in customer's saved address, then empty.
- *
- * The email is not here: it belongs to the contact step.
- */
 const ShippingAddress = ({
   customer,
   cart,
@@ -61,7 +49,6 @@ const ShippingAddress = ({
     [cart?.region]
   )
 
-  // Saved addresses are only usable in the region being shopped.
   const addressesInRegion = useMemo(
     () =>
       (customer?.addresses ?? []).filter(
@@ -90,8 +77,7 @@ const ShippingAddress = ({
   }
 
   useEffect(() => {
-    // Only a cart with an address on it overwrites the form: a later cart
-    // update must not clear a prefill the customer has not submitted yet.
+    // Only overwrite a prefill that has been submitted as a cart address.
     if (cart?.shipping_address?.address_1) {
       setFormAddress(cart.shipping_address)
     }
@@ -106,12 +92,7 @@ const ShippingAddress = ({
     }))
   }
 
-  /*
-   * What the picker compares itself against. An input the customer left alone
-   * is `""` where a saved address that never had that field is `null`, so the
-   * empty ones are handed over as null: without that, prefilling from a saved
-   * address reads back as "Choose an address" even though the form is filled.
-   */
+  // Empty values are passed as null so the picker can match a saved address.
   const addressInput = useMemo(
     () =>
       mapValues(
@@ -130,10 +111,6 @@ const ShippingAddress = ({
           <p className="text-small">
             {`Hi ${customer.first_name}, use one of your saved addresses?`}
           </p>
-          {/*
-           * Only the addresses the region can ship to: an address from another
-           * region is one the server rejects, so offering it is a dead end.
-           */}
           <AddressSelect
             addresses={addressesInRegion}
             addressInput={addressInput}

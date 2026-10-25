@@ -10,10 +10,8 @@ import {
 } from "../email-verification"
 
 /*
- * The two secrets of the email verification flow, tested without a database or
- * a mail provider: a code is only accepted for the address it was mailed to,
- * and a token is only accepted for the address and the window it was minted
- * for. Both are what the cart-completion gate relies on.
+ * A code is only accepted for the address it was mailed to, and a token only for
+ * its address and window. Both are what the cart gate relies on.
  */
 const SECRET = "unit-test-email-verification-secret-0123456789"
 
@@ -41,7 +39,6 @@ describe("email verification codes", () => {
 
     expect(hash).not.toContain(code)
     expect(codeMatches("ada@example.com", code, hash)).toBe(true)
-    // The same normal form, typed with different casing and spacing.
     expect(codeMatches("  ADA@example.com ", code, hash)).toBe(true)
   })
 
@@ -67,9 +64,7 @@ describe("email verification codes", () => {
     )
   })
 
-  it("bursts fewer than a million-guess brute force onto five attempts", () => {
-    // The stored value is an HMAC, not a hash of a six-digit space; the attempt
-    // limit is the second wall (`MAX_ATTEMPTS`), which the workflow enforces.
+  it("keeps the attempt limit to five", () => {
     expect(MAX_ATTEMPTS).toBeLessThanOrEqual(5)
   })
 })
@@ -142,8 +137,6 @@ describe("email verification tokens", () => {
     expect(() => createVerificationToken("ada@example.com")).toThrow(
       /EMAIL_VERIFICATION_SECRET/
     )
-    // Verification is the other half of the same failure: it must not fall back
-    // to accepting anything.
     expect(() => verifyVerificationToken("ada@example.com", token)).toThrow(
       /EMAIL_VERIFICATION_SECRET/
     )

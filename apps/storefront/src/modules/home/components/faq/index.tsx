@@ -33,11 +33,6 @@ const QUESTIONS = [
   },
 ]
 
-/**
- * The questions the support inbox actually answers, kept on the page so a
- * visitor does not have to write in for them. Native `details` does the work:
- * it opens without JavaScript, is keyboard-operable and is announced correctly.
- */
 export default function Faq() {
   return (
     <section

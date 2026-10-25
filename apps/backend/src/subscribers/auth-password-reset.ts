@@ -15,10 +15,8 @@ type PasswordResetEvent = {
 }
 
 /*
- * Medusa's core already signs a single-use token and stores only its hash, then
- * emits this event with the token. Everything this store owns is the link and
- * the email around it: the token's 15-minute lifetime and its one-use rule are
- * the Auth Module's, not ours to re-implement.
+ * Core signs and stores the token and emits it here; this owns the link and the
+ * email around it.
  */
 const TOKEN_TTL_MINUTES = 15
 
@@ -26,16 +24,9 @@ const storefrontUrl = () =>
   (process.env.STOREFRONT_URL || "http://localhost:8000").replace(/\/+$/, "")
 
 /**
- * Sends the password-reset link.
- *
- * The reset request is answered with `201` whatever happens here — Medusa does
- * not reveal whether an address has an account, and neither does this store. An
- * email that cannot be sent is therefore logged, never thrown: the customer is
- * told to check their inbox either way, and a real account's owner can ask
- * again.
- *
- * Admin users go through the same workflow; their reset is not this storefront's
- * page, so it is left to the admin dashboard and skipped here.
+ * Sends the reset link. A failure is logged, never thrown: the request answers
+ * 201 either way, so the endpoint does not reveal which addresses have accounts.
+ * Admin users are handled by the dashboard instead.
  */
 export default async function passwordResetHandler({
   event,
@@ -63,8 +54,7 @@ export default async function passwordResetHandler({
       data: {
         storeName: process.env.STORE_NAME || "DevCart",
         email,
-        // The middleware puts the region back on a URL that has none, so one
-        // link works for every country the store sells to.
+        // No country code: the storefront middleware adds the region.
         resetUrl: `${storefrontUrl()}/reset-password?token=${encodeURIComponent(token)}`,
         expiresInMinutes: TOKEN_TTL_MINUTES,
       },

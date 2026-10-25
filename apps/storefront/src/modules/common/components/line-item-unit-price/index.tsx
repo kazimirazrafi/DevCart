@@ -7,10 +7,6 @@ type LineItemUnitPriceProps = {
   currencyCode: string
 }
 
-/**
- * What one unit costs on this line — the total over the quantity, because a
- * price list can price a line rather than a unit.
- */
 const LineItemUnitPrice = ({
   item,
   currencyCode,

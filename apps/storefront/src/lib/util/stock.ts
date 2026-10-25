@@ -1,13 +1,9 @@
 import { HttpTypes } from "@medusajs/types"
 
 /**
- * How many units of a variant a single line may hold: the inventory the product
- * API reports when the variant is tracked and cannot be back-ordered, or `null`
- * when stock is not a limit at all.
- *
- * The cart response carries no inventory (checked against the Store API: the
- * line item's variant has `manage_inventory` but no `inventory_quantity`), so
- * every caller reads this from a product variant instead.
+ * Units a line may hold: the reported inventory when the variant is tracked and
+ * cannot be back-ordered, otherwise null. Callers pass a product variant, since
+ * cart lines carry no inventory_quantity.
  */
 export const remainingUnits = (
   variant: Pick<

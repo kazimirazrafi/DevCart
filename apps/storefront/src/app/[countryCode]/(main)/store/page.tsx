@@ -5,11 +5,7 @@ import { getRegion } from "@lib/data/regions"
 import { pageMetadata } from "@lib/util/seo"
 import StoreTemplate from "@modules/store/templates"
 
-/*
- * The listing is now server-rendered by InstantSearchNext, so it has to be
- * built per request: the results depend on the URL's search state and on the
- * catalogue, not on the build.
- */
+/* Built per request: results depend on the URL's search state and the catalogue. */
 export const dynamic = "force-dynamic"
 
 export async function generateMetadata(props: {

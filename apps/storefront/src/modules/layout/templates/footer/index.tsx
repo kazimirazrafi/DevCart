@@ -4,7 +4,6 @@ import { getStoreName } from "@lib/util/env"
 import { LEGAL_LINKS, SUPPORT_EMAIL } from "@modules/legal/links"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
-/** Departments on the footer: the shop's top level, never the whole tree. */
 const DEPARTMENTS_SHOWN = 6
 const COLLECTIONS_SHOWN = 5
 
@@ -38,16 +37,6 @@ const LinkColumn = ({
   </div>
 )
 
-/**
- * The footer is the site's index, not the catalogue's: six departments with a
- * way to reach all of them, the help links a buyer looks for after a decision,
- * and the policies a store has to publish. Listing every category here would be
- * unusable at a few hundred, so the depth lives in `/store` and the department
- * pages instead.
- *
- * It reads the same `LEGAL_LINKS` the policy pages do, which is what keeps a
- * policy from existing without a link to it.
- */
 export default async function Footer() {
   const [{ collections }, categories] = await Promise.all([
     listCollections({ fields: "id,handle,title" }),

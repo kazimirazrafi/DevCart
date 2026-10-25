@@ -27,11 +27,6 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
           {({ open, close }) => (
             <>
               <div className="relative flex h-full">
-                {/*
-                 * An icon rather than the word: the header's controls are
-                 * read at a glance, and the name is carried for assistive
-                 * technology instead of being drawn.
-                 */}
                 <Popover.Button
                   data-testid="nav-menu-button"
                   aria-label="Open menu"
@@ -69,7 +64,6 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                         type="button"
                         data-testid="close-menu-button"
                         onClick={close}
-                        /* The icon carries no text, so the button needs its own name. */
                         aria-label="Close menu"
                       >
                         <XMark aria-hidden="true" />
@@ -92,12 +86,6 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                       })}
                     </ul>
                     <div className="flex flex-col gap-y-6">
-                      {/*
-                       * The panel carries every destination, including the
-                       * ones the header already shows, and the colour control
-                       * with them — so the navigation has one home on a phone
-                       * and two on a wide screen, never a missing one.
-                       */}
                       <ThemeSwitcher
                         variant="full"
                         tone="on-ink"

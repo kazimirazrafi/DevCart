@@ -15,21 +15,13 @@ import {
 
 export type GoogleSignInState = { state: "error"; error: string } | null
 
-/**
- * Why a Google sign-in did not finish, in the terms the sign-in page has an
- * answer for. The callback route turns each into its own `?auth_error=`, since
- * it answers with a redirect rather than the action's returned state.
- */
+/** Why a Google sign-in did not finish. The callback route turns each into a ?auth_error= code. */
 export type GoogleFailure = "cancelled" | "email_taken" | "failed"
 
 /** Medusa refuses a second customer record for an email that already has one. */
 const ACCOUNT_EXISTS = /already has an account/i
 
-/**
- * The backend without `GOOGLE_CLIENT_ID`: Medusa answers with an instruction for
- * whoever runs the server ("make sure that the provider is registered in the
- * container..."), which is not something a customer can act on.
- */
+/** Without GOOGLE_CLIENT_ID Medusa answers with an instruction for whoever runs the server. */
 const PROVIDER_MISSING = /unable to retrieve the auth provider/i
 
 const googleErrorMessage = (error: unknown) =>
@@ -38,11 +30,8 @@ const googleErrorMessage = (error: unknown) =>
     : medusaErrorMessage(error)
 
 /**
- * The `redirect` a protected page left behind, or null. Only a path on this site
- * is kept: the field is attacker-controlled in the form, and `//host` is another
- * origin. The same rule the password forms apply in `customer.ts` — a `"use
- * server"` module can only export async functions, so it is repeated rather than
- * shared.
+ * The redirect a protected page left behind. Only a path on this site is kept:
+ * the field is attacker-controlled, and //host is another origin.
  */
 const safeReturnPath = (value: FormDataEntryValue | null) => {
   const path = typeof value === "string" ? value : ""
@@ -55,16 +44,10 @@ const safeReturnPath = (value: FormDataEntryValue | null) => {
 }
 
 /**
- * The claims Medusa puts in a customer's JWT (`generate-jwt-token.ts` in the
- * backend): `actor_id` is the customer the identity is linked to (empty until
- * one is), and `user_metadata` is whatever the auth provider told it — for
- * Google, the profile Google returned.
- *
- * Read rather than verified: the token came from the backend over the wire in
- * this same request, so its contents are what that response says they are. It is
- * never trusted for authorization, only for the two things a first-time Google
- * sign-in needs before the customer exists: the email to create them with and
- * their name.
+ * The claims in a customer JWT: actor_id links the identity to a customer (empty
+ * before one exists), user_metadata carries the provider profile. Read, not
+ * verified: the token came from the backend in this same request, and is only
+ * used to create a first-time customer.
  */
 const claimsOf = (token: string) => {
   const [, payload] = token.split(".")
@@ -88,10 +71,7 @@ const claimsOf = (token: string) => {
   }
 }
 
-/**
- * Sign the customer in locally once Google has vouched for them: the auth cookie,
- * the customer cache, and the cart they started before signing in.
- */
+/** Sets the auth cookie, refreshes the customer cache and moves the guest cart over. */
 async function openSession(token: string) {
   await setAuthToken(token)
 
@@ -107,10 +87,8 @@ async function openSession(token: string) {
 }
 
 /**
- * Starts the Google flow: asks the backend for the URL to send the customer to
- * and where they should land afterwards. The provider answers with Google's own
- * consent page, which is a location outside this app — hence the redirect rather
- * than any state this form could hold.
+ * Asks the backend for Google's consent URL, with the return path kept in a
+ * cookie for the callback.
  */
 export async function signInWithGoogle(
   _currentState: GoogleSignInState,
@@ -131,9 +109,7 @@ export async function signInWithGoogle(
     redirect(result.location)
   }
 
-  // A token instead of a location means this browser already had the identity
-  // authenticated. The provider in use answers with a location, but a token is
-  // what the SDK's contract allows here, and it is already a signed-in customer.
+  // A token instead of a location means the identity was already authenticated.
   if (typeof result === "string") {
     await openSession(result)
     redirect(await takeReturnPath())
@@ -160,9 +136,8 @@ export type GoogleCallbackOutcome =
   | { ok: false; failure: GoogleFailure }
 
 /**
- * Finishes the flow from the query Google came back with. Called by the callback
- * route, which is the only place that can both set the auth cookie and navigate
- * the browser — a page cannot set an httpOnly cookie while it renders.
+ * Finishes the flow from the query Google returned. Called by the callback route,
+ * the only place that can both set an httpOnly cookie and navigate.
  */
 export async function completeGoogleSignIn(query: {
   code: string
@@ -187,13 +162,8 @@ export async function completeGoogleSignIn(query: {
 
   const claims = claimsOf(token)
 
-  /*
-   * An empty `actor_id` is what a first-time Google customer gets: the auth
-   * identity exists, but no customer record is linked to it yet. Creating the
-   * customer with that token is what links them, and refreshing mints a token
-   * that carries the new id. The password flow reaches the same point by logging
-   * in a second time after creating the record.
-   */
+  // An empty actor_id means a first-time Google customer: the identity exists but
+  // no customer record is linked yet, so create it and refresh the token.
   if (!claims.actorId) {
     if (!claims.email) {
       console.error("Google sign-in returned no email to create a customer with")
@@ -219,12 +189,8 @@ export async function completeGoogleSignIn(query: {
         token = refreshed.token
       }
     } catch (error) {
-      /*
-       * The address already has an account — with a password, or with a Google
-       * account that a customer record was never made for. Either way we cannot
-       * hand this visitor that account on Google's word alone, so say what to do
-       * instead of showing Medusa's sentence about customers and emails.
-       */
+      // The address already has an account, with a password or an unlinked Google
+      // identity; it cannot be handed over on Google's word alone.
       return {
         ok: false,
         failure: ACCOUNT_EXISTS.test(medusaErrorMessage(error))

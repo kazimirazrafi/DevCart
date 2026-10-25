@@ -7,10 +7,7 @@ type Props = {
   params: Promise<{ id: string; token: string }>
 }
 
-/**
- * The other link in the transfer email. A declined request changes nothing, so
- * the page says so rather than congratulating anyone.
- */
+/** The decline link: a declined request changes nothing. */
 export default async function TransferDeclinedPage({ params }: Props) {
   const { id, token } = await params
 

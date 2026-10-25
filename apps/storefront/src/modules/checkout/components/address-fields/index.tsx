@@ -8,7 +8,6 @@ import CountrySelect from "../country-select"
 
 export type AddressPrefix = "shipping_address" | "billing_address"
 
-/** "shipping_address" → "shipping", which is what the test ids are built from. */
 const prefixKey = (prefix: AddressPrefix) => prefix.split("_")[0]
 
 const FIELDS: {
@@ -51,7 +50,7 @@ const FIELDS: {
     label: "Postal code",
     autoComplete: "postal-code",
     required: true,
-    // Kept from the starter: the two blocks have always used different ids.
+    // The two blocks have always used different postal ids.
     testId: (key) =>
       key === "shipping" ? "shipping-postal-code-input" : "billing-postal-input",
   },
@@ -74,12 +73,6 @@ type AddressFieldsProps = {
   region?: HttpTypes.StoreRegion
 }
 
-/**
- * The address inputs, shared by the shipping and billing blocks so both are
- * validated and laid out the same way. Values and errors are keyed by the
- * input's `name` (`shipping_address.city`), which is also how the server action
- * reports what it rejected.
- */
 const AddressFields = ({
   prefix,
   values,

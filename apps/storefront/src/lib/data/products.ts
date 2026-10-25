@@ -74,8 +74,7 @@ export const listProducts = async ({
           limit,
           offset,
           region_id: region?.id,
-          // `*categories` gives the related-products rail the product's own
-          // category without a second read of the product.
+          // *categories saves the related-products rail a second read.
           fields:
             "*variants.calculated_price,+variants.inventory_quantity,*variants.images,*variants.options,+metadata,+tags,*categories,",
           ...queryParams,
@@ -100,12 +99,8 @@ export const listProducts = async ({
 }
 
 /**
- * Units still buyable per variant id, `null` where stock is not a limit.
- *
- * The cart payload has no inventory on it, so anything that wants to cap a
- * quantity (the cart's line items, for instance) reads it from the product
- * side. Returns an empty map rather than throwing: a cart page that cannot
- * reach the catalogue should still render the cart it already has.
+ * Units still buyable per variant id, null where stock is not a limit. Cart lines
+ * carry no inventory, so callers read it here; a failed read returns {}.
  */
 export const listVariantAvailability = async ({
   productIds,
@@ -127,8 +122,7 @@ export const listVariantAvailability = async ({
       queryParams: { id: ids, limit: 100 },
       countryCode,
       regionId,
-      // Read live: a cached answer here shows a stock level the catalogue has
-      // already moved past, which is exactly when the cap on a quantity matters.
+      // Live: a cached level can already be behind the catalogue.
       cache: "no-store",
     })
 
@@ -152,16 +146,9 @@ export const listVariantAvailability = async ({
 const RELATED_CANDIDATES = 12
 
 /**
- * The products to show beside one product (C7): its own category first, then
- * its collection, then the rest of the catalogue to fill the rail.
- *
- * The two filtered reads are separate because the Store API combines filters
- * with AND: asking for the category and the collection in one request would
- * return only products that are in both, missing the siblings that are in just
- * one. The unfiltered read is the last resort — a product can be alone in its
- * category and its collection, and the spec asks for at least four, so the rail
- * fills rather than shrinking. Products are deduplicated and the product itself
- * is never in the result, whichever source offered it.
+ * The products beside one product: its category first, then its collection, then
+ * the rest of the catalogue. The reads are separate because the Store API ANDs
+ * filters, so asking for both at once would only match products in both.
  */
 export const listRelatedProducts = async ({
   product,
@@ -215,10 +202,6 @@ export const listRelatedProducts = async ({
   return related
 }
 
-/**
- * This will fetch 100 products to the Next.js cache and sort them based on the sortBy parameter.
- * It will then return the paginated products based on the page and limit parameters.
- */
 export const listProductsWithSort = async ({
   page = 0,
   queryParams,

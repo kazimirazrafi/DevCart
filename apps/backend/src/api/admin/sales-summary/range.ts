@@ -1,22 +1,15 @@
 import { MedusaError } from "@medusajs/framework/utils"
 
 /**
- * The window the sales summary reports on.
- *
- * Parsing is separate from the route so the rules — what counts as a date, how
- * long a range may be, what "nothing given" means — can be unit-tested without
- * an admin session.
+ * Parses the sales summary window, apart from the route so the rules can be
+ * unit-tested.
  */
 
 export const DEFAULT_RANGE_DAYS = 30
 
 /**
- * The longest window the summary will read.
- *
- * The route walks the orders in pages and sums them in memory, so an unbounded
- * range is an unbounded read. A year is more than the dashboard offers and more
- * than a shop needs to answer "how are we doing"; anything longer is answered
- * with a message rather than a slow request.
+ * The route sums orders in memory, so the window is capped: a year, well past
+ * anything the dashboard offers.
  */
 export const MAX_RANGE_DAYS = 366
 
@@ -43,9 +36,8 @@ const parse = (value: unknown, label: string): Date => {
 }
 
 /**
- * `from` and `to` are inclusive ISO timestamps; with neither given, the last
- * `DEFAULT_RANGE_DAYS` days ending now. One end may be given on its own: `from`
- * alone ends today, `to` alone reaches back the default number of days.
+ * `from` and `to` are inclusive; with neither given, the last 30 days. Either
+ * end may be given alone.
  */
 export const readRange = (
   fromRaw: unknown,

@@ -1,15 +1,4 @@
-/*
- * Which checkout step a customer belongs on, and which ones they may open.
- *
- * The case that matters here is the guest whose address is not proved yet: the
- * cart holds an email, so the older rule would call the contact step done and
- * move on to the address. The contact step is only finished when the address is
- * also verified — by the token a code returns, or by the customer being signed
- * in, whose address came from their account.
- *
- * Run with `pnpm run test` in apps/storefront; Node strips the types from the
- * module under test, so this needs no build step or framework.
- */
+// A guest's contact step is only complete once the address is verified.
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 

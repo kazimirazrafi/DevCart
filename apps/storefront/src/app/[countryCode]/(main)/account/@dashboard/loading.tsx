@@ -1,11 +1,7 @@
 import SkeletonBar from "@modules/skeletons/components/skeleton-bar"
 import { Rule } from "@modules/design-system"
 
-/**
- * The account's content column while a page of it loads: a heading, its rule
- * and a couple of blocks, which is the shape the overview, the addresses and
- * the order history all share.
- */
+/** The content column while an account page loads, shared by its three pages. */
 export default function AccountDashboardLoading() {
   return (
     <div className="flex w-full flex-col gap-6" data-testid="account-page-loader">

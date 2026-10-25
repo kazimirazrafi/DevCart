@@ -7,6 +7,7 @@ import BreadcrumbJsonLd from "@modules/common/components/breadcrumb-json-ld"
 import { Rule } from "@modules/design-system"
 import ImageGallery from "@modules/products/components/image-gallery"
 import ProductActions from "@modules/products/components/product-actions"
+import ProductDetails from "@modules/products/components/product-details"
 import ProductJsonLd from "@modules/products/components/product-json-ld"
 import ProductOnboardingCta from "@modules/products/components/product-onboarding-cta"
 import ProductReviews from "@modules/products/components/product-reviews"
@@ -22,16 +23,9 @@ type ProductTemplateProps = {
   region: HttpTypes.StoreRegion
   countryCode: string
   images: HttpTypes.StoreProductImage[]
-  /** The whole product's rating picture, for the search result's stars. */
   reviewSummary?: ReviewSummary
 }
 
-/*
- * Gallery on the left, everything a customer decides with on the right: name,
- * price and stock, options, add to cart, then the spec table
- * (docs/DESIGN.md "Product"). The right column stays put while a long gallery
- * scrolls past it.
- */
 const ProductTemplate: React.FC<ProductTemplateProps> = ({
   product,
   region,
@@ -45,11 +39,6 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
 
   const category = product.categories?.[0]
 
-  /*
-   * The trail the product sits in: the shop, its department, then the product.
-   * The category is only named when the product actually has one — a product
-   * that belongs to nothing still has a valid two-step trail.
-   */
   const breadcrumbs = [
     { name: "Home", path: "" },
     { name: "Store", path: "/store" },
@@ -102,6 +91,8 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           <ProductTabs product={product} />
         </div>
       </div>
+
+      <ProductDetails product={product} />
 
       <Suspense
         fallback={

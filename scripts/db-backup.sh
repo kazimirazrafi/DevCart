@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 #
-# A database backup that can be proved later: a custom-format dump, its
-# checksum, the database it came from, and the row count of every table in it.
+# Writes a custom-format dump, its checksum, the source database and a row count
+# per table. Files are owner-readable only; the dump holds customer data.
 #
 #   DATABASE_URL=postgres://... ./scripts/db-backup.sh
-#
-# Everything is written owner-readable only, because the dump holds customer
-# data — emails, addresses, order history. It is deliberately not uploaded
-# anywhere: moving it off the host is a deployment decision (docs/BACKUP.md), not
-# a shell default.
 #
 # Environment:
 #   DATABASE_URL            the database to dump (required)
@@ -54,21 +49,16 @@ pg_dump "$DATABASE_URL" \
   --no-privileges \
   --file="$dump"
 
-# Readable by pg_restore is only half of "usable"; the other half is that it
-# carries data and not just a schema.
-#
-# The listing is captured rather than piped into `grep -q`: with `pipefail`
-# set, grep's early exit closes the pipe, pg_restore dies of SIGPIPE, and the
-# pipeline reports failure on a dump that is perfectly good (measured: it
-# rejected a complete 1.4 MB dump).
+# A schema-only dump is not a backup. The listing is captured rather than piped
+# into grep: with pipefail, grep -q exits early and pg_restore dies of SIGPIPE on
+# a healthy dump.
 if [[ "$(pg_restore --list "$dump")" != *"TABLE DATA"* ]]; then
   echo "The dump contains no table data. Refusing to keep it." >&2
   rm -f "$dump"
   exit 1
 fi
 
-# The counts are what a restore is checked against. Without them, "it restored"
-# means only that pg_restore exited zero.
+# Without counts, "it restored" only means pg_restore exited zero.
 : > "$counts"
 
 while IFS= read -r table; do
@@ -101,8 +91,7 @@ printf '%s\n' "$digest" > "$dump.sha256"
   printf 'tables=%s\n' "$(wc -l < "$counts" | tr -d ' ')"
 } > "$meta"
 
-# Retention is measured from the files themselves, so a dump, its checksum and
-# its counts always age together.
+# Every file of one backup shares a timestamp, so they age together.
 find "$BACKUP_DIR" -maxdepth 1 -name 'medusa-*' -mtime +"$RETENTION_DAYS" -print -delete
 
 echo

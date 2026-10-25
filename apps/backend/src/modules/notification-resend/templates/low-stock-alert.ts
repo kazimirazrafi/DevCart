@@ -20,14 +20,7 @@ export type LowStockAlertData = {
   adminUrl?: string
 }
 
-/**
- * One email for every shortage the job found, not one per product.
- *
- * A restock morning is a list, and an inbox with forty separate alerts is the
- * reason nobody reads them. Each row is a product, its SKU and where it is
- * short, in the order the job found them; the threshold is printed once so
- * "3 left" reads against the number that made it worth saying.
- */
+/** One email listing every shortage the job found, not one per product. */
 export const lowStockAlert = (data: LowStockAlertData): EmailContent => {
   const storeName = data.storeName ?? "DevCart"
   const threshold = data.threshold ?? 5

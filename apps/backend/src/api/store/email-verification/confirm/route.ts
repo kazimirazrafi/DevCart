@@ -5,16 +5,8 @@ import type { StoreConfirmEmailCodeBody } from "../validators"
 
 /**
  * POST /store/email-verification/confirm
- *
- * Spends the code that was mailed to this address. A correct code is consumed
- * and answered with a token; the storefront keeps that token in an HttpOnly
- * cookie and sends it back when it completes the cart, which is what the
- * completion gate reads.
- *
- * Every refusal names the next step rather than the cause: a wrong code says
- * how many tries are left, an expired one asks for a new one, and a burned one
- * says to stop guessing. None of them says whether the address exists, has an
- * account, or was tried before.
+ * Spends the mailed code and returns the token the cart gates on. Refusals say
+ * what to do next, never whether the address exists.
  */
 export async function POST(
   req: MedusaRequest<StoreConfirmEmailCodeBody>,

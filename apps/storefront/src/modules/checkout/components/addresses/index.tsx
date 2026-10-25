@@ -12,11 +12,6 @@ import ShippingAddress from "../shipping-address"
 import StepSection from "../step-section"
 import { SubmitButton } from "../submit-button"
 
-/**
- * Step 2: where the order goes, and who pays for it. The address itself is
- * validated on the server — the browser only catches the empty required fields,
- * so anything that gets past it comes back keyed by field name.
- */
 const Addresses = ({
   cart,
   customer,
@@ -36,13 +31,7 @@ const Addresses = ({
   const errors = state?.fields ?? {}
   const billingToggle = useRef<HTMLInputElement>(null)
 
-  /*
-   * React resets a form once its action returns, and a checkbox goes back to
-   * the state it was mounted with rather than to what the customer chose.
-   * Measured: after a rejected address the box came back checked, so the next
-   * submit silently replaced a separate billing address with the shipping one.
-   * `state` is a dependency on purpose — that is when the reset lands.
-   */
+  // React resets the form after an action, so re-apply the checkbox state.
   useEffect(() => {
     const input = billingToggle.current
 

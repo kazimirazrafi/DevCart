@@ -8,10 +8,7 @@ type RefinementGroupProps = {
   title: string
 }
 
-/**
- * A facet as a checkbox list, most common value first. Native checkboxes, so
- * the state is announced and the control is keyboard-operable for free.
- */
+/* Native checkboxes, so the state is announced and keyboard access comes free. */
 const RefinementGroup = ({ attribute, title }: RefinementGroupProps) => {
   const { items, refine } = useRefinementList({
     attribute,

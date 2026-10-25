@@ -3,29 +3,10 @@ import { createHmac, randomInt, timingSafeEqual } from "node:crypto"
 import { MedusaError } from "@medusajs/framework/utils"
 
 /*
- * Proving a guest can read the address they are checking out with.
- *
- * A guest order is sent to whatever address was typed at the contact step and
- * nobody has to prove it exists. A typo means the customer never receives the
- * confirmation, the shipment notice or the order link; an invented address
- * means the store ships goods for an order whose buyer cannot be reached. So
- * the address is proved before the order is created: a six-digit code is
- * mailed to it, and the customer types it back on the same page.
- *
- * Two secrets, one for each job:
- *
- * - The code is stored as an HMAC rather than a hash, because a six-digit code
- *   has only a million possibilities — a plain hash in a leaked database is
- *   brute-forced in seconds. The key never leaves the environment.
- * - A successful confirmation returns a signed token, which is what the cart's
- *   completion reads later. The token is bound to the address, so it proves
- *   nothing about a different one, and it expires on its own. The token is
- *   handed to the storefront, which keeps it in an HttpOnly cookie and sends it
- *   back as a header when it completes the cart.
- *
- * The storefront never signs or checks anything: it stores the token and the
- * backend decides. That is why the same file has no counterpart in the
- * storefront, unlike `order-access.ts`.
+ * Guest checkouts prove the address with a six-digit code before the order is
+ * created. Codes are stored as an HMAC keyed by EMAIL_VERIFICATION_SECRET, and
+ * a confirmed address yields a signed token the storefront sends back as a
+ * header when it completes the cart.
  */
 
 const CODE_VERSION = "code:v1"
@@ -54,10 +35,8 @@ export const MAX_ATTEMPTS = 5
 export const VERIFICATION_TTL_MS = 7 * 24 * 60 * 60 * 1000
 
 /**
- * Addresses are compared and signed in one normal form. The local part of an
- * address is technically case-sensitive, but no mail provider this store can
- * deliver to treats it that way, and a customer who types `Ada@Example.com`
- * after verifying `ada@example.com` would be asked to verify twice.
+ * Addresses are compared and signed in one normal form, so `Ada@Example.com`
+ * matches an address verified as `ada@example.com`.
  */
 export const normalizeEmail = (email: string): string =>
   email.trim().toLowerCase()
@@ -65,11 +44,7 @@ export const normalizeEmail = (email: string): string =>
 const secret = (): string => {
   const value = process.env.EMAIL_VERIFICATION_SECRET
 
-  /*
-   * Refusing to sign or verify is the safe failure. A fallback secret would
-   * make every deployment that forgot the variable use a value from the
-   * repository, which is the same as storing plain codes.
-   */
+  // Refusing is the safe failure; a fallback secret would ship in the repo.
   if (!value || value.length < 32) {
     throw new MedusaError(
       MedusaError.Types.UNEXPECTED_STATE,
@@ -93,11 +68,7 @@ const codeDigest = (email: string, code: string): string =>
 export const hashCode = (email: string, code: string): string =>
   codeDigest(email, code)
 
-/**
- * Whether a typed code is the one that was mailed to this address. The digest
- * of the typed code is compared against the stored one in constant time, so the
- * comparison itself does not say how much of the code was right.
- */
+/** Constant-time comparison against the stored digest. */
 export const codeMatches = (
   email: string,
   code: string,
@@ -118,10 +89,7 @@ const sign = (email: string, expiresAt: number): string =>
     .update(`${TOKEN_VERSION}:${normalizeEmail(email)}:${expiresAt}`)
     .digest("base64url")
 
-/**
- * Proof that this address was confirmed, until `expiresAt`. The address is part
- * of what is signed, so the token cannot be moved to another one.
- */
+/** Token bound to one address until `expiresAt`. */
 export const createVerificationToken = (
   email: string,
   {
@@ -160,8 +128,7 @@ export const verifyVerificationToken = (
 
   const expiresAt = Number(expiresAtRaw)
 
-  // Expired or malformed. Checked before signing so a stale token costs one
-  // comparison rather than an HMAC.
+  // Checked before signing, so a stale token costs one comparison.
   if (!Number.isSafeInteger(expiresAt) || expiresAt <= now) {
     return false
   }

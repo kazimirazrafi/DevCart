@@ -15,15 +15,6 @@ const formatDate = (value: string) =>
     year: "numeric",
   }).format(new Date(value))
 
-/**
- * Reviews for one product: the summary a customer scans, the reviews
- * themselves, and the way to add one.
- *
- * Nothing here decides what is public — the route returns approved reviews
- * only — so this section's job is presentation plus the two states the spec
- * asks every data-driven view to have (a review list is empty until someone
- * writes one, and the form is the signed-in customer's).
- */
 const ProductReviews = async ({
   product,
   countryCode,

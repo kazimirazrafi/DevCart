@@ -14,13 +14,8 @@ export const sdk = new Medusa({
   publishableKey: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
 })
 
-/**
- * How long a catalogue read (products, categories, collections) may be served
- * from Next's data cache before it is fetched again. A cached read with no
- * expiry only ever refreshes when the storefront is rebuilt, so an admin edit,
- * an import or a reseed would never reach the shop; five minutes keeps repeat
- * views cached while the catalogue catches up on its own.
- */
+/* How long a catalogue read may be served from Next's data cache. Without an
+ * expiry, admin edits and imports would not reach the shop until a rebuild. */
 export const CATALOGUE_REVALIDATE_SECONDS = 300
 
 const originalFetch = sdk.client.fetch.bind(sdk.client)

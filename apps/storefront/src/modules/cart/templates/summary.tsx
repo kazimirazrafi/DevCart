@@ -9,16 +9,10 @@ import DiscountCode from "@modules/checkout/components/discount-code"
 
 type SummaryProps = {
   cart: HttpTypes.StoreCart
-  /** Units left per variant id; `null` where stock is not a limit. */
   availability?: Record<string, number | null>
 }
 
 const Summary = ({ cart, availability = {} }: SummaryProps) => {
-  /*
-   * A line can be left holding more units than the catalogue has: the stock can
-   * drop under it while the cart waits. Checkout would fail on it later, so the
-   * cart says what to fix and holds the button until it is fixed.
-   */
   const linesOverStock = (cart.items ?? []).filter((item) => {
     const available = item.variant_id ? availability[item.variant_id] : undefined
 
@@ -46,12 +40,6 @@ const Summary = ({ cart, availability = {} }: SummaryProps) => {
         </p>
       ) : null}
 
-      {/*
-        * No step in the URL: the checkout resolves the first unfinished step
-        * from the cart and the visitor's own state (a guest's address also has
-        * to be verified), and a step named here would only be a second guess at
-        * the same answer.
-        */}
       {linesOverStock.length > 0 ? (
         <button
           type="button"

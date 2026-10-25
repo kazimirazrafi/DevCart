@@ -21,13 +21,9 @@ export default async function OrderConfirmedPage(props: Props) {
     props.searchParams,
   ])
 
-  /*
-   * The order id is the address, not the credential. A guest proves they may
-   * read the order with the token in this link; a signed-in customer proves it
-   * with their session instead, which is why a missing token is not an error on
-   * its own. Either way the backend decides, and an order that is not the
-   * caller's is the same 404 as one that does not exist.
-   */
+  // The order id is the address, not the credential: a guest proves access with
+  // the link's token, a customer with their session. The backend decides either
+  // way, and someone else's order is the same 404 as a missing one.
   const token =
     typeof searchParams.token === "string" ? searchParams.token : undefined
 

@@ -8,12 +8,6 @@ export type Department = {
   productCount: number
 }
 
-/**
- * The shop's departments as one hairline grid — the fastest way from the home
- * page into a category, which is what the hero cannot do for a marketplace of
- * this size. Each cell names the department, says how much is in it, and lists
- * a few of its categories as plain text: one target per cell, no nested links.
- */
 export default function DepartmentGrid({
   departments,
 }: {

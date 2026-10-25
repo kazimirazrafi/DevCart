@@ -6,24 +6,15 @@ import { HttpTypes } from "@medusajs/types"
 import { getAuthHeaders } from "./cookies"
 
 /*
- * Orders are per-customer, so these reads never go through the data cache.
- * `/store/orders` has the same URL for every customer — only the Authorization
- * header differs — so a cached response hands one customer the previous one's
- * orders, and either read would keep showing a customer an order an admin has
- * just shipped. They read with `no-store`, like the cart.
+ * Orders are per-customer and the data cache is keyed by url, not by the
+ * Authorization header, so these reads use no-store, like the cart.
  */
 
 /**
- * The order with this id, or null when the Store API will not return it: an id
- * that does not exist, one that is not the signed-in customer's, or a guest's
- * order read without the token from its confirmation link. The routes answer a
- * null with the storefront's 404 rather than an error, so the message is
- * logged rather than thrown.
- *
- * `accessToken` comes from the confirmation URL and is sent as a header rather
- * than repeated in the query string, so it stays out of the backend's access
- * logs. The backend's middleware is what actually decides: the signed-in owner
- * or a valid token, and a not-found for everything else.
+ * The order with this id, or null when the Store API will not return it: missing,
+ * not the signed-in customer's, or a guest's without the confirmation token.
+ * The token travels as a header so it stays out of access logs; the backend
+ * middleware decides who may read the order.
  */
 export const retrieveOrder = async (
   id: string,
@@ -38,13 +29,8 @@ export const retrieveOrder = async (
     .fetch<HttpTypes.StoreOrderResponse>(`/store/orders/${id}`, {
       method: "GET",
       query: {
-        /*
-         * `customer_id`, `fulfillment_status` and `payment_status` are allowed
-         * extras on this route but not part of its defaults, and the account's
-         * page needs all three: without `customer_id` the ownership check on
-         * the order's own page cannot tell whose order this is, and without the
-         * statuses the receipt reads "Unknown" for delivery and payment.
-         */
+        // Allowed extras, not defaults: the account page needs the statuses and
+        // customer_id for its ownership check.
         fields:
           "*payment_collections.payments,*items,*items.metadata,*items.variant,*items.product,+fulfillment_status,+payment_status,+customer_id",
       },
@@ -62,11 +48,7 @@ export type OrderListResult =
   | { ok: true; orders: HttpTypes.StoreOrder[]; count: number }
   | { ok: false; message: string }
 
-/**
- * The signed-in customer's own orders, newest first. The Store API filters the
- * list by the authenticated customer server-side (its route takes `customer_id`
- * from the auth context), so this can only ever return the caller's.
- */
+/** The signed-in customer's own orders, newest first; the API filters by auth context. */
 export const listOrders = async (
   limit: number = 10,
   offset: number = 0,
@@ -83,9 +65,7 @@ export const listOrders = async (
         limit,
         offset,
         order: "-created_at",
-        // `list` and `retrieve` allow different field sets: the statuses are
-        // extras on both, and are asked for explicitly because the list's
-        // defaults are only id/display_id/total/currency/created_at.
+        // The list's defaults omit the statuses, so they are requested.
         fields:
           "*items,+items.metadata,*items.variant,*items.product,+fulfillment_status,+payment_status",
         ...filters,
@@ -100,9 +80,7 @@ export const listOrders = async (
     }))
     .catch((error) => ({
       ok: false as const,
-      // Returned, not thrown: a production build masks a thrown server-action
-      // message ("An error occurred in the Server Components render"), which is
-      // how a failed order read used to reach the customer (K2's class of bug).
+      // Returned, not thrown: production masks a thrown server-action message.
       message: medusaErrorMessage(error),
     }))
 }

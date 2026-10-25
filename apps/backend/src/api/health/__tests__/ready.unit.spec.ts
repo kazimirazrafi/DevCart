@@ -3,9 +3,8 @@ import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { GET } from "../ready/route"
 
 /*
- * The two answers the endpoint has, without a database: what a monitor needs is
- * that a failed read is a 503 rather than a 200, and that the reason stays in
- * the log instead of the body.
+ * Both answers without a database: a failed read is a 503, and the reason stays
+ * in the log.
  */
 const response = () => {
   const state: {

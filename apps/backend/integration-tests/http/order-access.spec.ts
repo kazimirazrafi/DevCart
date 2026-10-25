@@ -11,18 +11,9 @@ jest.setTimeout(180 * 1000)
 const PASSWORD = "supersecret"
 const ACCESS_SECRET = "integration-test-order-access-secret-0123456789"
 
-/*
- * Order reads, exercised over HTTP against a booted Medusa app.
- *
- * `GET /store/orders/:id` ships unauthenticated so guests can open their
- * confirmation page, which makes the order id a credential. The suite proves
- * the store no longer accepts the id alone: the owner's token or a signed-in
- * session is required, and every refusal looks exactly like a missing order.
- *
- * The token secret is pinned for the file, because the middleware reads it from
- * the environment at request time and a developer's own `.env` should not
- * decide whether these assertions hold.
- */
+/* Order reads over HTTP. GET /store/orders/:id ships unauthenticated, so the
+ * suite proves the id alone is not enough and that refusals look like a missing
+ * order. The token secret is pinned for the file. */
 process.env.ORDER_ACCESS_SECRET = ACCESS_SECRET
 
 medusaIntegrationTestRunner({
@@ -67,7 +58,7 @@ medusaIntegrationTestRunner({
       }
     }
 
-    /* A guest's order: it was placed with an email, so it has no owner. */
+    /* A guest's order has no owner. */
     const createGuestOrder = async (email = nextEmail("guest")) => {
       const orderService = container.resolve(Modules.ORDER)
 

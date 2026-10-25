@@ -7,13 +7,9 @@ import { listRegions } from "@lib/data/regions"
 import { absoluteUrl } from "@lib/util/seo"
 
 /*
- * A crawler should see one address per page, and every page the storefront
- * serves is under a region (`/{countryCode}/...`). The sitemap therefore lists
- * the default region's URLs only: the other regions render the same catalogue,
- * and listing them all would present duplicates competing for the same query.
- *
- * A product or category added in the admin appears here on the next
- * regeneration rather than on the next deploy.
+ * Every page lives under a region, and the sitemap lists the default one only:
+ * the other regions render the same catalogue. New products appear on the next
+ * regeneration, not the next deploy.
  */
 export const revalidate = 3600
 
@@ -73,8 +69,7 @@ const allProductHandles = async (countryCode: string) => {
       if (!nextPage) break
     }
   } catch (error) {
-    // A sitemap missing products is worse than one that says so; the rest of
-    // the pages still get listed.
+    // A sitemap missing products beats none; the other pages still get listed.
     console.error("Could not read products for the sitemap", error)
   }
 

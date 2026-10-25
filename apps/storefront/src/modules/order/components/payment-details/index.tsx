@@ -11,13 +11,7 @@ type PaymentDetailsProps = {
 const PaymentDetails = ({ order }: PaymentDetailsProps) => {
   const payment = order.payment_collections?.[0].payments?.[0]
 
-  /*
-   * The stripe provider keeps the whole PaymentIntent in `data`, so the card the
-   * customer paid with sits at `payment_method.card`. The starter only looked at
-   * a top-level `card_last4`, which this provider never sets — the lookup missed
-   * and every receipt fell back to the paid-at line below. Both are read, so the
-   * masked card shows whatever shape the payment carries.
-   */
+  // Stripe keeps the card at `payment_method.card`; other providers set `card_last4`.
   const data = payment?.data as
     | {
         card_last4?: string
@@ -27,11 +21,6 @@ const PaymentDetails = ({ order }: PaymentDetailsProps) => {
     | undefined
   const cardLast4 = data?.card_last4 ?? data?.payment_method?.card?.last4
 
-  /*
-   * The receipt names the outcome, not just the method: "Credit card" does not
-   * tell a customer whether their card was charged, which is the first thing
-   * they check after paying.
-   */
   const summary = paymentSummary(order)
   const providerTitle = payment
     ? (paymentInfoMap[payment.provider_id]?.title ?? payment.provider_id)

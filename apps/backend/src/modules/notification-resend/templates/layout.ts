@@ -1,12 +1,5 @@
-/**
- * The shared shell for every email this store sends.
- *
- * Email clients are not browsers: they do not all read a stylesheet, and the
- * ones that do disagree about which properties survive. So the markup is a
- * single column of tables with inline styles, in the same ink-on-paper palette
- * as the storefront, and no web fonts — the display face is asked for by name
- * and falls back to Georgia where it is missing.
- */
+/* Shared email shell. Tables and inline styles only: email clients do not
+ * agree on anything else. */
 
 export type EmailContent = {
   subject: string
@@ -66,10 +59,8 @@ export const formatDate = (iso: string | null | undefined): string => {
   }).format(date)
 }
 
-/**
- * A button-shaped link. The URL is repeated as text below it, because a link
- * that is only a button is unusable wherever images or styles are stripped.
- */
+/** A button link, with the URL repeated as text for clients that strip
+ * styles. */
 export const renderAction = (href: string, label: string): { html: string; text: string } => ({
   html: `
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0;">

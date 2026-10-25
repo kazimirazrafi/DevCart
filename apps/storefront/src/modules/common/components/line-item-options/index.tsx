@@ -6,11 +6,6 @@ type LineItemOptionsProps = {
   "data-value"?: HttpTypes.StoreProductVariant
 }
 
-/**
- * What was ordered about the variant — the option values joined into its title
- * ("M / Blue"). Printed plain, with no "Variant:" prefix: the value alone reads
- * as the choice, and a label for one short line is noise.
- */
 const LineItemOptions = ({
   variant,
   "data-testid": dataTestid,

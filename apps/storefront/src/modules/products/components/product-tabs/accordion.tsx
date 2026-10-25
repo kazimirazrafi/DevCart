@@ -4,16 +4,8 @@ import clsx from "clsx"
 import React, { createContext, useContext, useMemo, useState } from "react"
 
 /*
- * A plain disclosure list rather than Radix's Accordion. Radix generates the
- * trigger/content ids itself, and those ids drifted between the server render
- * and hydration on every product page — React logged "A tree hydrated but some
- * attributes … didn't match" with two different `radix-_R_…` ids for the same
- * node. The ids here come from the item's own value, so they are the same on
- * both sides, and `hidden` replaces the animation because a collapsed panel is
- * not something this page needed to animate.
- *
- * Only the product page's tabs use this component (the store filters have their
- * own refiner list), so the API is just what they need.
+ * Plain disclosure list rather than Radix's accordion: ids are derived from the
+ * item value so the server and client markup match on hydration.
  */
 
 type AccordionContextValue = {
@@ -27,7 +19,6 @@ const contentId = (value: string) =>
   `product-tab-${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
 
 type AccordionProps = {
-  /** `multiple` lets every panel open at once; `single` keeps only one open. */
   type?: "single" | "multiple"
   defaultValue?: string[]
   children: React.ReactNode
@@ -62,7 +53,6 @@ const Accordion: React.FC<AccordionProps> & {
 }
 
 type AccordionItemProps = {
-  /** Identifies the panel; also the source of its element ids. */
   value: string
   title: string
   subtitle?: string
@@ -71,7 +61,6 @@ type AccordionItemProps = {
   className?: string
 }
 
-/** Open marker: a plus that loses its upright stroke when the panel is open. */
 const TriggerMark = ({ open }: { open: boolean }) => (
   <span aria-hidden="true" className="relative block h-4 w-4 shrink-0">
     <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-ink" />
@@ -106,10 +95,6 @@ const Item: React.FC<AccordionItemProps> = ({
       className={clsx("border-t border-ink/20 last:border-b", className)}
       data-state={open ? "open" : "closed"}
     >
-      {/*
-       * `h2`, not `h3`: on the product page these panels are the first section
-       * headings under the product's `h1`, and an `h3` there skipped a level.
-       */}
       <h2>
         <button
           type="button"

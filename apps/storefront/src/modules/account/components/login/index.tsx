@@ -14,11 +14,7 @@ type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
 }
 
-/**
- * The `redirect` a protected page left behind. Only a path on this site is
- * followed: a search parameter is attacker-controlled, and an unchecked one
- * turns the sign-in form into an open redirect.
- */
+/* Only a path on this site is followed: ?redirect= is attacker-controlled. */
 const samePath = (value: string | null) =>
   value && value.startsWith("/") && !value.startsWith("//") ? value : null
 
@@ -27,20 +23,11 @@ const Login = ({ setCurrentView }: Props) => {
   const router = useRouter()
   const redirectTo = samePath(useSearchParams().get("redirect"))
 
-  /*
-   * Controlled on purpose. React resets an uncontrolled field once a form
-   * action returns (measured in K2), so a rejected sign-in would wipe the
-   * address the customer has to correct along with the password they mistyped.
-   */
+  /* Controlled so a rejected sign-in keeps what was typed. */
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  /*
-   * The action sets the auth cookie, but the page around it was rendered for a
-   * signed-out customer; asking for it again is what swaps the sign-in form for
-   * the account. A `?redirect=` is followed by the action itself, which is the
-   * only place a navigation and this refresh can be ordered correctly.
-   */
+  /* Refetch after sign-in so the page swaps the form for the account. */
   useEffect(() => {
     if (message?.state === "success") {
       router.refresh()
@@ -93,7 +80,6 @@ const Login = ({ setCurrentView }: Props) => {
       </div>
 
       <form className="flex flex-col gap-5" action={formAction}>
-        {/* The action needs it to return the customer to the page they came from. */}
         <input type="hidden" name="redirect" value={redirectTo ?? ""} />
 
         <Input

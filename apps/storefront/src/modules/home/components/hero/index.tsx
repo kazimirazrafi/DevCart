@@ -7,12 +7,6 @@ type HeroProps = {
   product?: HttpTypes.StoreProduct
 }
 
-/**
- * The first screen: what the shop is, in one sentence, beside the newest thing
- * in it. The two offset plates are the print-shop idea made literal — the
- * photograph sits slightly out of register with a pink and a blue impression —
- * and they are borders, not shadows, which this design never uses.
- */
 const Hero = ({ product }: HeroProps) => {
   const image = product?.thumbnail ?? product?.images?.[0]?.url
 
@@ -20,13 +14,7 @@ const Hero = ({ product }: HeroProps) => {
     <section className="content-container border-b border-ink/20 py-10 small:py-16">
       <div className="grid grid-cols-1 items-center gap-12 small:grid-cols-12 small:gap-10">
         <div className="small:col-span-7">
-          {/*
-            * The display size is clamped rather than fixed: `text-hero` (61px)
-            * is wider than a phone's content column, and the headline's longest
-            * word would push the page sideways. 10vw keeps the sentence on
-            * four lines down to 320px and still reaches the full size on a
-            * desktop.
-            */}
+          {/* Clamped so the longest word still fits on a 320px screen. */}
           <h1 className="max-w-[14ch] break-words font-display text-[clamp(2.375rem,10vw,3.8125rem)] font-bold leading-[0.98] tracking-[-0.045em] text-ink">
             Eight departments. One warehouse.
           </h1>

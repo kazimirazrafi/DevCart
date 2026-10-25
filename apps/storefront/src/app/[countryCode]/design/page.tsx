@@ -8,20 +8,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-/*
- * Internal reference page for the design foundation. It has no backend
- * dependency and lives outside the (main) layout, so it renders even when the
- * Medusa API is down. Not linked from the storefront navigation.
- *
- * Tokens are documented in docs/DESIGN.md; the ratios quoted below are the
- * measured values from §2.1.
- */
+/* Internal reference page for the design foundation: no backend dependency, not
+ * linked from the navigation. Values mirror src/styles/globals.css. */
 
-/*
- * Each token has two values, one per mode. The swatch shows whichever one the
- * page is currently painted in, so the hexes are printed rather than left to
- * the reader to infer.
- */
+/* Each token has a value per mode; both hexes are printed for reference. */
 const COLOURS = [
   {
     name: "stock",

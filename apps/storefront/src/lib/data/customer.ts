@@ -8,7 +8,6 @@ import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import {
   getAuthHeaders,
-  getCacheOptions,
   getCacheTag,
   getCartId,
   getPendingCustomer,
@@ -27,9 +26,8 @@ export type CustomerAuthState =
   | { state: "success" }
   | null
 
-// Requests a verification email for the given customer. The request must be
-// authenticated with a token tied to the auth identity (the token returned by
-// register or by a login that requires verification).
+// Requires a token tied to the auth identity: the one returned by register or by
+// a login that asks for verification.
 async function requestVerificationEmail(email: string, token: string) {
   await sdk.auth.verification.request(
     {
@@ -52,10 +50,9 @@ export const retrieveCustomer =
       ...authHeaders,
     }
 
-    const next = {
-      ...(await getCacheOptions("customers")),
-    }
-
+    // Uncached: the URL is the same for every customer, only the Authorization
+    // header differs, so a cached answer could serve one customer's record to the
+    // next caller. Orders and the cart are read the same way.
     return await sdk.client
       .fetch<{ customer: HttpTypes.StoreCustomer }>(`/store/customers/me`, {
         method: "GET",
@@ -63,8 +60,7 @@ export const retrieveCustomer =
           fields: "*orders",
         },
         headers,
-        next,
-        cache: "force-cache",
+        cache: "no-store",
       })
       .then(({ customer }) => customer)
       .catch(() => null)
@@ -86,12 +82,8 @@ export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
   return updateRes
 }
 
-/*
- * Whether the API rejected the submission because that email already has an
- * identity. Medusa answers `401 Identity with email already exists` for it. The
- * message is matched rather than a code because the SDK drops error codes (see
- * `lib/util/medusa-error.ts`).
- */
+/* The API answers 401 "Identity with email already exists". The message is
+ * matched because the SDK drops error codes. */
 const isDuplicateIdentity = (error: unknown) => {
   const fetchError = error as FetchError
 
@@ -102,10 +94,8 @@ const isDuplicateIdentity = (error: unknown) => {
 }
 
 /**
- * Where to send the customer once they are signed in. A protected page leaves
- * this behind as `?redirect=` (see `middleware.ts`), and the form carries it as
- * a hidden field — so it is only ever followed when it names a path on this
- * site. A second `//` would make it another origin.
+ * Where to send the customer after signing in. Only a path on this site is kept:
+ * the value comes from the form, and //host is another origin.
  */
 const afterSignIn = (formData: FormData) => {
   const value = formData.get("redirect")
@@ -138,15 +128,9 @@ export async function signup(
     phone: formData.get("phone") as string,
   }
 
-  // Signing up with an email that already has an identity is answered with the
-  // credentials that were just typed. The password decides what it means:
-  //
-  //  - it matches (an admin user with this email, or someone re-submitting their
-  //    own signup) -> carry on and log in, which is the starter's behaviour and
-  //    still links a customer record;
-  //  - it does not match -> the email is somebody else's account, and saying
-  //    "invalid email or password" here would send them hunting for a typo in a
-  //    form that never had a working password. `exists` says what happened.
+  // An email that already has an identity is answered with the submitted
+  // credentials: a matching password means this is the same person, a different
+  // one means the address belongs to someone else.
   let authorizedToken: string | undefined
 
   try {
@@ -168,13 +152,11 @@ export async function signup(
     authorizedToken = token
   }
 
-  // Persist the extra signup fields. The customer record is created during
-  // login, which is deferred until after email verification when the backend
-  // requires it.
+  // The customer record is created during login, after verification when the
+  // backend requires it, so the signup fields wait in a cookie.
   await setPendingCustomer(customerForm)
 
-  // Continue by logging in. The login response tells us whether the backend
-  // requires email verification — we don't need a storefront-side flag.
+  // The login response says whether verification is required; no local flag.
   return finishAuth(formData, await completeLogin(customerForm.email, password, authorizedToken))
 }
 
@@ -189,10 +171,8 @@ export async function login(
 }
 
 /**
- * Sends a signed-in customer to the page that asked for them. Done here rather
- * than in the form's effect because a `router.push` followed by the refresh the
- * new session needs would cancel the navigation — measured: signing in from a
- * protected page left the customer on the sign-in URL.
+ * Sends a signed-in customer to the page that asked for them. A router.push in
+ * the form would be cancelled by the refresh the new session needs.
  */
 function finishAuth(
   formData: FormData,
@@ -209,9 +189,8 @@ function finishAuth(
   return result
 }
 
-// Logs the customer in and reconciles the customer record. The behavior is
-// driven entirely by the backend's login response, so it works whether or not
-// email verification is enabled.
+// Behaviour follows the backend's login response, so it works with or without
+// email verification.
 async function completeLogin(
   email: string,
   password: string,
@@ -228,14 +207,12 @@ async function completeLogin(
         password,
       })
     } catch (error) {
-      // 401 for both a wrong password and an unknown address, which is what the
-      // customer is told — either way the fix is the same.
+      // 401 for both a wrong password and an unknown address.
       return { state: "error", error: medusaErrorMessage(error) }
     }
   }
 
-  // A `location` is returned by third-party auth providers, which this flow
-  // doesn't support.
+  // Third-party providers return a location, which this flow does not support.
   if (typeof result === "object" && "location" in result) {
     return {
       state: "error",
@@ -243,8 +220,7 @@ async function completeLogin(
     }
   }
 
-  // The backend requires email verification and the customer hasn't verified
-  // yet. Send the verification email and ask them to check their inbox.
+  // Verification required: send the email and ask them to check their inbox.
   if (
     typeof result === "object" &&
     "verification_required" in result &&
@@ -267,11 +243,8 @@ async function completeLogin(
 
   let token = result
 
-  // The token may not be tied to a customer record yet — right after
-  // registration, or after verifying a brand-new account. Ask the backend:
-  // `/store/customers/me` rejects tokens without a registered actor, so a
-  // failed retrieve means we still need to create the customer, then log in
-  // again to obtain a customer-bound token.
+  // A new token may not be tied to a customer record yet, so a failed retrieve
+  // means the record still has to be created and the token refreshed.
   const customerExists = await sdk.store.customer
     .retrieve({}, { authorization: `Bearer ${token}` })
     .then(() => true)
@@ -297,12 +270,8 @@ async function completeLogin(
         password,
       })) as string
     } catch (error) {
-      /*
-       * Medusa refuses a second account for an email that already has one
-       * ("Customer with this email already has an account"). That is the same
-       * situation the register form reports as `exists`, so it gets the same
-       * answer instead of a raw API sentence.
-       */
+      // Same situation the register form reports as "exists", so it gets the same
+      // answer rather than a raw API sentence.
       if (/already has an account/i.test(medusaErrorMessage(error))) {
         return { state: "exists", email }
       }
@@ -327,10 +296,8 @@ async function completeLogin(
   return { state: "success" }
 }
 
-// Confirms a customer's email using the token from the verification link.
-//
-// The confirm route doesn't require authentication, so this works even when the
-// customer opens the link on a different device than the one they signed up on.
+// The confirm route needs no authentication, so this works when the link is
+// opened on a different device.
 export async function confirmEmailVerification(
   token: string
 ): Promise<{ success: boolean; error?: string }> {
@@ -387,11 +354,7 @@ export type CustomerProfileState =
 
 const PROFILE_REVIEW = "Check the fields below and try again."
 
-/**
- * The name on the account. Both parts are required by the storefront's forms
- * and trimmed here, so a whitespace-only field is refused rather than stored
- * as a blank name.
- */
+/** Both parts are required and trimmed, so a blank name is refused. */
 export const updateCustomerName = async (
   _currentState: CustomerProfileState,
   formData: FormData
@@ -422,10 +385,8 @@ export const updateCustomerName = async (
 }
 
 /**
- * The phone number is optional. Empty is sent as null rather than "" so the
- * profile keeps showing "Not set" instead of a blank where the number belongs,
- * and a number that could not be dialled (letters, an unclosed bracket) is
- * refused before it reaches the API.
+ * The phone is optional: empty goes as null so the profile shows "Not set", and
+ * a value that cannot be dialled is refused before it reaches the API.
  */
 export const updateCustomerPhone = async (
   _currentState: CustomerProfileState,
@@ -450,12 +411,8 @@ export const updateCustomerPhone = async (
   return { ok: true }
 }
 
-/*
- * What an address form action reports back. Failures are returned, not thrown:
- * a production build replaces a thrown server-action message with generic copy
- * (see `lib/util/medusa-error.ts`). Field errors are keyed by the input's name so
- * the form can place each message next to the field it belongs to.
- */
+/* What an address form action reports. Failures are returned because production
+ * masks a thrown server-action message. Field errors use the input's name. */
 export type CustomerAddressState =
   | { ok: true }
   | { ok: false; message: string; fields?: Record<string, string> }
@@ -634,11 +591,7 @@ export const updateCustomerAddress = async (
   return { ok: true }
 }
 
-/**
- * Makes one saved address the default for shipping or billing. Medusa's own
- * update workflow clears the previous default, so there is never more than one
- * of each.
- */
+/** Medusa's update workflow clears the previous default, so there is only ever one. */
 export const setDefaultCustomerAddress = async (
   addressId: string,
   field: AddressDefaultField

@@ -7,11 +7,7 @@ type Props = {
   params: Promise<{ id: string; token: string }>
 }
 
-/**
- * Where the link in the transfer email lands after accepting. The result is the
- * server's: the request either moved the order to the other account or it did
- * not, and the page says which rather than showing a form.
- */
+/** Where the accept link lands: the server's result, either way. */
 export default async function TransferAcceptedPage({ params }: Props) {
   const { id, token } = await params
 

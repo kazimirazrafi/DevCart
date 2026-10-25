@@ -10,12 +10,7 @@ type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
 }
 
-/**
- * Sends the reset link the customer already has a page for (E2), rather than
- * asking for the current password: Medusa's customer password is changed with
- * the single-use token from that email, so collecting the old one here would be
- * a second, weaker path to the same write.
- */
+/* Medusa changes a customer password with the emailed single-use token. */
 const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
   const [state, formAction, isPending] = useActionState(
     requestPasswordReset,

@@ -17,7 +17,6 @@ import OptionRefinements from "./option-refinements"
 import PriceRange from "./price-range"
 import RefinementGroup from "./refinement-group"
 
-
 const SortProducts = ({ currencyCode }: { currencyCode: string }) => {
   const items = getSortOptions(currencyCode)
   const { currentRefinement, refine } = useSortBy({ items })
@@ -33,20 +32,9 @@ const SortProducts = ({ currencyCode }: { currencyCode: string }) => {
   )
 }
 
-/**
- * The listing's sort and filters.
- *
- * On a desktop this is one labelled column beside the grid, exactly as before.
- * On a phone the same groups live behind a `Filters` button: a collapsed bar
- * with the number of applied filters, and a panel that covers the grid when it
- * is opened. Nothing about the refinements themselves changes with the
- * breakpoint — they are the same InstantSearch state, so a filter chosen in the
- * panel stays chosen when it closes, and the URL still carries it.
- *
- * The panel is a plain, controlled region rather than a component from a
- * library: it has to be a dialog on a phone and static markup on a desktop, and
- * one element with a breakpoint is simpler than rendering two trees and keeping
- * their state in step.
+/*
+ * Desktop: one column beside the grid. Phone: the same groups behind a Filters
+ * drawer. Both read the same InstantSearch state, so the URL carries it either way.
  */
 const StoreRefinements = ({
   currencyCode,
@@ -65,11 +53,7 @@ const StoreRefinements = ({
     0
   )
 
-  /*
-   * Escape closes the panel and focus returns to the button that opened it, so
-   * the phone's back-out is the same as the desktop's "click away" rather than
-   * a trap behind a full-screen layer.
-   */
+  /* Escape closes the panel and returns focus to the trigger. */
   useEffect(() => {
     if (!open) {
       return
@@ -84,8 +68,7 @@ const StoreRefinements = ({
 
     document.addEventListener("keydown", onKeyDown)
 
-    // The first control inside the panel, so a keyboard or screen-reader user
-    // lands in the thing that just opened instead of behind it.
+    // Move focus into the panel that just opened.
     panelRef.current
       ?.querySelector<HTMLElement>("button, a, input")
       ?.focus()
@@ -100,12 +83,7 @@ const StoreRefinements = ({
 
   return (
     <>
-      {/*
-       * A fixed height, not a minimum that is dropped once the facets land:
-       * the bar holds one button and one line, but releasing the reserve shrank
-       * it by 12 px and moved the products below it — the listing's remaining
-       * 0.009 of layout shift.
-       */}
+      {/* Fixed height: shrinking this bar moved the products below it. */}
       <div
         className="flex min-h-14 items-center justify-between gap-4 small:hidden"
         data-testid="store-filters-bar"

@@ -1,26 +1,14 @@
 /**
- * The CSV the admin's product importer reads, and the one column it cannot
- * take as written.
- *
- * Medusa parses `Product Tag 1`…`Product Tag 5` as tag **ids** (`{ id: value }`
- * in `CSVNormalizer`), so a file exported from another shop — or written by
- * hand — carries values the importer has never heard of and the whole import
- * fails on the first product with "Tag with id makeup not found". The admin
- * route's middleware (`api/middlewares/resolve-import-tags.ts`) rewrites those
- * cells to ids before the workflow sees the file; this module is the pure half
- * of that, so the parsing and the rewriting are testable without a database.
+ * The importer reads tag and category columns as ids, so imported files are
+ * rewritten before the workflow runs. This is the pure half of that work:
+ * parsing and rewriting, testable without a database.
  */
 
 export type CsvRow = string[]
 
 const BOM = "\uFEFF"
 
-/**
- * RFC 4180: a cell may be quoted, a quoted cell may hold a comma, a newline or
- * a doubled quote, and records end in CRLF or LF. The importer's own parser
- * (`json-2-csv`) accepts more, but a file that round-trips through here has to
- * stay valid for it, so the reader accepts exactly this and nothing clever.
- */
+/** RFC 4180: quoted cells may hold commas, newlines and doubled quotes. */
 export function parseCsv(text: string): CsvRow[] {
   const source = text.startsWith(BOM) ? text.slice(BOM.length) : text
 
@@ -71,8 +59,7 @@ export function parseCsv(text: string): CsvRow[] {
     }
   }
 
-  // A file that does not end in a newline still has a last record; an empty
-  // trailing line (the common "\r\n" ending) does not.
+  // A file without a trailing newline still has a last record.
   if (cell !== "" || row.length) {
     row.push(cell)
     rows.push(row)
@@ -96,18 +83,10 @@ export function stringifyCsv(rows: CsvRow[]): string {
     .join("\r\n")
 }
 
-/**
- * The importer reads up to five tag columns, named `Product Tag 1` … `Product
- * Tag 5`; matching is case- and spacing-insensitive because the header a shop
- * exports is not always the one it imported.
- */
+/** Tag columns are `Product Tag 1`..`5`, matched case-insensitively. */
 export const PRODUCT_TAG_COLUMN = /^product tag \d+$/i
 
-/**
- * A cell that is already a tag id (an exported file, or one written against a
- * store's ids) is passed through untouched: looking it up as a value would
- * create a tag named after the id.
- */
+/** An id must not be looked up as a value, or it becomes a tag named after it. */
 const looksLikeTagId = (value: string) => /^ptag_/i.test(value)
 
 export function tagColumnIndexes(header: CsvRow): number[] {
@@ -120,10 +99,7 @@ export function tagColumnIndexes(header: CsvRow): number[] {
   }, [])
 }
 
-/**
- * Every distinct tag cell in the file, trimmed and in first-seen order. Blank
- * cells are not values: a product without a tag is a product without a tag.
- */
+/** Distinct tag values, trimmed and in first-seen order. */
 export function tagValues(rows: CsvRow[]): string[] {
   if (!rows.length) {
     return []
@@ -154,13 +130,8 @@ export function tagValues(rows: CsvRow[]): string[] {
 }
 
 /**
- * Replaces a value with the id a tag already has, or leaves the cell alone when
- * it is blank, already an id, or a value the caller could not resolve. `ids`
- * is keyed by the tag's lowercase value.
- *
- * Ids are recognised by `knownIds` rather than by their `ptag_` prefix: a cell
- * that is already an id must not be looked up as a value, or the next import of
- * an exported CSV would create tags called `ptag_01H…`.
+ * Replaces known values with tag ids. Blank cells, ids and unresolved values
+ * are left alone; `ids` is keyed by lowercase value.
  */
 export function rewriteTagCells(
   rows: CsvRow[],
@@ -188,6 +159,168 @@ export function rewriteTagCells(
       const cell = (row[column] ?? "").trim()
 
       if (!cell || knownIds.has(cell) || looksLikeTagId(cell)) {
+        continue
+      }
+
+      const id = ids.get(cell.toLowerCase())
+
+      if (id) {
+        next[column] = id
+      }
+    }
+
+    return next
+  })
+}
+
+/** Category columns are `Product Category 1`..`N`, also read as ids. */
+export const PRODUCT_CATEGORY_COLUMN = /^product category \d+$/i
+
+/** One `Product Category` cell may hold several names, separated by `|` or `;`. */
+export const PRODUCT_CATEGORY_NAME_COLUMN = /^product category(?:\s+name)?$/i
+
+/** An id must not be looked up as a name, or it becomes a category named after it. */
+const looksLikeCategoryId = (value: string) => /^pcat_/i.test(value)
+
+const categoryNames = (cell: string | undefined): string[] =>
+  (cell ?? "")
+    .split(/[|;]/)
+    .map((name) => name.trim())
+    .filter(Boolean)
+
+export function categoryColumnIndexes(header: CsvRow): number[] {
+  return header.reduce<number[]>((indexes, name, index) => {
+    if (PRODUCT_CATEGORY_COLUMN.test(name.trim())) {
+      indexes.push(index)
+    }
+
+    return indexes
+  }, [])
+}
+
+/**
+ * Rewrites category cells into the numbered form, so one `Product Category`
+ * column becomes `Product Category 1..N`.
+ */
+export function normalizeCategoryColumns(rows: CsvRow[]): CsvRow[] {
+  if (!rows.length) {
+    return rows
+  }
+
+  const header = rows[0]
+  const nameIndexes = header.reduce<number[]>((indexes, name, index) => {
+    if (PRODUCT_CATEGORY_NAME_COLUMN.test(name.trim())) {
+      indexes.push(index)
+    }
+
+    return indexes
+  }, [])
+
+  if (!nameIndexes.length) {
+    return rows
+  }
+
+  const namesPerRow = rows.slice(1).map((row) => [
+    ...nameIndexes.flatMap((index) => categoryNames(row[index])),
+    ...categoryColumnIndexes(header).flatMap((index) => categoryNames(row[index])),
+  ])
+  const width = namesPerRow.reduce((widest, names) => Math.max(widest, names.length), 0)
+
+  if (!width) {
+    return rows
+  }
+
+  const at = Math.min(...nameIndexes)
+  const drop = new Set([...nameIndexes, ...categoryColumnIndexes(header)])
+  const canonical = Array.from(
+    { length: width },
+    (_, index) => `Product Category ${index + 1}`
+  )
+
+  const headerOut = header.flatMap((name, index) => {
+    if (index === at) {
+      return canonical
+    }
+
+    return drop.has(index) ? [] : [name]
+  })
+
+  const rowsOut = rows.slice(1).map((row, rowIndex) => {
+    const names = namesPerRow[rowIndex]
+    const cells = row.flatMap((cell, index) => {
+      if (index === at) {
+        return canonical.map((_, position) => names[position] ?? "")
+      }
+
+      return drop.has(index) ? [] : [cell]
+    })
+
+    return cells
+  })
+
+  return [headerOut, ...rowsOut]
+}
+
+/** Distinct category names, trimmed and in first-seen order. */
+export function categoryValues(rows: CsvRow[]): string[] {
+  if (rows.length < 2) {
+    return []
+  }
+
+  const columns = categoryColumnIndexes(rows[0])
+  const seen = new Set<string>()
+  const values: string[] = []
+
+  for (const row of rows.slice(1)) {
+    for (const column of columns) {
+      const value = (row[column] ?? "").trim()
+
+      if (!value || looksLikeCategoryId(value)) {
+        continue
+      }
+
+      const key = value.toLowerCase()
+
+      if (!seen.has(key)) {
+        seen.add(key)
+        values.push(value)
+      }
+    }
+  }
+
+  return values
+}
+
+/**
+ * Replaces resolved names with category ids. Blank cells, ids and unresolved
+ * names are left alone; `ids` is keyed by lowercase name.
+ */
+export function rewriteCategoryCells(
+  rows: CsvRow[],
+  ids: Map<string, string>,
+  knownIds: Set<string>
+): CsvRow[] {
+  if (!rows.length) {
+    return rows
+  }
+
+  const columns = categoryColumnIndexes(rows[0])
+
+  if (!columns.length) {
+    return rows
+  }
+
+  return rows.map((row, rowIndex) => {
+    if (rowIndex === 0) {
+      return row
+    }
+
+    const next = [...row]
+
+    for (const column of columns) {
+      const cell = (row[column] ?? "").trim()
+
+      if (!cell || knownIds.has(cell) || looksLikeCategoryId(cell)) {
         continue
       }
 

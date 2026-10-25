@@ -6,15 +6,9 @@ import { getAuthHeaders } from "./cookies"
 import { HttpTypes } from "@medusajs/types"
 
 /*
- * Read uncached, like the cart. Which providers a region offers is set in the
- * backend (the seed adds Stripe to the region), and with a cached read the
- * storefront keeps serving the list from before that change: the checkout would
- * go on offering only the manual provider with nothing to explain why. The
- * checkout page is dynamic anyway, so the cache bought one round trip.
- *
- * The region's list is filtered against the storefront's own allowlist: this
- * store sells card and cash on delivery, so any other provider the backend
- * happens to have enabled for the region is not offered.
+ * Uncached, like the cart: a cached list would keep offering providers from
+ * before a backend change. The region's list is filtered against the storefront's
+ * allowlist, so a provider enabled in the backend is not offered automatically.
  */
 export const listCartPaymentMethods = async (regionId: string) => {
   const headers = {

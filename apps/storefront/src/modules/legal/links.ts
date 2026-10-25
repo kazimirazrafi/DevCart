@@ -1,11 +1,4 @@
-/**
- * The store's legal and support destinations, in one list.
- *
- * The pages' own footer navigation, the policy sidebar and the storefront
- * footer all read this, so a policy cannot exist without a way to reach it.
- * `href` is the path after the country code; every link is rendered through
- * `LocalizedClientLink`, which adds the region.
- */
+/* href is the path after the country code; LocalizedClientLink adds the region. */
 export type LegalLink = {
   label: string
   href: string
@@ -13,7 +6,7 @@ export type LegalLink = {
 
 export const SUPPORT_EMAIL = "support@kazimirazrafi.dev"
 
-/** The date every policy in `content.ts` was last reviewed. */
+/* Last reviewed date for every policy in content.ts. */
 export const LEGAL_UPDATED = "23 October 2026"
 
 export const LEGAL_LINKS: LegalLink[] = [

@@ -1,8 +1,4 @@
-/*
- * Loading placeholder for a product plate: same square media well and text
- * block, so the grid does not shift when the products arrive. Motion is off for
- * anyone who asked for reduced motion (docs/DESIGN.md §5.1).
- */
+/* Same shape as a product plate, so the grid does not shift when products arrive. */
 const SkeletonProductPreview = () => {
   return (
     <div

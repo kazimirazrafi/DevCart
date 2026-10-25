@@ -30,12 +30,6 @@ const LINKS: AccountLink[] = [
   },
 ]
 
-/**
- * One nav for every width. It reads across on a phone and becomes the sidebar
- * from the `small` breakpoint, so the links never exist as two copies of
- * themselves — the starter kept a second mobile list, which is how the same
- * control ends up with the same test id twice in the document.
- */
 const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer }) => {
   const route = usePathname()
   const { countryCode } = useParams() as { countryCode: string }

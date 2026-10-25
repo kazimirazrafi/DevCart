@@ -20,11 +20,8 @@ export default async function Cart() {
 
   const customer = await retrieveCustomer()
 
-  /*
-   * The cart holds quantities but not stock, so the caps and warnings on the
-   * line items are resolved from the products those lines point at. A failure
-   * here leaves the map empty and the cart renders anyway.
-   */
+  // Cart lines carry no stock, so the caps are resolved from their products; a
+  // failed read leaves the map empty and the cart still renders.
   const productIds =
     cart?.items
       ?.map((item) => item.product_id)

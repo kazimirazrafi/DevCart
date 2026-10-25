@@ -7,11 +7,6 @@ type LineItemPriceProps = {
   currencyCode: string
 }
 
-/**
- * A line's total. A reduced price keeps the original beside it, struck through:
- * the discount is real information, and `riso-pink` is not allowed as text at
- * this size (docs/DESIGN.md §2.1), so ink and a strike carry it instead.
- */
 const LineItemPrice = ({
   item,
   currencyCode,

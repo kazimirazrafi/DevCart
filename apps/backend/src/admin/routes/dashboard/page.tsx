@@ -120,11 +120,8 @@ const rangeFor = (days: number) => {
   }
 }
 
-/*
- * The chart is drawn from the API's own day keys (`YYYY-MM-DD`, UTC) rather
- * than from a parsed date, so a label can never slide a day sideways in a
- * browser that is west of Greenwich.
- */
+/* Day keys come from the API as YYYY-MM-DD in UTC, never from a parsed
+ * date, so a label cannot shift a day in a western timezone. */
 const MONTHS = [
   "Jan",
   "Feb",
@@ -154,11 +151,7 @@ const SECOND_SLICE_COLOR = "var(--border-strong)"
 
 type BadgeColor = "green" | "orange" | "red" | "blue" | "purple" | "grey"
 
-/**
- * Colour by what the state means for the shop, not by its name: money in is
- * green, money still owed is orange, and a cancelled order is not a live
- * thing at all.
- */
+/** Money in is green, money still owed orange, cancelled red. */
 const PAYMENT_COLORS: Record<string, BadgeColor> = {
   captured: "green",
   paid: "green",
@@ -190,11 +183,8 @@ const Stars = ({ rating }: { rating: number }) => (
   </span>
 )
 
-/**
- * The change against the window immediately before this one, drawn as an
- * arrow rather than a colour: a rise is not always good news, and the number
- * is what an admin reads.
- */
+/** Change against the previous window. An arrow, not a colour: a rise is
+ * not always good news. */
 const Delta = ({ value }: { value: number | null }) => {
   if (value === null) {
     return (
@@ -316,13 +306,8 @@ const RevenueTooltip = ({
   )
 }
 
-/**
- * Revenue per day, with the window before it drawn behind.
- *
- * One currency at a time: the shop prices in more than one and drawing two
- * currencies on one axis would add them up visually, which is the mistake the
- * totals avoid. The buttons are the currencies that appear in either window.
- */
+/** Revenue per day with the previous window behind it, one currency at a
+ * time so the axis cannot imply a sum. */
 const RevenueChart = ({
   points,
   currency,
@@ -419,7 +404,7 @@ const RevenueChart = ({
   </Container>
 )
 
-/** Orders per day, small and without axes: a shape beside a number. */
+/** Orders per day, no axes. */
 const OrdersSparkline = ({ values }: { values: number[] }) => {
   const points = useMemo(
     () => values.map((value, index) => ({ index, value })),
@@ -450,13 +435,8 @@ const OrdersSparkline = ({ values }: { values: number[] }) => {
   )
 }
 
-/**
- * New against returning customers in the window.
- *
- * "Returning" is someone who ordered in this window and already existed when
- * it opened, so the two halves add up to the people the window actually
- * reached — a customer who bought twice is one returning customer, not two.
- */
+/** New against returning customers; a customer who ordered twice counts
+ * once. */
 const CustomersDonut = ({
   fresh,
   returning,
@@ -555,7 +535,7 @@ const CustomersDonut = ({
   )
 }
 
-/** Average rating and the five-star distribution behind it. */
+/** Average rating with the star distribution. */
 const Satisfaction = ({
   average,
   count,
@@ -629,20 +609,9 @@ const Satisfaction = ({
   )
 }
 
-/**
- * The admin's home: the shop's numbers, the work waiting on an admin, and the
- * doors into the tasks that follow from both.
- *
- * The figures come from `GET /admin/dashboard`, which reads the same orders,
- * customers, reviews and stock levels the rest of the admin shows — a dashboard
- * that disagrees with the page it links to is worse than no dashboard, because
- * it is trusted.
- *
- * The window buttons move the sales figures, the charts, the new-customer count
- * and the orders still waiting to ship. Pending reviews and low stock are
- * counted across all time: a window would drop the oldest, and the oldest are
- * precisely the ones that have been forgotten.
- */
+/* The admin home. Every figure is read from the same endpoints the pages it
+ * links to use. The window only moves sales, charts, new customers and orders
+ * to ship; pending reviews and low stock are always all-time. */
 const DashboardPage = () => {
   const [days, setDays] = useState(30)
   const [currency, setCurrency] = useState<string | null>(null)
@@ -655,8 +624,7 @@ const DashboardPage = () => {
       sdk.client.fetch<Dashboard>("/admin/dashboard", {
         query: { from: range.from, to: range.to },
       }),
-    // The previous window's figures stay on screen while the next ones load,
-    // rather than the page collapsing to a spinner on every button press.
+    // Keep the old figures while the next window loads.
     placeholderData: (previous) => previous,
   })
 

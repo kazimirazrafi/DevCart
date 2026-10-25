@@ -59,8 +59,7 @@ const Modal = ({
               <Dialog.Panel
                 data-testid={dataTestId}
                 className={clx(
-                  // `overflow-y-auto` keeps a long form (the address dialogs)
-                  // reachable on a phone instead of clipped by the max height.
+                  // Keeps long forms reachable on a phone.
                   "flex h-fit max-h-[75vh] w-full flex-col justify-start overflow-y-auto transform p-5 text-left align-middle transition-all",
                   {
                     "max-w-md": size === "small",
@@ -89,7 +88,6 @@ const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <Dialog.Title className="flex items-center justify-between">
       <div className="min-w-0 flex-1">{children}</div>
       <div>
-        {/* The icon is the only content, so the button carries its own name. */}
         <button
           type="button"
           onClick={close}

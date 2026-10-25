@@ -1,5 +1,8 @@
 import {
+  categoryValues,
+  normalizeCategoryColumns,
   parseCsv,
+  rewriteCategoryCells,
   rewriteTagCells,
   stringifyCsv,
   tagColumnIndexes,
@@ -92,5 +95,63 @@ describe("tag columns", () => {
     expect(rewritten[2]).toEqual(["two", "ptag_01HXYZ", "", "2"])
     // The source is not mutated.
     expect(rows[1][1]).toBe("makeup")
+  })
+})
+
+describe("category columns", () => {
+  it("expands one Product Category cell into the numbered columns", () => {
+    const rows = [
+      ["Product Handle", "Product Category", "Price"],
+      ["one", "Home & Kitchen; Kitchen Accessories", "10"],
+      ["two", "Laptops", "20"],
+    ]
+
+    expect(normalizeCategoryColumns(rows)).toEqual([
+      ["Product Handle", "Product Category 1", "Product Category 2", "Price"],
+      ["one", "Home & Kitchen", "Kitchen Accessories", "10"],
+      ["two", "Laptops", "", "20"],
+    ])
+  })
+
+  it("leaves a file that only uses the numbered columns alone", () => {
+    const rows = [
+      ["Product Handle", "Product Category 1"],
+      ["one", "pcat_01HABC"],
+    ]
+
+    expect(normalizeCategoryColumns(rows)).toBe(rows)
+  })
+
+  it("collects distinct names, trimmed, skipping blanks and ids", () => {
+    const rows = [
+      ["Product Handle", "Product Category 1", "Product Category 2"],
+      ["one", "Laptops ", "", ],
+      ["two", "laptops", "pcat_01HABC"],
+      ["three", "Home & Kitchen", ""],
+    ]
+
+    expect(categoryValues(rows)).toEqual(["Laptops", "Home & Kitchen"])
+  })
+
+  it("rewrites names to ids and leaves ids, blanks and unknowns alone", () => {
+    const rows = [
+      ["Product Handle", "Product Category 1", "Product Category 2"],
+      ["one", "Laptops", "Home & Kitchen"],
+      ["two", "pcat_01HABC", ""],
+    ]
+
+    const rewritten = rewriteCategoryCells(
+      rows,
+      new Map([
+        ["laptops", "pcat_laptops"],
+        ["home & kitchen", "pcat_home"],
+      ]),
+      new Set(["pcat_01HABC"])
+    )
+
+    expect(rewritten[1]).toEqual(["one", "pcat_laptops", "pcat_home"])
+    expect(rewritten[2]).toEqual(["two", "pcat_01HABC", ""])
+    // The source is not mutated.
+    expect(rows[1][1]).toBe("Laptops")
   })
 })

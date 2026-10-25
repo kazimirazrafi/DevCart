@@ -40,11 +40,6 @@ export default async function CheckoutForm({
     listCartPaymentMethods(cart.region?.id ?? ""),
   ])
 
-  /*
-   * Without delivery options there is nothing to choose, and without a payment
-   * provider there is nothing to pay with. Saying so beats rendering a form
-   * that cannot be completed.
-   */
   if (!shippingMethods?.length || !paymentMethods?.length) {
     return (
       <div

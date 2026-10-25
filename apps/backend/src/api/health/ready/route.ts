@@ -3,21 +3,9 @@ import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 
 /**
  * GET /health/ready
- *
- * Readiness, as opposed to Medusa's own `/health`. That one answers for the
- * process — it is what a load balancer uses to know the server is up — and it
- * keeps answering when the database is gone, which is exactly the difference a
- * keep-alive ping and an uptime monitor need to see.
- *
- * This one asks the database a question, so:
- *
- * - a failed answer is a `503` rather than a misleading `200`;
- * - a free-tier database that suspends after inactivity is woken by the ping
- *   instead of by the next customer, which is what a keep-alive is for.
- *
- * It is public and unauthenticated on purpose: a monitor cannot hold a session.
- * It costs one round trip and nothing else, and it sends no credentials or
- * catalogue data back.
+ * Unlike Medusa's own /health, this asks the database, so a suspended free-tier
+ * database is woken by the ping and a dead one answers 503. Public because a
+ * monitor cannot hold a session.
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const startedAt = Date.now()
@@ -43,10 +31,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     logger.error(`Health check failed: ${reason}`)
 
-    /*
-     * No reason in the body: an unauthenticated caller does not need to learn
-     * the database's hostname or driver error, and the log has it.
-     */
+    // The reason is logged, not returned: this endpoint is unauthenticated.
     return res.status(503).json({
       status: "unavailable",
       database: "down",

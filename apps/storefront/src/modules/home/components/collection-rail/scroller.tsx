@@ -24,17 +24,7 @@ const Arrow = ({ direction }: { direction: "left" | "right" }) => (
   </svg>
 )
 
-/**
- * The sideways scroller for a product rail.
- *
- * A phone swipes the row and needs nothing more, but a mouse does not
- * discover a horizontal overflow — the products past the edge simply look
- * missing. Two buttons appear at `small` and up and move the row by most of a
- * screen; they disable at the ends so the control matches what is possible.
- *
- * The list itself stays a server-rendered child: this wrapper owns only the
- * scroll position, so no product card becomes client-side JavaScript.
- */
+// Buttons appear from `small` up, where a mouse cannot swipe the row.
 export default function RailScroller({
   children,
   label,
@@ -43,8 +33,6 @@ export default function RailScroller({
   label: string
 }) {
   const viewport = useRef<HTMLDivElement>(null)
-  // Both disabled until the first measurement, so a short row never flashes an
-  // enabled button.
   const [edges, setEdges] = useState<Edges>({ atStart: true, atEnd: true })
 
   const measure = useCallback(() => {
@@ -70,8 +58,7 @@ export default function RailScroller({
       return
     }
 
-    // The row grows when its images finish loading, which changes the far edge
-    // without a scroll event; observing both boxes catches that.
+    // Images loading moves the far edge without a scroll event.
     const observer = new ResizeObserver(measure)
     observer.observe(element)
     if (element.firstElementChild) {

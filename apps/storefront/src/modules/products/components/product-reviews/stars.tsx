@@ -1,10 +1,3 @@
-/**
- * Five stars, filled to `rating`.
- *
- * The glyphs are decoration: the meaning is in the `aria-label`, so a screen
- * reader hears "4 out of 5 stars" instead of five characters. `Math.round` on
- * the filled count keeps a 4.5 average (or any fractional number) legible.
- */
 const Stars = ({
   rating,
   className,

@@ -7,10 +7,7 @@ import { sdk } from "@lib/config"
 
 export const PRODUCT_INDEX_NAME = "product"
 
-/**
- * The currencies the product index holds prices in, one field set each. Keep
- * in sync with `PRICE_CURRENCIES` in the backend's `src/search/product.ts`.
- */
+/** Price fields in the index, one set per currency. Mirrors the backend's search module. */
 export const SEARCH_PRICE_CURRENCIES = ["eur", "usd"]
 
 export type PriceField =
@@ -19,11 +16,7 @@ export type PriceField =
   | "original_price"
   | "on_sale"
 
-/**
- * The indexed currency to read prices in for a region. A region whose currency
- * the index doesn't hold falls back to the first one, so the listing still
- * shows a price rather than none.
- */
+/** Falls back to the first indexed currency so a listing always shows a price. */
 export const indexedCurrency = (currencyCode: string) => {
   const code = currencyCode.toLowerCase()
   return SEARCH_PRICE_CURRENCIES.includes(code)
@@ -34,30 +27,18 @@ export const indexedCurrency = (currencyCode: string) => {
 export const priceAttribute = (field: PriceField, currencyCode: string) =>
   `${field}_${indexedCurrency(currencyCode)}`
 
-/**
- * Shared by the navbar search drawer and the store listing. An empty query
- * searches rather than short-circuiting, which is what the listing needs to
- * show every product before anything is refined.
- */
+/** Shared by the navbar search and the store listing. */
 export const { searchClient } = createInstantSearchAdapter({
   sdk: sdk as unknown as MedusaSdkLike,
   path: "/store/search",
   additionalSearchParameters: {
     search_options: {
       match_strategy: "last",
-      /*
-       * The engine only fuzzy-matches when the query asks for it: the postgres
-       * search provider defaults this option to off, so the index's own
-       * `typo_tolerance` setting was never reached and "hoddie" returned
-       * nothing while "hoodie" found the hoodies. The adapter sends these on the
-       * listing, its facet queries and the navbar search alike.
-       */
+      // The postgres provider defaults this off, so the index setting is never reached.
       typo_tolerance: true,
     },
   },
-  // Range widgets read `facets_stats`, which the adapter only produces for
-  // fields listed here. The price fields are declared with a `stats` facet on
-  // the index, which is what makes the stats available at all.
+  // Range widgets read facets_stats, which the adapter only computes for fields listed here.
   numericAttributes: SEARCH_PRICE_CURRENCIES.flatMap((currency) => [
     `min_price_${currency}`,
     `max_price_${currency}`,

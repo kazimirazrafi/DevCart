@@ -2,10 +2,6 @@ import { cookies as nextCookies } from "next/headers"
 
 import { Link } from "@modules/design-system"
 
-/*
- * Shown only to the person who just ran the template's own onboarding flow
- * (the `_medusa_onboarding` cookie), so a normal visitor never sees it.
- */
 async function ProductOnboardingCta() {
   const cookies = await nextCookies()
 
@@ -15,7 +11,6 @@ async function ProductOnboardingCta() {
     return null
   }
 
-  // The admin dashboard is served by the backend, at its /app path.
   const adminUrl = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || ""
 
   return (

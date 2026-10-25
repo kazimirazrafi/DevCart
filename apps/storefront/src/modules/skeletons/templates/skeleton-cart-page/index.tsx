@@ -5,11 +5,7 @@ import SkeletonCodeForm from "@modules/skeletons/components/skeleton-code-form"
 import SkeletonOrderSummary from "@modules/skeletons/components/skeleton-order-summary"
 import { Rule } from "@modules/design-system"
 
-/**
- * The cart while it is on its way: the same two columns (lines, then the money
- * box), the same heading and rule. The lines are a list because the real ones
- * are.
- */
+/* The same two columns as the real cart, so the page settles in place. */
 const SkeletonCartPage = () => {
   return (
     <div className="py-12">

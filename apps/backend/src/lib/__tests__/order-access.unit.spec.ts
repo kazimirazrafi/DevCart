@@ -98,8 +98,7 @@ describe("order access token", () => {
   })
 
   it("refuses to sign or verify without a usable secret", () => {
-    // Minted while the secret exists, so verification gets past the format and
-    // expiry checks and has to reach for the key.
+    // Minted first, so verification reaches the key rather than the format.
     const token = createOrderAccessToken(ORDER)
 
     delete process.env.ORDER_ACCESS_SECRET

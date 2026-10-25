@@ -3,11 +3,7 @@
 import clsx from "clsx"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
-/*
- * Paging for the listing pages that read a plain `page` query parameter
- * (categories and collections). The search-driven `/store` grid keeps its own
- * control, because InstantSearch owns that page's URL state.
- */
+/* Paging through a plain ?page= param, used by collections. */
 export function Pagination({
   page,
   totalPages,
@@ -21,18 +17,15 @@ export function Pagination({
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // Helper function to generate an array of numbers within a range
   const arrayRange = (start: number, stop: number) =>
     Array.from({ length: stop - start + 1 }, (_, index) => start + index)
 
-  // Function to handle page changes
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams)
     params.set("page", newPage.toString())
     router.push(`${pathname}?${params.toString()}`)
   }
 
-  // Function to render a page button
   const renderPageButton = (
     p: number,
     label: string | number,
@@ -57,7 +50,6 @@ export function Pagination({
     </li>
   )
 
-  // Function to render ellipsis
   const renderEllipsis = (key: string) => (
     <li
       key={key}
@@ -68,21 +60,17 @@ export function Pagination({
     </li>
   )
 
-  // Function to render page buttons based on the current page and total pages
   const renderPageButtons = () => {
     const buttons = []
 
     if (totalPages <= 7) {
-      // Show all pages
       buttons.push(
         ...arrayRange(1, totalPages).map((p) =>
           renderPageButton(p, p, p === page)
         )
       )
     } else {
-      // Handle different cases for displaying pages and ellipses
       if (page <= 4) {
-        // Show 1, 2, 3, 4, 5, ..., lastpage
         buttons.push(
           ...arrayRange(1, 5).map((p) => renderPageButton(p, p, p === page))
         )
@@ -91,7 +79,6 @@ export function Pagination({
           renderPageButton(totalPages, totalPages, totalPages === page)
         )
       } else if (page >= totalPages - 3) {
-        // Show 1, ..., lastpage - 4, lastpage - 3, lastpage - 2, lastpage - 1, lastpage
         buttons.push(renderPageButton(1, 1, 1 === page))
         buttons.push(renderEllipsis("ellipsis2"))
         buttons.push(
@@ -100,7 +87,6 @@ export function Pagination({
           )
         )
       } else {
-        // Show 1, ..., page - 1, page, page + 1, ..., lastpage
         buttons.push(renderPageButton(1, 1, 1 === page))
         buttons.push(renderEllipsis("ellipsis3"))
         buttons.push(
@@ -118,7 +104,6 @@ export function Pagination({
     return buttons
   }
 
-  // Render the component
   return (
     <nav aria-label="Pagination" className="mt-12 w-full">
       <ul

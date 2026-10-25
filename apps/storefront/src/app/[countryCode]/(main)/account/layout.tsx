@@ -9,10 +9,8 @@ export const metadata: Metadata = {
 }
 
 /**
- * The account's own slot decides what a visitor gets: the pages inside it when
- * they are signed in, the sign-in page when they are not. Middleware already
- * sends a signed-out visitor from `/account/<page>` to the sign-in page, so
- * this only has to answer the question, never redirect.
+ * The parallel route decides what a visitor gets: the pages when signed in, the
+ * sign-in slot when not. Middleware already handles the redirect.
  */
 export default async function AccountPageLayout({
   dashboard,

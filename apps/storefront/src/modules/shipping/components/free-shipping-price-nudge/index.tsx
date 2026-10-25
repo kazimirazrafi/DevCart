@@ -115,8 +115,6 @@ export default function ShippingPriceNudge({
     })
     .flat(1)
     .filter(Boolean)
-    // We focus here entirely on free shipping, but this can be edited to handle multiple layers
-    // of reduced shipping prices.
     .find((price) => price?.amount === 0)
 
   if (!freeShippingPrice) {
@@ -195,10 +193,6 @@ function FreeShippingPopup({
 }) {
   const [isClosed, setIsClosed] = useState(false)
 
-  /*
-   * The popup floats over the page, so it needs a landmark of its own to belong
-   * to; and its only control is an icon, so that button needs a name.
-   */
   return (
     <aside
       aria-label="Free shipping notice"
@@ -211,11 +205,6 @@ function FreeShippingPopup({
         }
       )}
     >
-      {/*
-       * The card is ink-on-stock flipped: `bg-ink` with `text-stock` reads as a
-       * dark panel in light mode and a light one in dark mode, which is the
-       * point — it is the loudest surface on the page either way.
-       */}
       <div>
         <button
           type="button"

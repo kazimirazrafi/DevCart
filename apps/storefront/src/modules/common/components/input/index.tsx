@@ -44,8 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             name={name}
             placeholder=" "
             required={required}
-            /* The focus ring is the global `:focus-visible` one in globals.css;
-               a `focus:outline-none` here would win the cascade and remove it. */
+            /* No `focus:outline-none`: it overrides the global focus ring. */
             className="pt-4 pb-1 block w-full h-11 px-4 mt-0 bg-stock border rounded-md appearance-none border-ink/20 hover:bg-ink/5 focus:border-ink"
             {...props}
             ref={inputRef}

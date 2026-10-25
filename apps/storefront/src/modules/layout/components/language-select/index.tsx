@@ -39,10 +39,6 @@ type LanguageSelectProps = {
   currentLocale: string | null
 }
 
-/**
- * Gets the localized display name for a language code using Intl API.
- * Falls back to the provided name if Intl is unavailable.
- */
 const getLocalizedLanguageName = (
   code: string,
   fallbackName: string,
@@ -65,10 +61,6 @@ const DEFAULT_OPTION: LanguageOption = {
   countryCode: "",
 }
 
-/*
- * Like the country switcher, the Listbox owns the open state so the control is
- * operable from the keyboard; the previous version opened only on hover.
- */
 const LanguageSelect = ({ locales, currentLocale }: LanguageSelectProps) => {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
@@ -87,8 +79,7 @@ const LanguageSelect = ({ locales, currentLocale }: LanguageSelectProps) => {
     return [DEFAULT_OPTION, ...localeOptions]
   }, [locales, currentLocale])
 
-  // Seeded rather than left undefined, so the Listbox never switches from
-  // uncontrolled to controlled on its first render.
+  // Seeded so the Listbox is never uncontrolled on first render.
   const [current, setCurrent] = useState<LanguageOption | undefined>(() => {
     if (!currentLocale) return DEFAULT_OPTION
 

@@ -8,13 +8,8 @@ jest.setTimeout(180 * 1000)
 
 const PASSWORD = "supersecret"
 
-/**
- * The review routes, exercised over HTTP against a booted Medusa app.
- *
- * Fixtures go through the same doors a browser does — customer sign-up, admin
- * sign-in — rather than writing rows straight into the database, so the tests
- * cover the module, the links, the workflows and the routes together.
- */
+/** Review routes over HTTP, with fixtures created through sign-up and admin
+ * sign-in rather than written straight to the database. */
 medusaIntegrationTestRunner({
   testSuite: ({ api, getContainer }) => {
     let container: ReturnType<typeof getContainer>
@@ -131,12 +126,7 @@ medusaIntegrationTestRunner({
         "x-publishable-api-key": publishableKey.token,
       }
 
-      /*
-       * Admin routes accept a secret API key over HTTP Basic, which is an
-       * admin identity that needs no password round-trip in a test. The route
-       * under test has nothing user-specific in it, so this is the whole
-       * authentication it needs.
-       */
+      /* Admin routes accept a secret API key over HTTP Basic. */
       const secretKey = await apiKeyModule.createApiKeys({
         title: "Reviews moderation",
         type: "secret",

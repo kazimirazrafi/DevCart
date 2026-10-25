@@ -15,11 +15,7 @@ type Refinement = ReturnType<
   typeof useCurrentRefinements
 >["items"][number]["refinements"][number]
 
-/**
- * What a single refinement reads as on its chip. The raw label is the facet
- * value, which is the option's `Size:M` form for options and a bare `true` for
- * the on-sale toggle — neither says what it filters on out of context.
- */
+/* The raw label is not readable: options read Size:M and the sale toggle reads true. */
 function refinementLabel(refinement: Refinement, currencyCode: string) {
   const { attribute, label, value, operator } = refinement
 
@@ -60,11 +56,7 @@ function refinementLabel(refinement: Refinement, currencyCode: string) {
   return label
 }
 
-/**
- * Every active refinement as a chip that drops it, above the filters that set
- * them. The free-text query is excluded by the connector's own defaults, so
- * only what the sidebar controls shows up here.
- */
+/* Active refinements as removable chips; the free-text query is not included. */
 const CurrentRefinements = ({ currencyCode }: { currencyCode: string }) => {
   const { items, refine } = useCurrentRefinements()
   const { canRefine: canClearAll, refine: clearAll } = useClearRefinements()

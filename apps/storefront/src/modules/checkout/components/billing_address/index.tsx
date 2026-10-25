@@ -5,10 +5,6 @@ import React, { useState } from "react"
 
 import AddressFields from "../address-fields"
 
-/**
- * The billing address form, shown only when it differs from the shipping one.
- * It holds its own local copy so a rejected submit keeps what was typed.
- */
 const BillingAddress = ({
   cart,
   errors,

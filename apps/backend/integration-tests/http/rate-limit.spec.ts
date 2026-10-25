@@ -6,16 +6,7 @@ import {
 
 jest.setTimeout(180 * 1000)
 
-/**
- * The per-caller limits attached in `src/api/middlewares.ts`, exercised over
- * HTTP against a booted app.
- *
- * The newsletter route is the cheapest open write there is, so it is what the
- * limit is spent on: ten sign-ups are allowed and the eleventh is refused with
- * `Retry-After`. The auth route beside it is then used to prove the counters are
- * per bucket — the same address that has exhausted its newsletter allowance can
- * still reach sign-in, which is the difference between a limit and a wall.
- */
+/** The per-caller limits from src/api/middlewares.ts, over HTTP. */
 medusaIntegrationTestRunner({
   testSuite: ({ api, getContainer }) => {
     let storeHeaders: Record<string, string>

@@ -47,15 +47,9 @@ const addressLines = (address: OrderForEmail["shipping_address"]) => {
 }
 
 /**
- * Sends the order confirmation when an order is placed.
- *
- * The event carries only the order id, so the order is read back through the
- * Query API — the email is built from what was committed, not from the cart.
- *
- * Nothing in here may fail the order. The event bus is asynchronous, but a
- * subscriber that throws is retried and, with a local bus, can hold up the same
- * worker; so every failure is caught and logged and the customer keeps their
- * order either way. A missing address simply omits the delivery block.
+ * Sends the order confirmation. The event carries an id only, so the order is
+ * read back from what was committed. Every failure is logged: a subscriber must
+ * not fail the order.
  */
 export default async function orderPlacedHandler({
   event,
@@ -102,10 +96,7 @@ export default async function orderPlacedHandler({
       filters: { id: orderId },
     })
 
-    /*
-     * The Query API returns the order module's entity type, whose display id
-     * may be a string; the email only ever needs the fields declared above.
-     */
+    // Only the fields declared above are used, whatever the entity type says.
     const placed = order as unknown as OrderForEmail | undefined
 
     if (!placed) {

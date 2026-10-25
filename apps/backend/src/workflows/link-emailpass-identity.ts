@@ -18,21 +18,10 @@ type LinkEmailPassIdentityOutput = {
 }
 
 /*
- * A customer who has only ever signed in with Google owns a customer record and
- * a Google auth identity, but no password. Registering with their address (or
- * resetting a password for it) creates a *separate* emailpass auth identity,
- * because Medusa's register route only checks provider identities — it never
- * looks at customers. That identity carries no `app_metadata.customer_id`, so
- * its login token has no actor and `/store/customers/me` rejects it.
- *
- * This step closes that gap, but only for a caller who has just proven they
- * read the address's inbox (see the reset-password workflow): proof is what
- * makes it safe to hand over an existing account. It is deliberately not run on
- * login or registration, where anyone could type someone else's address.
- *
- * The customer keeps the auth identity they signed up with and gains a second
- * one for the password. Medusa resolves the customer from whichever identity a
- * provider authenticated, so both ways in land on the same account.
+ * A customer who signed up with Google has no password, and Medusa's emailpass
+ * register creates a second identity without `app_metadata.customer_id`. This
+ * step attaches it to the existing customer. Only safe after the address has
+ * been proven, so it runs on password reset only, never on login or register.
  */
 const linkEmailPassIdentityStep = createStep(
   "link-email-pass-identity",
@@ -54,8 +43,7 @@ const linkEmailPassIdentityStep = createStep(
       email: input.email,
     })
 
-    // No customer yet: Medusa's normal registration flow links the identity
-    // when it creates the customer, so there is nothing to reconcile.
+    // No customer yet: normal registration links the identity on create.
     if (!customer) {
       return new StepResponse<LinkEmailPassIdentityOutput>({ linked: false })
     }

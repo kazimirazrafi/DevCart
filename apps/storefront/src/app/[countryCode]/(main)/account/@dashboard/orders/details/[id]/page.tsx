@@ -10,14 +10,9 @@ type Props = {
 }
 
 /*
- * An order is only shown in the account when it is the signed-in customer's.
- * The backend already refuses a read that is not the owner's (and a guest's
- * without the token from their confirmation link), so this page reads with the
- * session it has and keeps its own check: a read that fails, or one that
- * belongs to someone else, is the same 404 here, and the page must not confirm
- * that the id exists.
- *
- * `cache` so the metadata and the page share one pair of requests.
+ * An order is shown only to the customer who owns it. The backend already refuses
+ * anyone else, and this page keeps its own check so a failed or foreign read is
+ * the same 404. `cache` lets the metadata and the page share one read.
  */
 const loadOwnOrder = cache(async (id: string) => {
   const [order, customer] = await Promise.all([
@@ -35,12 +30,8 @@ const loadOwnOrder = cache(async (id: string) => {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const order = await loadOwnOrder((await props.params).id)
 
-  /*
-   * Deliberately no `notFound()` in here, and no order number unless the order
-   * is the caller's: notFound() raised from generateMetadata renders the root
-   * not-found page instead of the storefront's (the trap C3 hit), and the title
-   * must not name an order the visitor may not read.
-   */
+  // No notFound() here: raised from generateMetadata it renders the root
+  // not-found page, and the title must not name an order the visitor cannot read.
   return {
     title: order ? `Order #${order.display_id}` : "Order",
     description: "View your order",

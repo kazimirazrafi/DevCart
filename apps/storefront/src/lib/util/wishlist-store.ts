@@ -2,17 +2,8 @@
 
 /**
  * Which products the signed-in customer has saved, shared by every heart on the
- * page.
- *
- * One fetch per page load, not one per card: the first heart to mount starts
- * `GET /api/wishlist` and every other heart subscribes to the same snapshot.
- * The snapshot object identity only changes when the data does, which is what
- * `useSyncExternalStore` requires.
- *
- * It lives in a module rather than a React context because the hearts sit in
- * server-rendered plates scattered across the catalogue, and threading a
- * provider through every listing would mean a client boundary at the very top
- * of the page.
+ * page. The first heart to mount starts GET /api/wishlist; the rest subscribe to
+ * the same snapshot, which only changes identity when the data does.
  */
 export type WishlistEntrySnapshot = {
   id: string
@@ -65,19 +56,14 @@ export const getWishlistSnapshot = (): WishlistSnapshot => {
 }
 
 /**
- * The server-rendered snapshot, so a card does not flash an empty heart first.
- * It is one constant, not a fresh object per call: `useSyncExternalStore`
- * compares snapshots by identity, and a new object every render would make it
- * believe the data changed each time.
+ * The server snapshot, so a card does not flash an empty heart first. One
+ * constant, because useSyncExternalStore compares snapshots by identity.
  */
 const SERVER_SNAPSHOT: WishlistSnapshot = { ready: false, entries: [] }
 
 export const getEmptyWishlistSnapshot = (): WishlistSnapshot => SERVER_SNAPSHOT
 
-/**
- * Records the result of a toggle for every heart on the page, so tapping one
- * card's heart updates the same product wherever else it is shown.
- */
+/** Records a toggle for every heart on the page. */
 export const setWishlistEntry = (
   productId: string,
   entry: WishlistEntrySnapshot | null

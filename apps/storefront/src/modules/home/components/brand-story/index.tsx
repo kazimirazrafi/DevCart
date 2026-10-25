@@ -15,11 +15,6 @@ const PILLARS = [
   },
 ]
 
-/**
- * Why this shop exists, told in one display line and three short pillars. It
- * sits between the product rows on purpose: by then a visitor has seen the
- * catalogue and is deciding whether the shop can be trusted with an order.
- */
 export default function BrandStory() {
   return (
     <section

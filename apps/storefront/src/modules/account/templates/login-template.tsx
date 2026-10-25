@@ -14,12 +14,7 @@ export enum LOGIN_VIEW {
   FORGOT_PASSWORD = "forgot-password",
 }
 
-/*
- * Why a sign-in that left this page came back without one. The Google callback
- * route answers with a redirect, so it has no form state to put a message in:
- * the outcome travels as `?auth_error=` and is read here, where both views can
- * show it. Anything not in this list is not ours to explain, so it says nothing.
- */
+/* The Google callback route redirects, so failures arrive as ?auth_error=. */
 const AUTH_ERRORS: Record<string, string> = {
   google_cancelled: "Google sign-in was cancelled. Nothing was changed.",
   google_email_taken:
@@ -27,22 +22,15 @@ const AUTH_ERRORS: Record<string, string> = {
   google_failed: "Google sign-in could not be completed. Try again.",
 }
 
-/**
- * The ways into an account: signing in, creating one, and getting back into one
- * whose password is gone. Kept as one page with a view switch rather than three
- * routes, because they are the same decision seen from different sides — and
- * because a protected page's `?redirect=` has to survive the switch, which a
- * client-side view change does and a navigation would have to carry by hand.
- *
- * On a wide screen the form shares the page with the brand panel; on a phone
- * the panel is dropped and the form keeps the full width.
+/*
+ * One page with a view switch, so a protected page's ?redirect= survives
+ * signing in, registering or resetting a password.
  */
 const LoginTemplate = () => {
   const [currentView, setCurrentView] = useState<LOGIN_VIEW>(LOGIN_VIEW.SIGN_IN)
   const searchParams = useSearchParams()
   const authError = AUTH_ERRORS[searchParams.get("auth_error") ?? ""]
-  // The reset page cannot show this itself: it signs nobody in, so the customer
-  // lands back here and needs to know the password really did change.
+  // The reset page signs nobody in, so the confirmation is shown here.
   const resetDone = searchParams.get("reset") === "success"
 
   return (

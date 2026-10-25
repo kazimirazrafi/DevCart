@@ -26,11 +26,7 @@ const intParam = (
 
 /**
  * GET /admin/reviews
- *
- * The moderation queue: every review, whatever its status, newest first, with
- * an optional `product_id` (the product page's widget asks for one product) and
- * `status` filter. This is an admin-only route, so the customer's name is here
- * to give the reviewer an identity an admin can recognise.
+ * The moderation queue, newest first, optionally filtered by product or status.
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const limit = intParam(req.query.limit, DEFAULT_LIMIT, 1, MAX_LIMIT)

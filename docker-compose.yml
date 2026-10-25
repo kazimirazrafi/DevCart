@@ -13,7 +13,7 @@
 #   REDIS_URL=redis://localhost:6379
 #
 # Meilisearch is behind a profile on purpose: the project uses Medusa's built-in
-# search API, so nothing connects to it yet. See ROADMAP.md "Standing notes".
+# search API, so nothing connects to it yet.
 
 name: devcart
 

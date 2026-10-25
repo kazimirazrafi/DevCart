@@ -6,17 +6,6 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 const CHIP =
   "flex min-h-11 items-center border px-3 text-small transition-colors focus-visible:outline-offset-2"
 
-/**
- * A category page's own navigation: the departments on the first row, and on
- * the second the categories inside the one being browsed — the siblings when a
- * leaf is open, the children when a department is.
- *
- * Without it a visitor who landed on the wrong category had to go back to the
- * home page or the full listing to reach another one. It is drawn as chips
- * rather than a second sidebar so the facet column keeps its one job, and it
- * links to category pages instead of refining the search, which keeps the page
- * heading, breadcrumb and description agreeing with what is listed.
- */
 export default function CategorySwitcher({
   categories,
   current,

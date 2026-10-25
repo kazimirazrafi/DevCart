@@ -25,15 +25,14 @@ const parsePage = (value: string | string[] | undefined) => {
 }
 
 /**
- * The customer's own orders, newest first. The page never asks the Store API for
- * "some" orders and filters afterwards: `/store/orders` takes the customer from
- * the request's own authentication, so what it returns is what this page shows.
+ * The customer's own orders, newest first: /store/orders takes the customer from
+ * the request's authentication, so it only ever returns theirs.
  */
 export default async function Orders(props: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
-  // Middleware already sends a signed-out visitor to sign in; a page that shows
-  // order history still refuses to render without a customer to own it.
+  // Middleware already redirects a signed-out visitor; this still refuses to
+  // render without a customer.
   const customer = await retrieveCustomer()
 
   if (!customer) {
@@ -46,11 +45,8 @@ export default async function Orders(props: {
   const count = result.ok ? result.count : 0
   const pageCount = Math.max(1, Math.ceil(count / PAGE_SIZE))
 
-  /*
-   * A page past the end of the history is a stale link — the order it was
-   * pointing at is gone, or the URL was edited. Send the customer to the last
-   * page that exists instead of an empty list under a non-empty count.
-   */
+  // A page past the end is a stale link, so send the customer to the last page
+  // that exists instead of an empty list under a non-empty count.
   if (result.ok && page > pageCount) {
     redirect(`/account/orders?page=${pageCount}`)
   }

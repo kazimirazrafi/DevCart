@@ -22,10 +22,7 @@ const DeleteButton = ({
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  /*
-   * A removal that fails has to say so: the line stays on screen, so without a
-   * message the click would look like it did nothing.
-   */
+  // A failed removal has to say so; the line stays on screen.
   const handleDelete = async (id: string) => {
     setError(null)
     setIsDeleting(true)
@@ -37,8 +34,6 @@ const DeleteButton = ({
         setError(result.message)
         setIsDeleting(false)
       } else {
-        // Same reason as the cart's quantity change: make the repaint explicit
-        // rather than relying on the action's response to land.
         router.refresh()
       }
     } catch (cause) {

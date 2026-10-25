@@ -17,24 +17,16 @@ type Props = {
   >
 }
 
-/*
- * Rendered per request rather than baked at build time: the page reads the
- * customer's cache id (through the product reads) and a category created in the
- * admin after a build has to work. Prerendering this route made every such
- * page a 500 (DYNAMIC_SERVER_USAGE), the same failure the product page had.
- */
+/* Built per request: the page reads the cache id cookie, and a category created
+ * after a build has to work. */
 export const dynamic = "force-dynamic"
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   const productCategory = await getCategoryByHandle(params.category)
 
-  /*
-   * An unknown handle must not call `notFound()` here: a `notFound()` thrown
-   * while metadata resolves renders the root `app/not-found.tsx` instead of
-   * this route group's not-found page. Returning plain metadata lets the page
-   * below raise it, which keeps the 404 inside the storefront layout.
-   */
+  // notFound() raised while metadata resolves renders the root not-found page,
+  // so the page below raises it instead.
   if (!productCategory) {
     return notFoundMetadata()
   }

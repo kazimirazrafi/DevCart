@@ -11,14 +11,7 @@ type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
 }
 
-/**
- * The "forgot password" view, kept inside the sign-in page rather than on a
- * route of its own: it is one step of signing in, and the same page already owns
- * the view switch (and the `?redirect=` that must survive it).
- *
- * The answer never says whether the address has an account — the API does not
- * say either, and a form that did would let anyone test addresses against it.
- */
+/* The answer never reveals whether an address has an account. */
 const ForgotPassword = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(requestPasswordReset, null)
 

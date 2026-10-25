@@ -1,11 +1,8 @@
 name: Lighthouse budgets
 
-# The numbers in ROADMAP.md are only worth recording if they cannot drift
-# silently. This job rebuilds the shop on a seeded database and runs
-# lighthouserc.cjs against the three pages the spec names.
-#
-# It is nightly rather than per-push because it needs the whole stack: Postgres,
-# a migrated and seeded catalogue, the backend, a production storefront build.
+# Rebuilds the shop on a seeded database and runs lighthouserc.cjs against the
+# three pages that matter. Nightly because it needs the whole stack: Postgres, a
+# seeded catalogue, the backend and a production storefront build.
 on:
   schedule:
     - cron: "0 3 * * *"
@@ -77,10 +74,8 @@ jobs:
           cp apps/backend/.env.template apps/backend/.env
           cp apps/storefront/.env.template apps/storefront/.env.local
 
-      # The storefront refuses to build without a publishable key, and a page
-      # whose catalogue reads fail scores nothing worth gating. The key the seed
-      # just created is the one the storefront has to be built with, because
-      # NEXT_PUBLIC_* is inlined at build time.
+      # The seed creates the publishable key, and NEXT_PUBLIC_* is inlined at
+      # build time, so the key has to exist before the storefront is built.
       - name: Migrate and seed
         run: |
           pnpm --filter @dtc/backend exec medusa db:migrate
@@ -120,10 +115,7 @@ jobs:
             sleep 2
           done
 
-          # The image optimiser resizes on first request and caches afterwards,
-          # so the first audit of a cold machine measures the encode rather than
-          # the page. One warm pass per URL is what makes the numbers comparable
-          # with the ones in ROADMAP.md.
+          # Warm the image optimiser, or the first audit measures the encode.
           curl -fsS "http://localhost:8000/$LHCI_COUNTRY" >/dev/null
           curl -fsS "http://localhost:8000/$LHCI_COUNTRY/store" >/dev/null
           curl -fsS "http://localhost:8000/$LHCI_COUNTRY/products/$LHCI_PRODUCT_HANDLE" >/dev/null

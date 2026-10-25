@@ -2,12 +2,8 @@
 
 import RouteError from "@modules/common/components/route-error"
 
-/**
- * The error boundary for everything in the storefront: home, store, product,
- * category, collection, cart, order and account. It renders inside the group's
- * layout, so the customer keeps the nav and footer and can walk away from the
- * broken page rather than staring at a framework error.
- */
+/** Boundary for every page in this group; it renders inside the group layout,
+ * so the nav and footer stay. */
 export default function MainGroupError({
   error,
   reset,

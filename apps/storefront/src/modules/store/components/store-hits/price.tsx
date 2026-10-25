@@ -13,11 +13,7 @@ type HitPriceProps = {
 
 const amount = (value: unknown) => (typeof value === "number" ? value : null)
 
-/**
- * Prices off the search hit. Variants with different prices make the card show
- * a range, and a struck-through original price is the only sale marker the
- * design allows at this size (docs/DESIGN.md §2.1 keeps riso-pink for display type).
- */
+/* A range is shown when the variants differ in price. */
 const HitPrice = ({ hit, currencyCode }: HitPriceProps) => {
   const currency_code = indexedCurrency(currencyCode)
   const min_price = amount(hit[priceAttribute("min_price", currencyCode)])
