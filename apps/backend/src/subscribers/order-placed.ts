@@ -122,6 +122,7 @@ export default async function orderPlacedHandler({
       data: {
         storeName: process.env.STORE_NAME || "DevCart",
         orderNumber: placed.display_id,
+        orderId: placed.id,
         orderDate: placed.created_at,
         customerName:
           [placed.shipping_address?.first_name, placed.shipping_address?.last_name]

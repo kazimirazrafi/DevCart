@@ -97,17 +97,21 @@ export const createTransferRequest = async (
   error: string | null
   order: HttpTypes.StoreOrder | null
 }> => {
-  const id = formData.get("order_id") as string
+  const submitted = (formData.get("order_id") as string)?.trim() ?? ""
 
-  if (!id) {
+  if (!submitted) {
     return { success: false, error: "Order ID is required", order: null }
   }
+
+  // A pasted confirmation link is the common mistake, so the id is read out of
+  // it instead of failing on a 404 the customer cannot interpret.
+  const orderId = submitted.match(/(order_[A-Z0-9]+)/i)?.[1] ?? submitted
 
   const headers = await getAuthHeaders()
 
   return await sdk.store.order
     .requestTransfer(
-      id,
+      orderId,
       {},
       {
         fields: "id, email",
@@ -115,7 +119,36 @@ export const createTransferRequest = async (
       headers
     )
     .then(({ order }) => ({ success: true, error: null, order }))
-    .catch((err) => ({ success: false, error: err.message, order: null }))
+    .catch((err) => ({
+      success: false,
+      error: transferErrorMessage(err.message, orderId),
+      order: null,
+    }))
+}
+
+/**
+ * Core Medusa allows one open order change at a time, so a second request is
+ * refused with wording that means nothing to a customer. These are the cases
+ * worth naming; everything else is passed through.
+ */
+const transferErrorMessage = (message: string, orderId: string): string => {
+  if (/existing active order change/i.test(message)) {
+    return `Order ${orderId} already has a transfer waiting. Open the link we emailed you, or ask the store to cancel it and try again.`
+  }
+
+  if (/to a guest customer account/i.test(message)) {
+    return "That order belongs to a guest checkout, and this account cannot receive it yet. Contact the store so they can move it to you."
+  }
+
+  if (/already belongs to customer/i.test(message)) {
+    return `Order ${orderId} is already in this account. It should appear under Account → Orders.`
+  }
+
+  if (/not found|does not exist/i.test(message)) {
+    return `We could not find an order with the id ${orderId}. Use the reference from your confirmation email, which looks like order_01H8XYZ.`
+  }
+
+  return message
 }
 
 export const acceptTransferRequest = async (id: string, token: string) => {

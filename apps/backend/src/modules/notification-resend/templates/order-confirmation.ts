@@ -12,6 +12,8 @@ import {
 export type OrderConfirmationData = {
   storeName?: string
   orderNumber: string | number
+  /** The order id, printed so it can be quoted without reading the URL. */
+  orderId?: string
   orderDate?: string
   customerName?: string
   currencyCode?: string
@@ -109,8 +111,13 @@ export const orderConfirmation = (data: OrderConfirmationData): EmailContent => 
       itemTable,
       totals,
       action.html,
+      data.orderId
+        ? renderParagraph(
+            `Order reference: ${data.orderId} — quote this if you contact us, or use it under Account → Orders → Order transfers to move the order into an account.`
+          )
+        : "",
       shippingBlock,
-    ],
+    ].filter((block) => block !== ""),
   })
 
   const text = [
@@ -129,6 +136,7 @@ export const orderConfirmation = (data: OrderConfirmationData): EmailContent => 
     "",
     action.text,
     "",
+    data.orderId ? `Order reference: ${data.orderId}` : "",
     address.length ? `Delivering to\n${address.join("\n")}` : "",
     data.shippingMethod ? `${data.shippingMethod}` : "",
     "",

@@ -1,5 +1,5 @@
 import { Radio } from "@headlessui/react"
-import { isManual } from "@lib/constants"
+import { isManual, stripePublishableKey } from "@lib/constants"
 import clsx from "clsx"
 import { PaymentElement } from "@stripe/react-stripe-js"
 import React, { useContext, type JSX } from "react"
@@ -110,8 +110,15 @@ export const StripePaymentContainer = ({
               }}
             />
           </div>
-        ) : (
+        ) : stripePublishableKey ? (
           <SkeletonCardDetails />
+        ) : (
+          // No key means the element can never mount, so the skeleton would
+          // never resolve. Say so instead of loading forever.
+          <span className="text-small text-ink/80" data-testid="stripe-not-configured">
+            Card payments are unavailable right now. Choose another payment
+            method, or contact us and we will take the order another way.
+          </span>
         ))}
     </PaymentContainer>
   )

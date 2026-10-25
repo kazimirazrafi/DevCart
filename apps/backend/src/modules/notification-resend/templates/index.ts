@@ -5,6 +5,7 @@ import { emailVerification } from "./email-verification"
 import { lowStockAlert } from "./low-stock-alert"
 import { newsletterWelcome } from "./newsletter-welcome"
 import { orderConfirmation } from "./order-confirmation"
+import { orderTransferRequested } from "./order-transfer-requested"
 import { passwordReset } from "./password-reset"
 import { shipment } from "./shipment"
 
@@ -13,6 +14,7 @@ export type { EmailVerificationData } from "./email-verification"
 export type { LowStockAlertData } from "./low-stock-alert"
 export type { NewsletterWelcomeData } from "./newsletter-welcome"
 export type { OrderConfirmationData } from "./order-confirmation"
+export type { OrderTransferRequestedData } from "./order-transfer-requested"
 export type { PasswordResetData } from "./password-reset"
 export type { ShipmentData } from "./shipment"
 
@@ -21,6 +23,7 @@ export type { ShipmentData } from "./shipment"
 export const EMAIL_TEMPLATES = {
   EMAIL_VERIFICATION: "email-verification",
   ORDER_CONFIRMATION: "order-confirmation",
+  ORDER_TRANSFER_REQUESTED: "order-transfer-requested",
   PASSWORD_RESET: "password-reset",
   SHIPMENT: "shipment",
   LOW_STOCK_ALERT: "low-stock-alert",
@@ -42,6 +45,8 @@ export const renderEmail = (
       return emailVerification(payload as never)
     case EMAIL_TEMPLATES.ORDER_CONFIRMATION:
       return orderConfirmation(payload as never)
+    case EMAIL_TEMPLATES.ORDER_TRANSFER_REQUESTED:
+      return orderTransferRequested(payload as never)
     case EMAIL_TEMPLATES.PASSWORD_RESET:
       return passwordReset(payload as never)
     case EMAIL_TEMPLATES.SHIPMENT:

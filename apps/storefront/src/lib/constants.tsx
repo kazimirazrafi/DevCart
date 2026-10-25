@@ -16,6 +16,17 @@ export const ENABLED_PAYMENT_PROVIDERS = [
 /* Restrict the Stripe element to cards instead of the account's defaults. */
 export const CARD_SESSION_DATA = { payment_method_types: ["card"] } as const
 
+/*
+ * The publishable key Stripe.js loads with. Empty when the deployment has none,
+ * which is the one failure the checkout has to name rather than wait on: the
+ * card element cannot mount, so the payment step would otherwise show its
+ * skeleton forever.
+ */
+export const stripePublishableKey =
+  process.env.NEXT_PUBLIC_STRIPE_KEY ||
+  process.env.NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY ||
+  ""
+
 /* Titles and icons, kept for providers no longer offered: receipts outlive
  * the checkout. */
 export const paymentInfoMap: Record<

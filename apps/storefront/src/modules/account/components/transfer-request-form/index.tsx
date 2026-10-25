@@ -41,7 +41,7 @@ export default function TransferRequestForm() {
           name="order_id"
           label="Order ID"
           placeholder="order_01H8XYZ"
-          hint="The id in the link of the order's confirmation email."
+          hint="The order reference from your confirmation email, like order_01H8XYZ. The whole link works too."
           value={orderId}
           onChange={(event) => setOrderId(event.target.value)}
           data-testid="order-id-input"

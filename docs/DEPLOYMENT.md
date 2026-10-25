@@ -21,26 +21,23 @@ Starting from `.medusa/server` also means `apps/backend/.env` is **not** read: t
 
 Run one backend process. `medusa start` accepts `--servers` and `--workers` to fork the cluster, so the HTTP servers and the job/workflow workers can be sized separately once scheduled jobs outgrow a single instance; until then one process does both.
 
-### Database exposure (Supabase)
+### Database hosting and region
 
-Medusa talks to Postgres directly, so it wants no row level security and no REST layer. Supabase gives you both by default: the `public` schema is published through PostgREST and granted to the `anon` and `authenticated` roles, whose keys are handed out by the dashboard. That is what the "RLS Disabled in Public" and "Sensitive Columns Exposed" advisors report, and they are not cosmetic: `customer`, `order`, `cart` and `api_key` (with its `token` column) are readable with a key that is not treated as a secret.
+Two properties matter more than the provider's feature list:
 
-Run this once against the project, as `postgres`, and the advisories clear:
+- **Region.** Put the database in the same region as the backend process. Medusa issues dozens of queries per page render, so a cross-continent hop is paid on every one of them. Measured on this project: a single `select 1` from a backend in Singapore to a database in Sydney took **181 ms**, and the same probe in-region takes **2-3 ms**. That difference is the whole of a three-second page load.
+- **No transaction pooler.** MikroORM names its prepared statements (`s0`, `s1`, ...). A PgBouncer endpoint in transaction mode hands each statement to a different backend connection, so the name does not exist in the next transaction and requests fail with `prepared statement "s0" does not exist`. Use a direct endpoint; a session-mode pooler also works, at the cost of one extra hop.
+
+This project uses **Neon** in Singapore (`aws-ap-southeast-1`), reached through its direct endpoint. Nothing Neon-specific is involved: no SDK, no Data API, no row level security to disable. The backend opens an ordinary TCP connection with a connection string, exactly as it would to a local Postgres, so any managed Postgres in the right region is a valid substitute.
+
+If you restore an existing database rather than seeding a new one, create these first. The schema depends on both and Medusa's migrations do not create either:
 
 ```sql
-revoke all on all tables    in schema public from anon, authenticated;
-revoke all on all sequences in schema public from anon, authenticated;
-revoke all on all functions in schema public from anon, authenticated;
-
--- Objects Medusa's migrations create later get no default grant either.
-alter default privileges in schema public revoke all on tables    from anon, authenticated;
-alter default privileges in schema public revoke all on sequences from anon, authenticated;
-
--- Strongest form: no REST access to public at all for those roles.
-revoke usage on schema public from anon, authenticated;
+create extension if not exists unaccent with schema public;
+create extension if not exists pg_trgm  with schema public;
 ```
 
-The application is unaffected: it connects as `postgres`, which owns the schema. Do not enable RLS on Medusa's tables to satisfy the advisor instead — the policies would have to mirror Medusa's own authorization rules, and every one you miss silently empties a page. Disabling the Data API in the Supabase dashboard (Settings → API) has the same effect and is fine to combine with the statements above.
+The text search configuration references `public.unaccent`, and the search tables carry `gin (search_text public.gin_trgm_ops)` indexes, so both extensions have to live in `public` for a restore to match.
 
 ### Redis
 
@@ -56,7 +53,7 @@ Copy `apps/backend/.env.template` and `apps/storefront/.env.template`; they docu
 
 **Backend**
 
-- `DATABASE_URL` — add `?sslmode=require` for a managed database. If the provider offers both a session pooler (5432) and a transaction pooler (6543), use the session pooler: Medusa's ORM uses prepared statements, which a transaction pooler breaks.
+- `DATABASE_URL` — the provider's **direct** connection string, with TLS on. Prefer it over a pooled endpoint: a transaction-mode pooler breaks the prepared statements Medusa's ORM uses, and a session-mode pooler works but adds a hop. Neon's string already carries `?channel_binding=require&sslmode=require`, and needs no other parameter: its certificate chains to a public CA, so `sslmode=require` verifies cleanly. A host whose certificate is not publicly trusted needs `uselibpqcompat=true&sslmode=require` instead.
 - `JWT_SECRET`, `COOKIE_SECRET`, `ORDER_ACCESS_SECRET`, `EMAIL_VERIFICATION_SECRET` — generate fresh values (`openssl rand -hex 32`). The last two are at least 32 characters; rotating them revokes existing order links and verification codes.
 - `STORE_CORS`, `ADMIN_CORS`, `AUTH_CORS` — the storefront origin, plus the admin origin if it is served from elsewhere.
 - `STRIPE_API_KEY`, `STRIPE_WEBHOOK_SECRET` — the webhook endpoint is `/hooks/payment/stripe_stripe` on the backend origin.
