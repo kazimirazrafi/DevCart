@@ -188,6 +188,30 @@ RESEND_FROM="DevCart <orders@example.com>"
 notification instead of sending it, which is enough for local work. `RESEND_BASE_URL` can point the
 client at a local stub that accepts `POST /emails`.
 
+Resend's shared sender (`onboarding@resend.dev`) only delivers to the address that owns the Resend
+account, so a shop using it sends verification and order mail to nobody. Owning a domain is what
+unlocks sending to customers:
+
+1. Resend dashboard → **Domains** → **Add domain**, enter the domain you send from (or a subdomain
+   such as `mail.example.com`, which is what Resend recommends so the root's mail records stay
+   untouched), and pick the region closest to your buyers (Ireland, Virginia or Tokyo).
+2. Copy the records it gives you into the DNS provider for that domain. There are usually three:
+   an `MX` and a `TXT` (SPF) on the sending subdomain, and a `TXT` named `resend._domainkey` holding
+   the DKIM key. Add them exactly as shown — Cloudflare users must switch those records to
+   **DNS only** (grey cloud); a proxied record never verifies.
+3. If the domain already has an SPF record (`v=spf1 ...`), merge Resend's `include:` into it instead
+   of adding a second `v=spf1` record; two SPF records fail SPF for the whole domain.
+4. Wait for the domain's status in Resend to read **Verified** (usually minutes, up to a day for DNS
+   propagation), then set `RESEND_FROM` to an address on that domain — `"DevCart <orders@example.com>"`
+   — and redeploy the backend.
+5. Send one real notification (a password reset or an order confirmation) and check Resend →
+   **Emails** for a `delivered` event; `bounced` and `complained` also appear there, which is the
+   quickest way to tell a bad recipient from a bad sender.
+
+A newly added domain is in Resend's test mode until it verifies, so mail is rejected rather than
+queued — a missing email and no error in the Resend log usually means `RESEND_FROM` still names a
+domain the account has not verified.
+
 ## 12. Order links
 
 A guest has no account, so the confirmation link carries a signed token. The same `ORDER_ACCESS_SECRET`
@@ -205,7 +229,8 @@ issue a code rather than fall back to a value in the repository.
 Products, **Export** writes a CSV and links it from a dashboard notification. **Import** takes a CSV
 and reports how many products it will create before it runs. The import drawer's sample download is
 the store's own template, served from `/static/product-import-template.csv`; the file lives at
-`apps/backend/static/product-import-template.csv`.
+`apps/backend/static/product-import-template.csv` and the build copies it into the build output, so
+the path also answers from a production start (`scripts/copy-static.mjs`).
 
 Both are background workflows and need Redis. Without it the import never leaves the processing
 state.

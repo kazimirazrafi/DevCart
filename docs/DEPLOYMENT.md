@@ -15,9 +15,32 @@ Everything below assumes the repository is built with pnpm 10 (`packageManager` 
 
 The backend start command is not `pnpm start`. `medusa build` writes the server and the admin dashboard to `apps/backend/.medusa/server`, and only a start from that directory serves the dashboard at `/app`. Starting from `apps/backend` serves `public/admin` instead, which the build no longer populates.
 
+The build also copies `apps/backend/static/` into `.medusa/server/static/` (`scripts/copy-static.mjs`, run as part of `build`), because `medusa start` serves `/static` from the directory it runs in. Without that copy the admin's product-import sample CSV is a 404 in production while it works locally.
+
 Starting from `.medusa/server` also means `apps/backend/.env` is **not** read: the process looks for its environment in its working directory. A host that injects variables into the process is unaffected; a local run of the production build has to export them first (`set -a; . ../../.env; set +a`), or the server refuses to boot with `http.jwtSecret not found`.
 
 Run one backend process. `medusa start` accepts `--servers` and `--workers` to fork the cluster, so the HTTP servers and the job/workflow workers can be sized separately once scheduled jobs outgrow a single instance; until then one process does both.
+
+### Database exposure (Supabase)
+
+Medusa talks to Postgres directly, so it wants no row level security and no REST layer. Supabase gives you both by default: the `public` schema is published through PostgREST and granted to the `anon` and `authenticated` roles, whose keys are handed out by the dashboard. That is what the "RLS Disabled in Public" and "Sensitive Columns Exposed" advisors report, and they are not cosmetic: `customer`, `order`, `cart` and `api_key` (with its `token` column) are readable with a key that is not treated as a secret.
+
+Run this once against the project, as `postgres`, and the advisories clear:
+
+```sql
+revoke all on all tables    in schema public from anon, authenticated;
+revoke all on all sequences in schema public from anon, authenticated;
+revoke all on all functions in schema public from anon, authenticated;
+
+-- Objects Medusa's migrations create later get no default grant either.
+alter default privileges in schema public revoke all on tables    from anon, authenticated;
+alter default privileges in schema public revoke all on sequences from anon, authenticated;
+
+-- Strongest form: no REST access to public at all for those roles.
+revoke usage on schema public from anon, authenticated;
+```
+
+The application is unaffected: it connects as `postgres`, which owns the schema. Do not enable RLS on Medusa's tables to satisfy the advisor instead — the policies would have to mirror Medusa's own authorization rules, and every one you miss silently empties a page. Disabling the Data API in the Supabase dashboard (Settings → API) has the same effect and is fine to combine with the statements above.
 
 ### Redis
 
@@ -65,6 +88,16 @@ All `NEXT_PUBLIC_*` values are inlined at build time, so changing one means rebu
    ```
 
    `pnpm run seed` seeds the region, currencies, sales channel, shipping options, payment providers and the demo catalogue. It is idempotent enough to re-run, but run it against a fresh database first; see `docs/SETUP.md` for what it creates and `docs/ADMIN.md` for what to do instead when a catalogue already exists.
+
+   A seed change reaches a deployed shop only when the seed is re-run against its database. A plan with no shell (Render's free tier) means running it from your machine with the production connection string exported:
+
+   ```bash
+   cd apps/backend
+   DATABASE_URL='<production url>' pnpm run seed          # all four seeds
+   DATABASE_URL='<production url>' pnpm run seed-catalogue # catalogue and product details only
+   ```
+
+   `seed-catalogue` is the one to run after a change to the catalogue or its `metadata.details`: it repairs products created before the details band existed and leaves admin-written details alone.
 
 3. **Deploy the storefront** with `NEXT_PUBLIC_MEDUSA_BACKEND_URL` pointing at the backend's public URL and the publishable key set. Its build fetches the store's region data, so the backend must be up and seeded before the build runs.
 4. **Point Stripe at the webhook**: add `https://<backend>/hooks/payment/stripe_stripe` as an endpoint, subscribe to payment events, and put the signing secret in `STRIPE_WEBHOOK_SECRET`. Without it every delivery fails verification and is ignored, which shows up as orders stuck at "awaiting payment".
